@@ -243,12 +243,7 @@ export function Gallery({
           <div className="gallery-sizer" aria-hidden />
           <div className="gallery-gutter" aria-hidden />
           {videos.map((item) => (
-            <VideoCard
-              key={item.id}
-              item={item}
-              onOpen={() => setActive(item)}
-              likes={reactions.likesFor(item.id)}
-            />
+            <VideoCard key={item.id} item={item} onOpen={() => setActive(item)} />
           ))}
         </div>
       )}
@@ -327,6 +322,45 @@ function CardMeta({ category, title }: { category: string; title: string }) {
   );
 }
 
+function ReactionButtons({
+  selected,
+  onReact,
+}: {
+  selected: ReactionType | null;
+  onReact: (reaction: ReactionType) => void;
+}) {
+  return (
+    <div
+      className="inline-flex items-center gap-0.5 rounded-full border border-line bg-canvas/80 px-1.5 py-1 shadow-[0_8px_24px_rgba(0,0,0,.35)] backdrop-blur-md"
+      role="group"
+      aria-label="Reactions"
+    >
+      {REACTION_OPTIONS.map((option) => {
+        const active = selected === option.id;
+        return (
+          <button
+            key={option.id}
+            type="button"
+            aria-label={option.label}
+            aria-pressed={active}
+            title={option.label}
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              onReact(option.id);
+            }}
+            className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-[16px] leading-none transition hover:scale-110 hover:bg-elevated/80 ${
+              active ? "bg-elevated scale-110 ring-1 ring-lime/50" : ""
+            }`}
+          >
+            <span aria-hidden="true">{option.emoji}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function ReactionBar({
   selected,
   onReact,
@@ -345,35 +379,8 @@ function ReactionBar({
       }`}
       aria-hidden={!visible}
     >
-      <div
-        className={`inline-flex items-center gap-0.5 rounded-full border border-line bg-canvas/80 px-1.5 py-1 shadow-[0_8px_24px_rgba(0,0,0,.35)] backdrop-blur-md ${
-          visible ? "pointer-events-auto" : "pointer-events-none"
-        }`}
-        role="group"
-        aria-label="Reactions"
-      >
-        {REACTION_OPTIONS.map((option) => {
-          const active = selected === option.id;
-          return (
-            <button
-              key={option.id}
-              type="button"
-              aria-label={option.label}
-              aria-pressed={active}
-              title={option.label}
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                onReact(option.id);
-              }}
-              className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-[16px] leading-none transition hover:scale-110 hover:bg-elevated/80 ${
-                active ? "bg-elevated scale-110 ring-1 ring-lime/50" : ""
-              }`}
-            >
-              <span aria-hidden="true">{option.emoji}</span>
-            </button>
-          );
-        })}
+      <div className={visible ? "pointer-events-auto" : "pointer-events-none"}>
+        <ReactionButtons selected={selected} onReact={onReact} />
       </div>
     </div>
   );
@@ -392,6 +399,18 @@ function LikesBadge({
     <span
       className={`pointer-events-none absolute z-[5] inline-flex items-center gap-1 rounded-full border border-line bg-canvas/70 px-2.5 py-1 text-[11px] font-bold tracking-wide text-ink backdrop-blur-sm ${positionClass}`}
     >
+      <span aria-hidden="true">❤️</span>
+      <span>{formatCount(likes)}</span>
+      <span className="sr-only">likes</span>
+    </span>
+  );
+}
+
+function LikesLabel({ likes }: { likes: number }) {
+  if (likes <= 0) return null;
+
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full border border-line bg-elevated/80 px-2.5 py-1 text-[11px] font-bold tracking-wide text-ink">
       <span aria-hidden="true">❤️</span>
       <span>{formatCount(likes)}</span>
       <span className="sr-only">likes</span>
@@ -450,15 +469,7 @@ function ImageCard({
   );
 }
 
-function VideoCard({
-  item,
-  onOpen,
-  likes,
-}: {
-  item: GalleryVideo;
-  onOpen: () => void;
-  likes: number;
-}) {
+function VideoCard({ item, onOpen }: { item: GalleryVideo; onOpen: () => void }) {
   return (
     <button
       type="button"
@@ -478,7 +489,6 @@ function VideoCard({
         <span className="h-1.5 w-1.5 rounded-full bg-magenta shadow-[0_0_8px_rgba(255,60,172,.8)]" />
         Video
       </span>
-      <LikesBadge likes={likes} />
       <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <span className="flex h-12 w-12 items-center justify-center rounded-full border border-line bg-canvas/70 text-lime backdrop-blur-sm transition group-hover:scale-110">
           ▶
@@ -505,8 +515,8 @@ function Lightbox({
     () => true,
     () => false,
   );
-  const [playing, setPlaying] = useState(false);
   const wide = item.width > item.height;
+  const likes = reactions.likesFor(item.id);
 
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -568,38 +578,33 @@ function Lightbox({
             className="mx-auto max-h-[78vh] w-auto object-contain"
           />
         ) : (
-          <div className="relative">
-            <video
-              ref={videoRef}
-              className="mx-auto max-h-[78vh] w-full bg-black object-contain"
-              controls
-              autoPlay
-              playsInline
-              poster={item.poster}
-              onPlay={() => setPlaying(true)}
-              onPlaying={() => setPlaying(true)}
-              onPause={() => setPlaying(false)}
-              onEnded={() => setPlaying(false)}
-            >
-              <source src={item.src} type="video/mp4" />
-            </video>
-            {playing ? (
-              <ReactionBar
-                visible
-                selected={reactions.pickFor(item.id)}
-                onReact={(reaction) => reactions.react(item.id, reaction)}
-                positionClass="bottom-14"
-              />
-            ) : (
-              <LikesBadge likes={reactions.likesFor(item.id)} />
-            )}
-          </div>
+          <video
+            ref={videoRef}
+            className="mx-auto max-h-[78vh] w-full bg-black object-contain"
+            controls
+            autoPlay
+            playsInline
+            poster={item.poster}
+          >
+            <source src={item.src} type="video/mp4" />
+          </video>
         )}
         <div className="border-t border-line px-5 py-4">
           <div className="text-[11px] font-bold tracking-[0.14em] text-lime uppercase">{item.category}</div>
-          <h2 id={titleId} className="m-0 mt-1 font-display text-[28px] leading-none font-black uppercase">
-            {item.title}
-          </h2>
+          <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-2">
+            <h2 id={titleId} className="m-0 font-display text-[28px] leading-none font-black uppercase">
+              {item.title}
+            </h2>
+            {item.type === "video" ? (
+              <div className="flex flex-wrap items-center gap-2">
+                <LikesLabel likes={likes} />
+                <ReactionButtons
+                  selected={reactions.pickFor(item.id)}
+                  onReact={(reaction) => reactions.react(item.id, reaction)}
+                />
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>,
