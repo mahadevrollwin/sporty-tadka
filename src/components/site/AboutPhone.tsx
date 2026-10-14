@@ -91,9 +91,9 @@ export function AboutPhone({ videos }: { videos?: { id: string; src: string; pos
         aria-atomic="true"
       >
         <div
-          className="flex h-full w-full will-change-transform"
+          className="flex h-full w-full flex-col will-change-transform"
           style={{
-            transform: `translate3d(-${index * 100}%, 0, 0)`,
+            transform: `translate3d(0, -${index * 100}%, 0)`,
             transition: animate ? "transform 550ms cubic-bezier(0.22, 1, 0.36, 1)" : "none",
           }}
           onTransitionEnd={onTrackTransitionEnd}
