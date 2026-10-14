@@ -364,9 +364,17 @@ function ReactionBar({
   );
 }
 
-function LikesBadge({ likes }: { likes: number }) {
+function LikesBadge({
+  likes,
+  positionClass = "top-3 right-3",
+}: {
+  likes: number;
+  positionClass?: string;
+}) {
   return (
-    <span className="pointer-events-none absolute top-3 right-3 z-[5] inline-flex items-center gap-1 rounded-full border border-line bg-canvas/70 px-2.5 py-1 text-[11px] font-bold tracking-wide text-ink backdrop-blur-sm">
+    <span
+      className={`pointer-events-none absolute z-[5] inline-flex items-center gap-1 rounded-full border border-line bg-canvas/70 px-2.5 py-1 text-[11px] font-bold tracking-wide text-ink backdrop-blur-sm ${positionClass}`}
+    >
       <span aria-hidden="true">❤️</span>
       <span>{formatCount(likes)}</span>
       <span className="sr-only">likes</span>
@@ -407,6 +415,7 @@ function ImageCard({
           loading="lazy"
           className="block h-auto w-full transition duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />
+        <LikesBadge likes={likesTotal(reactions.countsFor(item.id))} positionClass="top-3 left-3" />
         <CardMeta category={item.category} title={item.title} />
         <ReactionBar
           visible={hovered}
