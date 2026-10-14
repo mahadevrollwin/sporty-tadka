@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import {
   galleryImages,
@@ -10,6 +10,20 @@ import {
   type GallerySpan,
   type GalleryVideo,
 } from "@/content/gallery";
+import {
+  REACTION_OPTIONS,
+  applyReactionChange,
+  emptyCounts,
+  formatCount,
+  likesTotal,
+  readLocalCounts,
+  readLocalPicks,
+  writeLocalCounts,
+  writeLocalPick,
+  type ReactionCounts,
+  type ReactionType,
+  type ReactionsMap,
+} from "@/lib/gallery-reactions";
 
 type Tab = "images" | "videos";
 
@@ -18,10 +32,89 @@ type MasonryInstance = {
   destroy?: () => void;
 };
 
+type ReactionsApi = {
+  countsFor: (itemId: string) => ReactionCounts;
+  pickFor: (itemId: string) => ReactionType | null;
+  react: (itemId: string, reaction: ReactionType) => void;
+};
+
 function spanClass(span: GallerySpan) {
   if (span === 3) return "gallery-card gallery-card--width3";
   if (span === 2) return "gallery-card gallery-card--width2";
   return "gallery-card";
+}
+
+function useGalleryReactions(): ReactionsApi {
+  const [counts, setCounts] = useState<ReactionsMap>(() => readLocalCounts());
+  const [picks, setPicks] = useState<Record<string, ReactionType>>(() => readLocalPicks());
+
+  useEffect(() => {
+    let cancelled = false;
+    void fetch("/api/gallery-reactions")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: unknown) => {
+        if (cancelled || !data || typeof data !== "object") return;
+        const payload = data as { counts?: ReactionsMap };
+        if (!payload.counts || typeof payload.counts !== "object") return;
+        setCounts((prev) => {
+          const next = { ...prev, ...payload.counts };
+          writeLocalCounts(next);
+          return next;
+        });
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const react = useCallback((itemId: string, reaction: ReactionType) => {
+    setPicks((prevPicks) => {
+      const previous = prevPicks[itemId] ?? null;
+      const nextPick = previous === reaction ? null : reaction;
+
+      setCounts((prevCounts) => {
+        const updated = {
+          ...prevCounts,
+          [itemId]: applyReactionChange(prevCounts[itemId] ?? emptyCounts(), previous, nextPick),
+        };
+        writeLocalCounts(updated);
+        return updated;
+      });
+
+      writeLocalPick(itemId, nextPick);
+      void fetch("/api/gallery-reactions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ itemId, reaction: nextPick, previous }),
+      })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data: unknown) => {
+          if (!data || typeof data !== "object") return;
+          const payload = data as { counts?: ReactionCounts };
+          if (!payload.counts) return;
+          setCounts((prev) => {
+            const next = { ...prev, [itemId]: payload.counts as ReactionCounts };
+            writeLocalCounts(next);
+            return next;
+          });
+        })
+        .catch(() => {});
+
+      if (!nextPick) {
+        const rest = { ...prevPicks };
+        delete rest[itemId];
+        return rest;
+      }
+      return { ...prevPicks, [itemId]: nextPick };
+    });
+  }, []);
+
+  return {
+    countsFor: (itemId) => counts[itemId] ?? emptyCounts(),
+    pickFor: (itemId) => picks[itemId] ?? null,
+    react,
+  };
 }
 
 export function Gallery({
@@ -34,6 +127,7 @@ export function Gallery({
   const [tab, setTab] = useState<Tab>("images");
   const [active, setActive] = useState<GalleryItem | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const reactions = useGalleryReactions();
   const items = tab === "images" ? images : videos;
   const tabs = [
     { id: "images" as const, label: "Images", count: images.length },
@@ -119,6 +213,7 @@ export function Gallery({
               item={item}
               feature={item.id === images.find((image) => image.span >= 2)?.id}
               onOpen={() => setActive(item)}
+              reactions={reactions}
             />
           ))}
         </div>
@@ -133,12 +228,19 @@ export function Gallery({
           <div className="gallery-sizer" aria-hidden />
           <div className="gallery-gutter" aria-hidden />
           {videos.map((item) => (
-            <VideoCard key={item.id} item={item} onOpen={() => setActive(item)} />
+            <VideoCard
+              key={item.id}
+              item={item}
+              onOpen={() => setActive(item)}
+              likes={likesTotal(reactions.countsFor(item.id))}
+            />
           ))}
         </div>
       )}
 
-      {active ? <Lightbox item={active} onClose={() => setActive(null)} /> : null}
+      {active ? (
+        <Lightbox item={active} onClose={() => setActive(null)} reactions={reactions} />
+      ) : null}
     </>
   );
 }
@@ -210,17 +312,87 @@ function CardMeta({ category, title }: { category: string; title: string }) {
   );
 }
 
+function ReactionBar({
+  selected,
+  onReact,
+  visible,
+  positionClass = "bottom-3",
+}: {
+  selected: ReactionType | null;
+  onReact: (reaction: ReactionType) => void;
+  visible: boolean;
+  positionClass?: string;
+}) {
+  return (
+    <div
+      className={`pointer-events-none absolute inset-x-0 z-[5] flex justify-center px-3 transition duration-200 ${positionClass} ${
+        visible ? "opacity-100" : "opacity-0"
+      }`}
+      aria-hidden={!visible}
+    >
+      <div
+        className={`inline-flex items-center gap-0.5 rounded-full border border-line bg-canvas/80 px-1.5 py-1 shadow-[0_8px_24px_rgba(0,0,0,.35)] backdrop-blur-md ${
+          visible ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+        role="group"
+        aria-label="Reactions"
+      >
+        {REACTION_OPTIONS.map((option) => {
+          const active = selected === option.id;
+          return (
+            <button
+              key={option.id}
+              type="button"
+              aria-label={option.label}
+              aria-pressed={active}
+              title={option.label}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onReact(option.id);
+              }}
+              className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-[16px] leading-none transition hover:scale-110 hover:bg-elevated/80 ${
+                active ? "bg-elevated scale-110 ring-1 ring-lime/50" : ""
+              }`}
+            >
+              <span aria-hidden="true">{option.emoji}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function LikesBadge({ likes }: { likes: number }) {
+  return (
+    <span className="pointer-events-none absolute top-3 right-3 z-[5] inline-flex items-center gap-1 rounded-full border border-line bg-canvas/70 px-2.5 py-1 text-[11px] font-bold tracking-wide text-ink backdrop-blur-sm">
+      <span aria-hidden="true">❤️</span>
+      <span>{formatCount(likes)}</span>
+      <span className="sr-only">likes</span>
+    </span>
+  );
+}
+
 function ImageCard({
   item,
   onOpen,
   feature = false,
+  reactions,
 }: {
   item: GalleryImage;
   onOpen: () => void;
   feature?: boolean;
+  reactions: ReactionsApi;
 }) {
+  const [hovered, setHovered] = useState(false);
+
   return (
-    <div className={`${spanClass(item.span)} ${feature ? "gallery-card--feature" : ""} group relative h-full`}>
+    <div
+      className={`${spanClass(item.span)} ${feature ? "gallery-card--feature" : ""} group relative h-full`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       <button
         type="button"
         onClick={onOpen}
@@ -236,6 +408,12 @@ function ImageCard({
           className="block h-auto w-full transition duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />
         <CardMeta category={item.category} title={item.title} />
+        <ReactionBar
+          visible={hovered}
+          selected={reactions.pickFor(item.id)}
+          onReact={(reaction) => reactions.react(item.id, reaction)}
+          positionClass="bottom-[4.5rem]"
+        />
       </button>
       <DownloadLink
         src={item.src}
@@ -246,7 +424,15 @@ function ImageCard({
   );
 }
 
-function VideoCard({ item, onOpen }: { item: GalleryVideo; onOpen: () => void }) {
+function VideoCard({
+  item,
+  onOpen,
+  likes,
+}: {
+  item: GalleryVideo;
+  onOpen: () => void;
+  likes: number;
+}) {
   return (
     <button
       type="button"
@@ -266,6 +452,7 @@ function VideoCard({ item, onOpen }: { item: GalleryVideo; onOpen: () => void })
         <span className="h-1.5 w-1.5 rounded-full bg-magenta shadow-[0_0_8px_rgba(255,60,172,.8)]" />
         Video
       </span>
+      <LikesBadge likes={likes} />
       <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <span className="flex h-12 w-12 items-center justify-center rounded-full border border-line bg-canvas/70 text-lime backdrop-blur-sm transition group-hover:scale-110">
           ▶
@@ -276,15 +463,24 @@ function VideoCard({ item, onOpen }: { item: GalleryVideo; onOpen: () => void })
   );
 }
 
-function Lightbox({ item, onClose }: { item: GalleryItem; onClose: () => void }) {
+function Lightbox({
+  item,
+  onClose,
+  reactions,
+}: {
+  item: GalleryItem;
+  onClose: () => void;
+  reactions: ReactionsApi;
+}) {
   const titleId = useId();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+  const [playing, setPlaying] = useState(false);
   const wide = item.width > item.height;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -346,16 +542,32 @@ function Lightbox({ item, onClose }: { item: GalleryItem; onClose: () => void })
             className="mx-auto max-h-[78vh] w-auto object-contain"
           />
         ) : (
-          <video
-            ref={videoRef}
-            className="mx-auto max-h-[78vh] w-full bg-black object-contain"
-            controls
-            autoPlay
-            playsInline
-            poster={item.poster}
-          >
-            <source src={item.src} type="video/mp4" />
-          </video>
+          <div className="relative">
+            <video
+              ref={videoRef}
+              className="mx-auto max-h-[78vh] w-full bg-black object-contain"
+              controls
+              autoPlay
+              playsInline
+              poster={item.poster}
+              onPlay={() => setPlaying(true)}
+              onPlaying={() => setPlaying(true)}
+              onPause={() => setPlaying(false)}
+              onEnded={() => setPlaying(false)}
+            >
+              <source src={item.src} type="video/mp4" />
+            </video>
+            {playing ? (
+              <ReactionBar
+                visible
+                selected={reactions.pickFor(item.id)}
+                onReact={(reaction) => reactions.react(item.id, reaction)}
+                positionClass="bottom-14"
+              />
+            ) : (
+              <LikesBadge likes={likesTotal(reactions.countsFor(item.id))} />
+            )}
+          </div>
         )}
         <div className="border-t border-line px-5 py-4">
           <div className="text-[11px] font-bold tracking-[0.14em] text-lime uppercase">{item.category}</div>

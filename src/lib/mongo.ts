@@ -41,3 +41,9 @@ export function scoresCollection() {
   }
   return globalForMongo.scoresReady;
 }
+
+export async function getCollection(name: string) {
+  if (!uri) return null;
+  const client = await clientPromise();
+  return client.db(dbName).collection(name);
+}
