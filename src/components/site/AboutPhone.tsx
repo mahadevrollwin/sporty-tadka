@@ -32,6 +32,7 @@ export function AboutPhone({ videos }: { videos?: { id: string; src: string; pos
   const count = slides.length;
   const active = count === 0 ? 0 : index % count;
   const trackSlides = count > 1 ? [...slides, slides[0]!] : slides;
+  const trackCount = Math.max(trackSlides.length, 1);
 
   useEffect(() => {
     const playingSlot = index >= count ? count : active;
@@ -84,59 +85,67 @@ export function AboutPhone({ videos }: { videos?: { id: string; src: string; pos
         }
       }}
     >
-      <div
-        className={`absolute ${screenInset} z-0 overflow-hidden bg-transparent`}
-        style={{ borderRadius: "10% / 4%" }}
-        aria-live="polite"
-        aria-atomic="true"
-      >
+      {/* Keep the visual phone box from growing with the slide track */}
+      <div className="absolute inset-0 overflow-hidden">
         <div
-          className="flex h-full w-full flex-col will-change-transform"
-          style={{
-            transform: `translate3d(0, -${index * 100}%, 0)`,
-            transition: animate ? "transform 550ms cubic-bezier(0.22, 1, 0.36, 1)" : "none",
-          }}
-          onTransitionEnd={onTrackTransitionEnd}
+          className={`absolute ${screenInset} z-0 overflow-hidden bg-transparent`}
+          style={{ borderRadius: "10% / 4%" }}
+          aria-live="polite"
+          aria-atomic="true"
         >
-          {trackSlides.map((slide, i) => {
-            const sourceIndex = i % count;
-            const isClone = i >= count;
-            return (
-              <div key={isClone ? `${slide.id}-clone` : slide.id} className="relative h-full w-full shrink-0 grow-0 basis-full">
-                <video
-                  ref={(el) => {
-                    videoRefs.current[isClone ? count : sourceIndex] = el;
-                  }}
-                  className="absolute inset-0 h-full w-full object-cover"
-                  muted
-                  loop
-                  playsInline
-                  autoPlay={sourceIndex === active}
-                  preload={
-                    sourceIndex === active || sourceIndex === (active + 1) % count || isClone
-                      ? "auto"
-                      : "metadata"
-                  }
-                  poster={slide.poster}
-                  aria-label={`${slide.title}, ${slide.category}`}
-                  aria-hidden={sourceIndex !== active}
+          <div
+            className="absolute top-0 left-0 w-full will-change-transform"
+            style={{
+              height: `${trackCount * 100}%`,
+              transform: `translate3d(0, -${(index / trackCount) * 100}%, 0)`,
+              transition: animate ? "transform 550ms cubic-bezier(0.22, 1, 0.36, 1)" : "none",
+            }}
+            onTransitionEnd={onTrackTransitionEnd}
+          >
+            {trackSlides.map((slide, i) => {
+              const sourceIndex = i % count;
+              const isClone = i >= count;
+              return (
+                <div
+                  key={isClone ? `${slide.id}-clone` : slide.id}
+                  className="relative w-full"
+                  style={{ height: `${100 / trackCount}%` }}
                 >
-                  <source src={slide.src} type="video/mp4" />
-                </video>
-              </div>
-            );
-          })}
+                  <video
+                    ref={(el) => {
+                      videoRefs.current[isClone ? count : sourceIndex] = el;
+                    }}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    muted
+                    loop
+                    playsInline
+                    autoPlay={sourceIndex === active}
+                    preload={
+                      sourceIndex === active || sourceIndex === (active + 1) % count || isClone
+                        ? "auto"
+                        : "metadata"
+                    }
+                    poster={slide.poster}
+                    aria-label={`${slide.title}, ${slide.category}`}
+                    aria-hidden={sourceIndex !== active}
+                  >
+                    <source src={slide.src} type="video/mp4" />
+                  </video>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      {/* eslint-disable-next-line @next/next/no-img-element -- decorative frame overlay */}
-      <img
-        src="/images/phone-frame.png?v=2"
-        alt=""
-        aria-hidden
-        draggable={false}
-        className="pointer-events-none absolute inset-0 z-10 h-full w-full select-none object-contain"
-      />
+        {/* eslint-disable-next-line @next/next/no-img-element -- decorative frame overlay */}
+        <img
+          src="/images/phone-frame.png?v=2"
+          alt=""
+          aria-hidden
+          draggable={false}
+          className="pointer-events-none absolute inset-0 z-10 h-full w-full select-none object-fill"
+        />
+      </div>
 
       <div
         className="absolute top-1/2 right-full z-20 mr-3 flex -translate-y-1/2 flex-col items-center gap-2.5"
