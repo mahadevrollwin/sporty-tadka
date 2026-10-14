@@ -56,22 +56,52 @@ function useGalleryReactions(): ReactionsApi {
 
   useEffect(() => {
     let cancelled = false;
+    const voterId = getVoterId();
+
     void fetch("/api/gallery-reactions")
       .then((res) => (res.ok ? res.json() : null))
-      .then((data: unknown) => {
+      .then(async (data: unknown) => {
         if (cancelled || !data || typeof data !== "object") return;
         const payload = data as { counts?: Record<string, unknown> };
         if (!payload.counts || typeof payload.counts !== "object") return;
-        setStates((prev) => {
-          const next: ReactionsMap = { ...prev };
-          for (const [id, value] of Object.entries(payload.counts!)) {
-            next[id] = normalizeState(value);
-          }
-          writeLocalCounts(next);
-          return next;
-        });
+
+        const next: ReactionsMap = {};
+        for (const [id, value] of Object.entries(payload.counts)) {
+          next[id] = normalizeState(value);
+        }
+
+        // Re-sync any local picks the server is missing so unique counts stay accurate.
+        const localPicks = readLocalPicks();
+        await Promise.all(
+          Object.entries(localPicks).map(async ([itemId, reaction]) => {
+            if (cancelled || !voterId) return;
+            const serverLikes = likesTotal(next[itemId]);
+            // Always upsert local pick so this person is counted once server-side.
+            try {
+              const res = await fetch("/api/gallery-reactions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ itemId, voterId, reaction }),
+              });
+              if (!res.ok) return;
+              const body: unknown = await res.json();
+              if (!body || typeof body !== "object") return;
+              const row = body as { state?: unknown; counts?: unknown; likes?: number };
+              next[itemId] = normalizeState(
+                row.state ?? { counts: row.counts, likes: row.likes ?? serverLikes },
+              );
+            } catch {
+              // Keep optimistic local state if sync fails.
+            }
+          }),
+        );
+
+        if (cancelled) return;
+        writeLocalCounts(next);
+        setStates(next);
       })
       .catch(() => {});
+
     return () => {
       cancelled = true;
     };
@@ -81,56 +111,61 @@ function useGalleryReactions(): ReactionsApi {
     const voterId = getVoterId();
     if (!voterId) return;
 
-    setPicks((prevPicks) => {
-      const previous = prevPicks[itemId] ?? null;
-      const nextPick = previous === reaction ? null : reaction;
+    const previous = readLocalPicks()[itemId] ?? null;
+    const nextPick = previous === reaction ? null : reaction;
 
-      setStates((prevStates) => {
-        const updated = {
-          ...prevStates,
-          [itemId]: applyOptimisticState(prevStates[itemId] ?? emptyState(), previous, nextPick),
-        };
-        writeLocalCounts(updated);
-        return updated;
-      });
-
-      writeLocalPick(itemId, nextPick);
-      void fetch("/api/gallery-reactions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ itemId, voterId, reaction: nextPick }),
-      })
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data: unknown) => {
-          if (!data || typeof data !== "object") return;
-          const payload = data as { state?: unknown; counts?: unknown; likes?: number };
-          const state = normalizeState(
-            payload.state ?? {
-              counts: payload.counts,
-              likes: payload.likes,
-            },
-          );
-          setStates((prev) => {
-            const next = { ...prev, [itemId]: state };
-            writeLocalCounts(next);
-            return next;
-          });
-        })
-        .catch(() => {});
-
+    writeLocalPick(itemId, nextPick);
+    setPicks((prev) => {
       if (!nextPick) {
-        const rest = { ...prevPicks };
+        const rest = { ...prev };
         delete rest[itemId];
         return rest;
       }
-      return { ...prevPicks, [itemId]: nextPick };
+      return { ...prev, [itemId]: nextPick };
     });
+
+    setStates((prevStates) => {
+      const updated = {
+        ...prevStates,
+        [itemId]: applyOptimisticState(prevStates[itemId] ?? emptyState(), previous, nextPick),
+      };
+      writeLocalCounts(updated);
+      return updated;
+    });
+
+    void fetch("/api/gallery-reactions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ itemId, voterId, reaction: nextPick }),
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: unknown) => {
+        if (!data || typeof data !== "object") return;
+        const payload = data as { state?: unknown; counts?: unknown; likes?: number };
+        const state = normalizeState(
+          payload.state ?? {
+            counts: payload.counts,
+            likes: payload.likes,
+          },
+        );
+        setStates((prev) => {
+          const next = { ...prev, [itemId]: state };
+          writeLocalCounts(next);
+          return next;
+        });
+      })
+      .catch(() => {});
   }, []);
 
   return {
     stateFor: (itemId) => states[itemId] ?? emptyState(),
     pickFor: (itemId) => picks[itemId] ?? null,
-    likesFor: (itemId) => likesTotal(states[itemId]),
+    likesFor: (itemId) => {
+      const likes = likesTotal(states[itemId]);
+      // If this person already reacted but server count hasn't caught up yet, show at least 1.
+      if (picks[itemId] && likes < 1) return 1;
+      return likes;
+    },
     displayFor: (itemId) => displayReaction(states[itemId]?.counts, picks[itemId] ?? null),
     react,
   };
@@ -443,33 +478,35 @@ function ImageCard({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <button
-        type="button"
-        onClick={onOpen}
-        className="relative block h-full w-full cursor-pointer overflow-hidden rounded-[14px] border border-line bg-elevated text-left transition hover:border-lime/45 hover:shadow-[0_0_28px_rgba(198,255,61,.12)]"
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={item.src}
-          alt={item.title}
-          width={item.width}
-          height={item.height}
-          loading="lazy"
-          className="block h-auto w-full transition duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-        />
-        <LikesBadge
-          likes={reactions.likesFor(item.id)}
-          reaction={reactions.displayFor(item.id)}
-          positionClass="top-3 left-3"
-        />
-        <CardMeta category={item.category} title={item.title} />
+      <div className="relative h-full overflow-hidden rounded-[14px] border border-line bg-elevated transition hover:border-lime/45 hover:shadow-[0_0_28px_rgba(198,255,61,.12)]">
+        <button
+          type="button"
+          onClick={onOpen}
+          className="relative block h-full w-full cursor-pointer text-left"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={item.src}
+            alt={item.title}
+            width={item.width}
+            height={item.height}
+            loading="lazy"
+            className="block h-auto w-full transition duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+          />
+          <LikesBadge
+            likes={reactions.likesFor(item.id)}
+            reaction={reactions.displayFor(item.id)}
+            positionClass="top-3 left-3"
+          />
+          <CardMeta category={item.category} title={item.title} />
+        </button>
         <ReactionBar
           visible={hovered}
           selected={reactions.pickFor(item.id)}
           onReact={(reaction) => reactions.react(item.id, reaction)}
           positionClass="bottom-[4.5rem]"
         />
-      </button>
+      </div>
       <DownloadLink
         src={item.src}
         title={item.title}

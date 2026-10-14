@@ -3,115 +3,202 @@ import path from "node:path";
 import {
   isReactionType,
   isValidVoterId,
-  normalizeState,
-  normalizeVoters,
   stateFromVoters,
   type ItemReactionState,
   type ReactionType,
   type ReactionsMap,
   type VoterMap,
 } from "@/lib/gallery-reactions";
-import { getCollection } from "@/lib/mongo";
+import { getCollection, mongoConfigured } from "@/lib/mongo";
 
 const file = path.join(process.cwd(), "data", "gallery-reactions.json");
 
-type StoredItem = {
-  voters: VoterMap;
+type Vote = {
+  itemId: string;
+  voterId: string;
+  reaction: ReactionType;
 };
 
-type FileStore = Record<string, StoredItem>;
+type FileStore = {
+  votes: Vote[];
+};
 
-function toStoredItem(value: unknown): StoredItem {
-  if (!value || typeof value !== "object") return { voters: {} };
-  const record = value as Record<string, unknown>;
-  if (record.voters && typeof record.voters === "object") {
-    return { voters: normalizeVoters(record.voters) };
+const globalStore = globalThis as unknown as {
+  galleryVotesMemory?: Map<string, ReactionType>;
+  galleryVotesReady?: Promise<void>;
+};
+
+function memoryKey(itemId: string, voterId: string) {
+  return `${itemId}::${voterId}`;
+}
+
+function memoryMap() {
+  if (!globalStore.galleryVotesMemory) {
+    globalStore.galleryVotesMemory = new Map();
   }
-  // Legacy bare counts / state without voters — start a fresh voter map.
-  // Keep likes visible via empty voters until new unique votes arrive.
-  return { voters: {} };
+  return globalStore.galleryVotesMemory;
+}
+
+function votersForItem(itemId: string, votes: Iterable<Vote> | Map<string, ReactionType>): VoterMap {
+  const voters: VoterMap = {};
+  if (votes instanceof Map) {
+    const prefix = `${itemId}::`;
+    for (const [key, reaction] of votes) {
+      if (!key.startsWith(prefix)) continue;
+      const voterId = key.slice(prefix.length);
+      if (isValidVoterId(voterId) && isReactionType(reaction)) {
+        voters[voterId] = reaction;
+      }
+    }
+    return voters;
+  }
+  for (const vote of votes) {
+    if (vote.itemId !== itemId) continue;
+    if (isValidVoterId(vote.voterId) && isReactionType(vote.reaction)) {
+      voters[vote.voterId] = vote.reaction;
+    }
+  }
+  return voters;
+}
+
+function summarizeVotes(votes: Vote[]): ReactionsMap {
+  const byItem = new Map<string, VoterMap>();
+  for (const vote of votes) {
+    if (!isValidVoterId(vote.voterId) || !isReactionType(vote.reaction)) continue;
+    const current = byItem.get(vote.itemId) ?? {};
+    current[vote.voterId] = vote.reaction;
+    byItem.set(vote.itemId, current);
+  }
+  const out: ReactionsMap = {};
+  for (const [itemId, voters] of byItem) {
+    out[itemId] = stateFromVoters(voters);
+  }
+  return out;
+}
+
+function parseFileStore(stored: unknown): FileStore {
+  if (!stored || typeof stored !== "object") return { votes: [] };
+
+  const record = stored as Record<string, unknown>;
+
+  // Current shape: { votes: Vote[] }
+  if (Array.isArray(record.votes)) {
+    const votes: Vote[] = [];
+    for (const row of record.votes) {
+      if (!row || typeof row !== "object") continue;
+      const vote = row as Record<string, unknown>;
+      const itemId = typeof vote.itemId === "string" ? vote.itemId : "";
+      const voterId = typeof vote.voterId === "string" ? vote.voterId : "";
+      const reaction = vote.reaction;
+      if (!itemId || !isValidVoterId(voterId) || !isReactionType(reaction)) continue;
+      votes.push({ itemId, voterId, reaction });
+    }
+    return { votes };
+  }
+
+  // Legacy shape: { [itemId]: { voters: { [voterId]: reaction } } }
+  const votes: Vote[] = [];
+  for (const [itemId, value] of Object.entries(record)) {
+    if (!value || typeof value !== "object") continue;
+    const voters = (value as { voters?: unknown }).voters;
+    if (!voters || typeof voters !== "object") continue;
+    for (const [voterId, reaction] of Object.entries(voters as Record<string, unknown>)) {
+      if (!isValidVoterId(voterId) || !isReactionType(reaction)) continue;
+      votes.push({ itemId, voterId, reaction });
+    }
+  }
+  return { votes };
 }
 
 async function readFileStore(): Promise<FileStore> {
   try {
     const stored: unknown = JSON.parse(await readFile(file, "utf8"));
-    if (!stored || typeof stored !== "object") return {};
-    const out: FileStore = {};
-    for (const [id, value] of Object.entries(stored as Record<string, unknown>)) {
-      out[id] = toStoredItem(value);
-    }
-    return out;
+    return parseFileStore(stored);
   } catch {
-    return {};
+    return { votes: [] };
   }
 }
 
-async function writeFileStore(map: FileStore) {
+async function writeFileStore(store: FileStore) {
   await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(file, JSON.stringify(map, null, 2));
+  await writeFile(file, JSON.stringify(store, null, 2));
 }
 
-function summarize(store: FileStore): ReactionsMap {
-  const out: ReactionsMap = {};
-  for (const [id, item] of Object.entries(store)) {
-    out[id] = stateFromVoters(item.voters);
+function hydrateMemory(votes: Vote[]) {
+  const map = memoryMap();
+  map.clear();
+  for (const vote of votes) {
+    map.set(memoryKey(vote.itemId, vote.voterId), vote.reaction);
   }
-  return out;
 }
 
-async function loadVoters(itemId: string): Promise<VoterMap> {
-  const collection = await getCollection("gallery_reactions").catch(() => null);
-  if (collection) {
-    const doc = await collection.findOne({ itemId });
-    return normalizeVoters(doc?.voters);
+async function ensureMemoryHydrated() {
+  if (globalStore.galleryVotesReady) {
+    await globalStore.galleryVotesReady;
+    return;
   }
-  const map = await readFileStore();
-  return map[itemId]?.voters ?? {};
+  globalStore.galleryVotesReady = (async () => {
+    if (mongoConfigured()) {
+      const collection = await getCollection("gallery_reaction_votes").catch(() => null);
+      if (collection) {
+        await collection.createIndex({ itemId: 1, voterId: 1 }, { unique: true }).catch(() => {});
+        const docs = await collection.find({}).toArray();
+        const votes: Vote[] = [];
+        for (const doc of docs) {
+          const itemId = typeof doc.itemId === "string" ? doc.itemId : "";
+          const voterId = typeof doc.voterId === "string" ? doc.voterId : "";
+          const reaction = doc.reaction;
+          if (!itemId || !isValidVoterId(voterId) || !isReactionType(reaction)) continue;
+          votes.push({ itemId, voterId, reaction });
+        }
+        hydrateMemory(votes);
+        return;
+      }
+    }
+    const store = await readFileStore();
+    hydrateMemory(store.votes);
+  })().catch(() => {
+    globalStore.galleryVotesReady = undefined;
+  });
+  await globalStore.galleryVotesReady;
 }
 
-async function saveVoters(itemId: string, voters: VoterMap): Promise<ItemReactionState> {
-  const state = stateFromVoters(voters);
-  const collection = await getCollection("gallery_reactions").catch(() => null);
-  if (collection) {
-    await collection.updateOne(
-      { itemId },
-      {
-        $set: {
-          itemId,
-          voters,
-          counts: state.counts,
-          likes: state.likes,
-          updatedAt: new Date(),
-        },
-      },
-      { upsert: true },
-    );
-    return state;
+async function persistMemory() {
+  const map = memoryMap();
+  const votes: Vote[] = [];
+  for (const [key, reaction] of map) {
+    const split = key.indexOf("::");
+    if (split <= 0) continue;
+    const itemId = key.slice(0, split);
+    const voterId = key.slice(split + 2);
+    if (!itemId || !isValidVoterId(voterId) || !isReactionType(reaction)) continue;
+    votes.push({ itemId, voterId, reaction });
   }
 
-  const map = await readFileStore();
-  map[itemId] = { voters };
-  await writeFileStore(map);
-  return state;
+  if (mongoConfigured()) {
+    const collection = await getCollection("gallery_reaction_votes").catch(() => null);
+    if (collection) {
+      // Memory is source of truth for this instance after hydrate + writes;
+      // individual commits already upserted — nothing else required here.
+      return;
+    }
+  }
+
+  await writeFileStore({ votes });
 }
 
 export async function loadReactionCounts(): Promise<ReactionsMap> {
-  const collection = await getCollection("gallery_reactions").catch(() => null);
-  if (collection) {
-    const docs = await collection.find({}).toArray();
-    const out: ReactionsMap = {};
-    for (const doc of docs) {
-      const id = typeof doc.itemId === "string" ? doc.itemId : null;
-      if (!id) continue;
-      if (doc.voters && typeof doc.voters === "object") {
-        out[id] = stateFromVoters(normalizeVoters(doc.voters));
-      } else {
-        out[id] = normalizeState(doc);
-      }
-    }
-    return out;
-  }
-  return summarize(await readFileStore());
+  await ensureMemoryHydrated();
+  return summarizeVotes(
+    [...memoryMap().entries()].map(([key, reaction]) => {
+      const split = key.indexOf("::");
+      return {
+        itemId: key.slice(0, split),
+        voterId: key.slice(split + 2),
+        reaction,
+      };
+    }),
+  );
 }
 
 export async function commitReaction(input: {
@@ -122,20 +209,51 @@ export async function commitReaction(input: {
   if (!isValidVoterId(input.voterId)) {
     throw new Error("Invalid voter");
   }
+  if (!input.itemId) {
+    throw new Error("Invalid item");
+  }
 
-  const voters = { ...(await loadVoters(input.itemId)) };
-  const previous = isReactionType(voters[input.voterId]) ? voters[input.voterId]! : null;
+  await ensureMemoryHydrated();
+  const map = memoryMap();
+  const key = memoryKey(input.itemId, input.voterId);
+  const previous = map.get(key) ?? null;
   const next = input.reaction;
 
   if (previous === next) {
-    return stateFromVoters(voters);
+    return stateFromVoters(votersForItem(input.itemId, map));
+  }
+
+  if (mongoConfigured()) {
+    const collection = await getCollection("gallery_reaction_votes").catch(() => null);
+    if (collection) {
+      await collection.createIndex({ itemId: 1, voterId: 1 }, { unique: true }).catch(() => {});
+      if (!next) {
+        await collection.deleteOne({ itemId: input.itemId, voterId: input.voterId });
+        map.delete(key);
+      } else {
+        await collection.updateOne(
+          { itemId: input.itemId, voterId: input.voterId },
+          {
+            $set: {
+              itemId: input.itemId,
+              voterId: input.voterId,
+              reaction: next,
+              updatedAt: new Date(),
+            },
+          },
+          { upsert: true },
+        );
+        map.set(key, next);
+      }
+      return stateFromVoters(votersForItem(input.itemId, map));
+    }
   }
 
   if (!next) {
-    delete voters[input.voterId];
+    map.delete(key);
   } else {
-    voters[input.voterId] = next;
+    map.set(key, next);
   }
-
-  return saveVoters(input.itemId, voters);
+  await persistMemory();
+  return stateFromVoters(votersForItem(input.itemId, map));
 }
