@@ -12,15 +12,17 @@ import {
 } from "@/content/gallery";
 import {
   REACTION_OPTIONS,
-  applyReactionChange,
-  emptyCounts,
+  applyOptimisticState,
+  emptyState,
   formatCount,
+  getVoterId,
   likesTotal,
+  normalizeState,
   readLocalCounts,
   readLocalPicks,
   writeLocalCounts,
   writeLocalPick,
-  type ReactionCounts,
+  type ItemReactionState,
   type ReactionType,
   type ReactionsMap,
 } from "@/lib/gallery-reactions";
@@ -33,8 +35,9 @@ type MasonryInstance = {
 };
 
 type ReactionsApi = {
-  countsFor: (itemId: string) => ReactionCounts;
+  stateFor: (itemId: string) => ItemReactionState;
   pickFor: (itemId: string) => ReactionType | null;
+  likesFor: (itemId: string) => number;
   react: (itemId: string, reaction: ReactionType) => void;
 };
 
@@ -45,7 +48,7 @@ function spanClass(span: GallerySpan) {
 }
 
 function useGalleryReactions(): ReactionsApi {
-  const [counts, setCounts] = useState<ReactionsMap>(() => readLocalCounts());
+  const [states, setStates] = useState<ReactionsMap>(() => readLocalCounts());
   const [picks, setPicks] = useState<Record<string, ReactionType>>(() => readLocalPicks());
 
   useEffect(() => {
@@ -54,10 +57,13 @@ function useGalleryReactions(): ReactionsApi {
       .then((res) => (res.ok ? res.json() : null))
       .then((data: unknown) => {
         if (cancelled || !data || typeof data !== "object") return;
-        const payload = data as { counts?: ReactionsMap };
+        const payload = data as { counts?: Record<string, unknown> };
         if (!payload.counts || typeof payload.counts !== "object") return;
-        setCounts((prev) => {
-          const next = { ...prev, ...payload.counts };
+        setStates((prev) => {
+          const next: ReactionsMap = { ...prev };
+          for (const [id, value] of Object.entries(payload.counts!)) {
+            next[id] = normalizeState(value);
+          }
           writeLocalCounts(next);
           return next;
         });
@@ -69,14 +75,17 @@ function useGalleryReactions(): ReactionsApi {
   }, []);
 
   const react = useCallback((itemId: string, reaction: ReactionType) => {
+    const voterId = getVoterId();
+    if (!voterId) return;
+
     setPicks((prevPicks) => {
       const previous = prevPicks[itemId] ?? null;
       const nextPick = previous === reaction ? null : reaction;
 
-      setCounts((prevCounts) => {
+      setStates((prevStates) => {
         const updated = {
-          ...prevCounts,
-          [itemId]: applyReactionChange(prevCounts[itemId] ?? emptyCounts(), previous, nextPick),
+          ...prevStates,
+          [itemId]: applyOptimisticState(prevStates[itemId] ?? emptyState(), previous, nextPick),
         };
         writeLocalCounts(updated);
         return updated;
@@ -86,15 +95,20 @@ function useGalleryReactions(): ReactionsApi {
       void fetch("/api/gallery-reactions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ itemId, reaction: nextPick, previous }),
+        body: JSON.stringify({ itemId, voterId, reaction: nextPick }),
       })
         .then((res) => (res.ok ? res.json() : null))
         .then((data: unknown) => {
           if (!data || typeof data !== "object") return;
-          const payload = data as { counts?: ReactionCounts };
-          if (!payload.counts) return;
-          setCounts((prev) => {
-            const next = { ...prev, [itemId]: payload.counts as ReactionCounts };
+          const payload = data as { state?: unknown; counts?: unknown; likes?: number };
+          const state = normalizeState(
+            payload.state ?? {
+              counts: payload.counts,
+              likes: payload.likes,
+            },
+          );
+          setStates((prev) => {
+            const next = { ...prev, [itemId]: state };
             writeLocalCounts(next);
             return next;
           });
@@ -111,8 +125,9 @@ function useGalleryReactions(): ReactionsApi {
   }, []);
 
   return {
-    countsFor: (itemId) => counts[itemId] ?? emptyCounts(),
+    stateFor: (itemId) => states[itemId] ?? emptyState(),
     pickFor: (itemId) => picks[itemId] ?? null,
+    likesFor: (itemId) => likesTotal(states[itemId]),
     react,
   };
 }
@@ -232,7 +247,7 @@ export function Gallery({
               key={item.id}
               item={item}
               onOpen={() => setActive(item)}
-              likes={likesTotal(reactions.countsFor(item.id))}
+              likes={reactions.likesFor(item.id)}
             />
           ))}
         </div>
@@ -417,7 +432,7 @@ function ImageCard({
           loading="lazy"
           className="block h-auto w-full transition duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />
-        <LikesBadge likes={likesTotal(reactions.countsFor(item.id))} positionClass="top-3 left-3" />
+        <LikesBadge likes={reactions.likesFor(item.id)} positionClass="top-3 left-3" />
         <CardMeta category={item.category} title={item.title} />
         <ReactionBar
           visible={hovered}
@@ -576,7 +591,7 @@ function Lightbox({
                 positionClass="bottom-14"
               />
             ) : (
-              <LikesBadge likes={likesTotal(reactions.countsFor(item.id))} />
+              <LikesBadge likes={reactions.likesFor(item.id)} />
             )}
           </div>
         )}

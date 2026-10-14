@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isReactionType } from "@/lib/gallery-reactions";
+import { isReactionType, isValidVoterId } from "@/lib/gallery-reactions";
 import { commitReaction, loadReactionCounts } from "@/lib/reaction-store";
 
 export async function GET() {
@@ -32,22 +32,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing item." }, { status: 400 });
   }
 
+  const voterId = typeof record.voterId === "string" ? record.voterId.trim() : "";
+  if (!isValidVoterId(voterId)) {
+    return NextResponse.json({ error: "Missing voter." }, { status: 400 });
+  }
+
   const reaction =
     record.reaction === null ? null : isReactionType(record.reaction) ? record.reaction : undefined;
   if (reaction === undefined) {
     return NextResponse.json({ error: "Invalid reaction." }, { status: 400 });
   }
 
-  const previous =
-    record.previous === null || record.previous === undefined
-      ? null
-      : isReactionType(record.previous)
-        ? record.previous
-        : null;
-
   try {
-    const counts = await commitReaction({ itemId, reaction, previous });
-    return NextResponse.json({ ok: true, counts });
+    const state = await commitReaction({ itemId, voterId, reaction });
+    return NextResponse.json({
+      ok: true,
+      counts: state.counts,
+      likes: state.likes,
+      state,
+    });
   } catch {
     return NextResponse.json({ error: "Could not save reaction." }, { status: 500 });
   }
