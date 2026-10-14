@@ -1,0 +1,73 @@
+.st-row {
+  display: flex;
+}
+
+.st-cell {
+  aspect-ratio: 1;
+  width: 1.35rem;
+  border-radius: 0.35rem;
+}
+
+@media (min-width: 640px) {
+  .st-cell {
+    width: 1.7rem;
+  }
+}
+
+.st-Empty {
+  background: transparent;
+}
+
+.st-I {
+  background-color: #33e6ff;
+  box-shadow: 0 0 6px #33e6ff, 0 0 14px rgba(51, 230, 255, 0.55);
+  border: 1px solid rgba(8, 7, 14, 0.45);
+}
+
+.st-J {
+  background-color: #9b8cff;
+  box-shadow: 0 0 6px #9b8cff, 0 0 14px rgba(155, 140, 255, 0.5);
+  border: 1px solid rgba(8, 7, 14, 0.45);
+}
+
+.st-L {
+  background-color: #ffe45e;
+  box-shadow: 0 0 6px #ffe45e, 0 0 14px rgba(255, 228, 94, 0.45);
+  border: 1px solid rgba(8, 7, 14, 0.45);
+}
+
+.st-O {
+  background-color: #c6ff3d;
+  box-shadow: 0 0 6px #c6ff3d, 0 0 14px rgba(198, 255, 61, 0.5);
+  border: 1px solid rgba(8, 7, 14, 0.45);
+}
+
+.st-S {
+  background-color: #5dffc2;
+  box-shadow: 0 0 6px #5dffc2, 0 0 14px rgba(93, 255, 194, 0.45);
+  border: 1px solid rgba(8, 7, 14, 0.45);
+}
+
+.st-T {
+  background-color: #ff3cac;
+  box-shadow: 0 0 6px #ff3cac, 0 0 14px rgba(255, 60, 172, 0.5);
+  border: 1px solid rgba(8, 7, 14, 0.45);
+}
+
+.st-Z {
+  background-color: #ff7a6e;
+  box-shadow: 0 0 6px #ff7a6e, 0 0 14px rgba(255, 122, 110, 0.45);
+  border: 1px solid rgba(8, 7, 14, 0.45);
+}
+
+.st-IGhost,
+.st-JGhost,
+.st-LGhost,
+.st-OGhost,
+.st-SGhost,
+.st-TGhost,
+.st-ZGhost {
+  background-color: rgba(244, 242, 255, 0.06);
+  border: 1px solid rgba(244, 242, 255, 0.28);
+  box-shadow: none;
+}
