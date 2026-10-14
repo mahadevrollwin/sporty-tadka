@@ -13,11 +13,13 @@ import {
 import {
   REACTION_OPTIONS,
   applyOptimisticState,
+  displayReaction,
   emptyState,
   formatCount,
   getVoterId,
   likesTotal,
   normalizeState,
+  reactionEmoji,
   readLocalCounts,
   readLocalPicks,
   writeLocalCounts,
@@ -38,6 +40,7 @@ type ReactionsApi = {
   stateFor: (itemId: string) => ItemReactionState;
   pickFor: (itemId: string) => ReactionType | null;
   likesFor: (itemId: string) => number;
+  displayFor: (itemId: string) => ReactionType | null;
   react: (itemId: string, reaction: ReactionType) => void;
 };
 
@@ -128,6 +131,7 @@ function useGalleryReactions(): ReactionsApi {
     stateFor: (itemId) => states[itemId] ?? emptyState(),
     pickFor: (itemId) => picks[itemId] ?? null,
     likesFor: (itemId) => likesTotal(states[itemId]),
+    displayFor: (itemId) => displayReaction(states[itemId]?.counts, picks[itemId] ?? null),
     react,
   };
 }
@@ -388,9 +392,11 @@ function ReactionBar({
 
 function LikesBadge({
   likes,
+  reaction,
   positionClass = "top-3 right-3",
 }: {
   likes: number;
+  reaction?: ReactionType | null;
   positionClass?: string;
 }) {
   if (likes <= 0) return null;
@@ -399,19 +405,19 @@ function LikesBadge({
     <span
       className={`pointer-events-none absolute z-[5] inline-flex items-center gap-1 rounded-full border border-line bg-canvas/70 px-2.5 py-1 text-[11px] font-bold tracking-wide text-ink backdrop-blur-sm ${positionClass}`}
     >
-      <span aria-hidden="true">❤️</span>
+      <span aria-hidden="true">{reactionEmoji(reaction)}</span>
       <span>{formatCount(likes)}</span>
       <span className="sr-only">likes</span>
     </span>
   );
 }
 
-function LikesLabel({ likes }: { likes: number }) {
+function LikesLabel({ likes, reaction }: { likes: number; reaction?: ReactionType | null }) {
   if (likes <= 0) return null;
 
   return (
     <span className="inline-flex items-center gap-1 rounded-full border border-line bg-elevated/80 px-2.5 py-1 text-[11px] font-bold tracking-wide text-ink">
-      <span aria-hidden="true">❤️</span>
+      <span aria-hidden="true">{reactionEmoji(reaction)}</span>
       <span>{formatCount(likes)}</span>
       <span className="sr-only">likes</span>
     </span>
@@ -451,7 +457,11 @@ function ImageCard({
           loading="lazy"
           className="block h-auto w-full transition duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />
-        <LikesBadge likes={reactions.likesFor(item.id)} positionClass="top-3 left-3" />
+        <LikesBadge
+          likes={reactions.likesFor(item.id)}
+          reaction={reactions.displayFor(item.id)}
+          positionClass="top-3 left-3"
+        />
         <CardMeta category={item.category} title={item.title} />
         <ReactionBar
           visible={hovered}
@@ -597,7 +607,7 @@ function Lightbox({
             </h2>
             {item.type === "video" ? (
               <div className="flex flex-wrap items-center gap-2">
-                <LikesLabel likes={likes} />
+                <LikesLabel likes={likes} reaction={reactions.displayFor(item.id)} />
                 <ReactionButtons
                   selected={reactions.pickFor(item.id)}
                   onReact={(reaction) => reactions.react(item.id, reaction)}

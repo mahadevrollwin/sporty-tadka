@@ -117,6 +117,29 @@ export function likesTotal(state: ItemReactionState | ReactionCounts | undefined
   return REACTION_TYPES.reduce((sum, key) => sum + ((state as ReactionCounts)[key] ?? 0), 0);
 }
 
+export function reactionEmoji(type: ReactionType | null | undefined) {
+  if (!type) return "❤️";
+  return REACTION_OPTIONS.find((option) => option.id === type)?.emoji ?? "❤️";
+}
+
+/** Prefer the viewer's pick; otherwise the most-used reaction on the item. */
+export function displayReaction(
+  counts: ReactionCounts | undefined,
+  selected: ReactionType | null | undefined,
+): ReactionType | null {
+  if (selected) return selected;
+  if (!counts) return null;
+  let best: ReactionType | null = null;
+  let bestCount = 0;
+  for (const key of REACTION_TYPES) {
+    if (counts[key] > bestCount) {
+      best = key;
+      bestCount = counts[key];
+    }
+  }
+  return best;
+}
+
 export function formatCount(n: number) {
   if (n < 1000) return String(n);
   if (n < 10_000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}k`;
