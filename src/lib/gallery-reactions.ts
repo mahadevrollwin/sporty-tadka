@@ -34,7 +34,8 @@ export function isReactionType(value: unknown): value is ReactionType {
 }
 
 export function likesTotal(counts: ReactionCounts | undefined) {
-  return counts?.heart ?? 0;
+  if (!counts) return 0;
+  return REACTION_TYPES.reduce((sum, key) => sum + counts[key], 0);
 }
 
 export function formatCount(n: number) {

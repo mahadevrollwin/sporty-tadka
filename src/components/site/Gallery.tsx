@@ -371,6 +371,8 @@ function LikesBadge({
   likes: number;
   positionClass?: string;
 }) {
+  if (likes <= 0) return null;
+
   return (
     <span
       className={`pointer-events-none absolute z-[5] inline-flex items-center gap-1 rounded-full border border-line bg-canvas/70 px-2.5 py-1 text-[11px] font-bold tracking-wide text-ink backdrop-blur-sm ${positionClass}`}
