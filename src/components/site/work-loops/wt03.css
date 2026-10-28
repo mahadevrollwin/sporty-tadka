@@ -1,0 +1,76 @@
+/* ==================================================================
+   SPORTYTADKA · WORK TILE 03 · CHANNEL TAKEOVER — WIDE (expanded state)
+   Place the .wt03 block as the FIRST child of the expanded tile
+   (it is position:absolute; inset:0). Title/buttons stay on top.
+   The SHARED part is identical in all wide tile files: include it once.
+   ================================================================== */
+
+/* ---------- SPORTYTADKA · WORK TILES · WIDE · SHARED (same in every file) ---------- */
+.wt03{--lime:#C8FF3E;--pink:#FF3D9A;--cyan:#3ED8FF;--yel:#FFD23E;--red:#FF4747;--txt:#F1EEFF;--mut:#8A8798;--c:var(--lime);
+  --T:4.8s;--S:1.2s;position:absolute;inset:0;overflow:hidden;container-type:inline-size;pointer-events:none;
+  font-family:"Space Grotesk",system-ui,sans-serif;color:var(--txt)}
+.wt03 *{box-sizing:border-box}
+.wt03 .d{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:800;text-transform:uppercase;line-height:.86}
+.wt03 .m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+.wt03 .amb{position:absolute;inset:0;background:radial-gradient(40% 70% at 72% 42%,color-mix(in srgb,var(--c) 18%,transparent),transparent 70%)}
+.wt03 .floor{position:absolute;left:30%;right:-10%;top:72%;height:40%;opacity:.55;transform:perspective(40cqw) rotateX(62deg);transform-origin:top;
+  background:repeating-linear-gradient(90deg,color-mix(in srgb,var(--c) 18%,transparent) 0 1px,transparent 1px 4cqw),repeating-linear-gradient(0deg,color-mix(in srgb,var(--c) 12%,transparent) 0 1px,transparent 1px 2.4cqw);
+  -webkit-mask:linear-gradient(180deg,#000,transparent 70%);mask:linear-gradient(180deg,#000,transparent 70%);animation:wt03-floor var(--S) linear infinite}
+.wt03 .hud{position:absolute;left:3.4cqw;top:3cqw;display:flex;gap:2.6cqw}
+.wt03 .hud>div{border-left:.2cqw solid var(--c);padding-left:1cqw}
+.wt03 .hud .l{font-size:.8cqw;color:var(--mut)}
+.wt03 .hud .v{font-size:2.6cqw;margin-top:.3cqw}
+.wt03 .hud .v span{color:var(--c)}
+.wt03 .mod{position:absolute;right:3.4cqw;bottom:9.4cqw;width:30cqw}
+.wt03 .mod .row{display:flex;justify-content:space-between;align-items:center;font-size:.75cqw;color:var(--mut);margin-bottom:.7cqw}
+.wt03 .mod .row b{color:var(--c);font-weight:700}
+.wt03 .glass{background:linear-gradient(160deg,rgba(32,32,46,.94),rgba(16,16,24,.9));border:.12cqw solid rgba(255,255,255,.1);border-radius:1.2cqw;box-shadow:0 2cqw 4cqw rgba(0,0,0,.55)}
+.wt03 .glass::after{content:"";position:absolute;left:0;right:0;top:0;height:.25cqw;background:var(--c);border-radius:1.2cqw 1.2cqw 0 0}
+.wt03 .sk{display:block;height:.7cqw;border-radius:.4cqw;background:rgba(241,238,255,.16)}
+.wt03 .s1,.wt03 .s2,.wt03 .s3,.wt03 .s4{animation:var(--T) linear infinite}
+.wt03 .s1{animation-name: wt03-v1}.wt03 .s2{animation-name: wt03-v2}.wt03 .s3{animation-name: wt03-v3}.wt03 .s4{animation-name: wt03-v4}
+.wt03 .blink{animation:wt03-blink .8s linear infinite}
+.wt03 .scanx{position:absolute;top:0;bottom:0;width:10cqw;left:-12cqw;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--c) 30%,transparent) 85%,var(--c) 92%,transparent);mix-blend-mode:screen;animation:wt03-scanx 2.4s linear infinite}
+@keyframes wt03-v1{0%,25%{opacity:1}25.01%,100%{opacity:0}}
+@keyframes wt03-v2{0%,25%{opacity:0}25.01%,50%{opacity:1}50.01%,100%{opacity:0}}
+@keyframes wt03-v3{0%,50%{opacity:0}50.01%,75%{opacity:1}75.01%,100%{opacity:0}}
+@keyframes wt03-v4{0%,75%{opacity:0}75.01%,100%{opacity:1}}
+@keyframes wt03-blink{0%,55%{opacity:1}56%,100%{opacity:.15}}
+@keyframes wt03-floor{to{background-position:-4cqw 0,0 0}}
+@keyframes wt03-scanx{0%{left:-12cqw;opacity:0}5%{opacity:1}40%{left:104cqw;opacity:1}41%,100%{left:104cqw;opacity:0}}
+@keyframes wt03-marq{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.wt03 *{animation-play-state:paused!important}}
+
+/* ---------- TILE 03 ONLY ---------- */
+.wt03{--c:var(--cyan)}
+
+.wt03 .dash{position:absolute;left:50cqw;top:6.5cqw;width:38cqw;height:24cqw;padding:1.4cqw;transform:perspective(90cqw) rotateY(-16deg) rotateX(4deg);transform-origin:left center;animation:wt03-float 2.4s ease-in-out infinite}
+.wt03 .top{display:flex;justify-content:space-between;align-items:center}
+.wt03 .who{display:flex;align-items:center;gap:.8cqw}
+.wt03 .av{width:2.6cqw;height:2.6cqw;border-radius:50%;background:conic-gradient(var(--cyan),var(--lime),var(--pink),var(--cyan));box-shadow:0 0 0 .25cqw rgba(62,216,255,.25)}
+.wt03 .meta{display:block;font-size:.7cqw;color:var(--mut);margin-top:.35cqw}
+.wt03 .onair{font-size:.7cqw;font-weight:700;background:var(--red);color:#fff;padding:.35cqw .7cqw;border-radius:.4cqw}
+.wt03 .cols{display:grid;grid-template-columns:1.45fr 1fr;gap:1.8cqw;margin-top:1.4cqw}
+.wt03 .num{position:relative;height:5cqw;font-size:5.6cqw;margin-top:.5cqw}
+.wt03 .num b{position:absolute;left:0;bottom:0;font-weight:800}
+.wt03 .up{font-size:.75cqw;color:var(--lime);margin-top:.5cqw}
+.wt03 .chart{width:100%;height:7.4cqw;margin-top:1cqw}
+.wt03 .rev{animation:wt03-rev var(--T) cubic-bezier(.4,0,.2,1) infinite}
+.wt03 .heat{display:grid;grid-template-columns:repeat(7,1fr);gap:.35cqw;margin-top:.7cqw}
+.wt03 .heat i{aspect-ratio:1;border-radius:.3cqw;background:rgba(255,255,255,.07);animation:wt03-cell var(--T) linear infinite;animation-delay:calc(var(--d) * .2s - 4.8s)}
+.wt03 .q{display:flex;flex-direction:column;gap:.5cqw;margin-top:.6cqw}
+.wt03 .toast{position:absolute;display:flex;align-items:center;gap:.8cqw;padding:.8cqw 1.2cqw;font-size:.9cqw;width:17cqw;height:3.4cqw}
+.wt03 .toast span{position:absolute;left:3cqw}
+.wt03 .toast i{width:.9cqw;height:.9cqw;border-radius:50%;flex:none}
+.wt03 .t1{left:37cqw;top:10cqw;animation:wt03-pop var(--S) ease-out infinite}
+.wt03 .t2{left:40cqw;top:21cqw;animation:wt03-pop var(--S) ease-out infinite;animation-delay:-.6s}
+.wt03 .xp{display:flex;align-items:center;gap:.8cqw;font-size:.75cqw;color:var(--mut)}
+.wt03 .bar{flex:1;height:1.2cqw;border-radius:.7cqw;background:rgba(255,255,255,.08);border:.12cqw solid rgba(62,216,255,.3);overflow:hidden}
+.wt03 .bar i{display:block;height:100%;width:4%;background:linear-gradient(90deg,var(--cyan),var(--lime));box-shadow:0 0 1cqw var(--cyan);animation:wt03-xp var(--T) cubic-bezier(.4,0,.2,1) infinite}
+.wt03 .lu{opacity:0;color:var(--lime)!important;animation:wt03-lu var(--T) linear infinite}
+@keyframes wt03-float{0%,100%{translate:0 -.3cqw}50%{translate:0 .3cqw}}
+@keyframes wt03-rev{0%{transform:translateX(-200px)}80%,94%{transform:translateX(0)}100%{transform:translateX(-200px)}}
+@keyframes wt03-cell{0%{background:rgba(255,255,255,.07)}3%,60%{background:var(--cyan);box-shadow:0 0 .6cqw var(--cyan)}66%,100%{background:rgba(255,255,255,.07);box-shadow:none}}
+@keyframes wt03-pop{0%{transform:translateX(-1.5cqw) scale(.94);opacity:0}12%{transform:none;opacity:1}86%{opacity:1}100%{opacity:0}}
+@keyframes wt03-xp{0%{width:4%}84%,96%{width:100%}100%{width:4%}}
+@keyframes wt03-lu{0%,82%{opacity:0}85%,94%{opacity:1}97%,100%{opacity:0}}

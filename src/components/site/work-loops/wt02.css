@@ -1,0 +1,84 @@
+/* ==================================================================
+   SPORTYTADKA · WORK TILE 02 · REEL ROOM — WIDE (expanded state)
+   Fills the whole expanded panel. Place .rrw as the FIRST child of the
+   expanded tile with position:absolute; inset:0. Title stays on top.
+   7.2s seamless loop. Transparent background.
+   ================================================================== */
+.rrw{--lime:#C8FF3E;--pink:#FF3D9A;--cyan:#3ED8FF;--yel:#FFD23E;--red:#FF4747;--txt:#F1EEFF;--mut:#8A8798;
+  --L:7.2s; --G:1.2s;
+  position:absolute;inset:0;overflow:hidden;container-type:inline-size;pointer-events:none;
+  font-family:"Space Grotesk",system-ui,sans-serif;color:var(--txt)}
+.rrw *{box-sizing:border-box}
+.rrw .d{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:800;text-transform:uppercase;line-height:.86}
+.rrw .m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+
+/* ambient light */
+.rrw .amb{position:absolute;inset:0;
+  background:radial-gradient(40% 70% at 74% 42%,rgba(255,61,154,.20),transparent 70%),
+             radial-gradient(30% 50% at 92% 80%,rgba(200,255,62,.08),transparent 70%)}
+.rrw .floor{position:absolute;left:30%;right:-10%;top:72%;height:40%;
+  background:repeating-linear-gradient(90deg,rgba(255,61,154,.16) 0 1px,transparent 1px 4cqw),
+             repeating-linear-gradient(0deg,rgba(255,61,154,.12) 0 1px,transparent 1px 2.4cqw);
+  transform:perspective(40cqw) rotateX(62deg);transform-origin:top;opacity:.6;
+  -webkit-mask:linear-gradient(180deg,#000,transparent 70%),linear-gradient(90deg,transparent,#000 40%);
+  -webkit-mask-composite:source-in;mask:linear-gradient(180deg,#000,transparent 70%);animation:rrw-floor var(--G) linear infinite}
+
+/* conveyor of reels */
+.rrw .rail{position:absolute;inset:0;perspective:110cqw;perspective-origin:24% 34%;
+  -webkit-mask:linear-gradient(90deg,transparent 14%,#000 46%);mask:linear-gradient(90deg,transparent 14%,#000 46%)}
+.rrw .ph{position:absolute;left:0;top:5.6cqw;width:14cqw;height:25cqw;border-radius:1.8cqw;padding:.6cqw;
+  background:#0f0f15;border:.15cqw solid rgba(255,255,255,.12);box-shadow:0 2cqw 4cqw rgba(0,0,0,.6);
+  opacity:0;animation:rrw-move var(--L) linear infinite}
+.rrw .ph::after{content:"";position:absolute;top:1cqw;left:50%;width:3.6cqw;height:.7cqw;margin-left:-1.8cqw;border-radius:1cqw;background:#050507}
+.rrw .scr{position:relative;width:100%;height:100%;border-radius:1.3cqw;overflow:hidden;padding:1.4cqw 1.2cqw;display:flex;flex-direction:column;
+  background:radial-gradient(120% 80% at 30% 35%,color-mix(in srgb,var(--k) 34%,#12121a),#0c0c12 72%)}
+.rrw .scr::before{content:"";position:absolute;inset:-30%;opacity:.8;
+  background:repeating-linear-gradient(115deg,color-mix(in srgb,var(--k) 16%,transparent) 0 .5cqw,transparent .5cqw 1.5cqw);animation:rrw-stripe .6s linear infinite}
+.rrw .scr>*{position:relative}
+.rrw .tp{display:flex;justify-content:space-between;font-size:.75cqw;color:var(--mut)}
+.rrw .tp b{color:var(--txt);font-family:"Saira Condensed";font-size:1.3cqw}
+.rrw .big{margin-top:auto;font-size:4.6cqw;color:var(--k);text-shadow:0 0 1.6cqw color-mix(in srgb,var(--k) 55%,transparent)}
+.rrw .cap{font-size:.75cqw;margin-top:.6cqw}
+.rrw .acts{position:absolute!important;right:.9cqw;bottom:4.2cqw;display:flex;flex-direction:column;gap:.8cqw;align-items:center;font-size:.6cqw}
+.rrw .acts i{display:block;width:1.6cqw;height:1.6cqw;border-radius:50%;background:rgba(255,255,255,.18)}
+.rrw .acts i.h{background:var(--pink);box-shadow:0 0 .8cqw var(--pink)}
+.rrw .pb{height:.3cqw;border-radius:.2cqw;background:rgba(255,255,255,.18);margin-top:1cqw;overflow:hidden}
+.rrw .pb i{display:block;height:100%;background:var(--k);animation:rrw-pb var(--G) linear infinite}
+
+/* HUD stats strip (top-left) */
+.rrw .hud{position:absolute;left:3.4cqw;top:3cqw;display:flex;gap:2.6cqw}
+.rrw .hud div{border-left:.2cqw solid var(--pink);padding-left:1cqw}
+.rrw .hud .l{font-size:.8cqw;color:var(--mut)}
+.rrw .hud .v{font-size:2.6cqw;margin-top:.3cqw}
+.rrw .hud .v span{color:var(--pink)}
+
+/* hearts burst from the front reel */
+.rrw .hrt{position:absolute;left:84%;top:58%;width:1.6cqw;opacity:0;fill:var(--pink);filter:drop-shadow(0 0 .6cqw var(--pink));animation:rrw-heart 2.4s ease-out infinite}
+
+/* edit timeline (above the CTA) */
+.rrw .tl{position:absolute;right:3.4cqw;bottom:9.4cqw;width:30cqw}
+.rrw .tl .row{display:flex;justify-content:space-between;font-size:.75cqw;color:var(--mut);margin-bottom:.7cqw}
+.rrw .tl .row b{color:var(--lime);font-weight:700}
+.rrw .trk{position:relative;height:2.6cqw;border-radius:.5cqw;background:rgba(255,255,255,.05);border:.1cqw solid rgba(255,255,255,.1);overflow:hidden;display:flex;gap:.2cqw;padding:.3cqw}
+.rrw .trk span{flex:var(--f);border-radius:.3cqw;background:color-mix(in srgb,var(--k) 45%,transparent);border:.1cqw solid var(--k)}
+.rrw .wave{position:absolute;left:0;right:0;bottom:-1.6cqw;height:1.2cqw;display:flex;align-items:flex-end;gap:.18cqw}
+.rrw .wave i{flex:1;background:rgba(241,238,255,.25);border-radius:.1cqw;animation:rrw-wave .6s ease-in-out infinite alternate}
+.rrw .head{position:absolute;top:-.6cqw;bottom:-.6cqw;width:.2cqw;background:var(--lime);box-shadow:0 0 .8cqw var(--lime);left:0;animation:rrw-head var(--L) linear infinite}
+.rrw .head::before{content:"";position:absolute;top:-.3cqw;left:-.5cqw;width:1.2cqw;height:.6cqw;background:var(--lime);clip-path:polygon(0 0,100% 0,50% 100%)}
+
+/* flash on each reel swap */
+.rrw .fl{position:absolute;inset:0;background:radial-gradient(40% 60% at 80% 45%,rgba(255,255,255,.12),transparent 70%);opacity:0;animation:rrw-fl var(--G) linear infinite}
+
+@keyframes rrw-move{
+  0%{transform:translate3d(104cqw,0,10cqw) rotateY(-24deg);opacity:0}
+  6%{opacity:1}
+  80%{opacity:1}
+  100%{transform:translate3d(22cqw,-2cqw,-70cqw) rotateY(-24deg);opacity:0}}
+@keyframes rrw-stripe{to{transform:translateX(-1.6cqw)}}
+@keyframes rrw-pb{0%{width:0}100%{width:100%}}
+@keyframes rrw-floor{to{background-position:-4cqw 0,0 0}}
+@keyframes rrw-heart{0%{transform:translate(0,0) scale(.5);opacity:0}12%{opacity:1}100%{transform:translate(var(--x),-16cqw) scale(1.2);opacity:0}}
+@keyframes rrw-head{to{left:100%}}
+@keyframes rrw-wave{from{height:20%}to{height:100%}}
+@keyframes rrw-fl{0%{opacity:.9}20%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.rrw *{animation-play-state:paused!important}}

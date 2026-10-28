@@ -1,0 +1,66 @@
+/* ==================================================================
+   SPORTYTADKA · WORK TILE 01 · MATCHDAY POSTERS — WIDE (expanded state)
+   Place the .wt01 block as the FIRST child of the expanded tile
+   (it is position:absolute; inset:0). Title/buttons stay on top.
+   The SHARED part is identical in all wide tile files: include it once.
+   ================================================================== */
+
+/* ---------- SPORTYTADKA · WORK TILES · WIDE · SHARED (same in every file) ---------- */
+.wt01{--lime:#C8FF3E;--pink:#FF3D9A;--cyan:#3ED8FF;--yel:#FFD23E;--red:#FF4747;--txt:#F1EEFF;--mut:#8A8798;--c:var(--lime);
+  --T:4.8s;--S:1.2s;position:absolute;inset:0;overflow:hidden;container-type:inline-size;pointer-events:none;
+  font-family:"Space Grotesk",system-ui,sans-serif;color:var(--txt)}
+.wt01 *{box-sizing:border-box}
+.wt01 .d{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:800;text-transform:uppercase;line-height:.86}
+.wt01 .m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+.wt01 .amb{position:absolute;inset:0;background:radial-gradient(40% 70% at 72% 42%,color-mix(in srgb,var(--c) 18%,transparent),transparent 70%)}
+.wt01 .floor{position:absolute;left:30%;right:-10%;top:72%;height:40%;opacity:.55;transform:perspective(40cqw) rotateX(62deg);transform-origin:top;
+  background:repeating-linear-gradient(90deg,color-mix(in srgb,var(--c) 18%,transparent) 0 1px,transparent 1px 4cqw),repeating-linear-gradient(0deg,color-mix(in srgb,var(--c) 12%,transparent) 0 1px,transparent 1px 2.4cqw);
+  -webkit-mask:linear-gradient(180deg,#000,transparent 70%);mask:linear-gradient(180deg,#000,transparent 70%);animation:wt01-floor var(--S) linear infinite}
+.wt01 .hud{position:absolute;left:3.4cqw;top:3cqw;display:flex;gap:2.6cqw}
+.wt01 .hud>div{border-left:.2cqw solid var(--c);padding-left:1cqw}
+.wt01 .hud .l{font-size:.8cqw;color:var(--mut)}
+.wt01 .hud .v{font-size:2.6cqw;margin-top:.3cqw}
+.wt01 .hud .v span{color:var(--c)}
+.wt01 .mod{position:absolute;right:3.4cqw;bottom:9.4cqw;width:30cqw}
+.wt01 .mod .row{display:flex;justify-content:space-between;align-items:center;font-size:.75cqw;color:var(--mut);margin-bottom:.7cqw}
+.wt01 .mod .row b{color:var(--c);font-weight:700}
+.wt01 .glass{background:linear-gradient(160deg,rgba(32,32,46,.94),rgba(16,16,24,.9));border:.12cqw solid rgba(255,255,255,.1);border-radius:1.2cqw;box-shadow:0 2cqw 4cqw rgba(0,0,0,.55)}
+.wt01 .glass::after{content:"";position:absolute;left:0;right:0;top:0;height:.25cqw;background:var(--c);border-radius:1.2cqw 1.2cqw 0 0}
+.wt01 .sk{display:block;height:.7cqw;border-radius:.4cqw;background:rgba(241,238,255,.16)}
+.wt01 .s1,.wt01 .s2,.wt01 .s3,.wt01 .s4{animation:var(--T) linear infinite}
+.wt01 .s1{animation-name: wt01-v1}.wt01 .s2{animation-name: wt01-v2}.wt01 .s3{animation-name: wt01-v3}.wt01 .s4{animation-name: wt01-v4}
+.wt01 .blink{animation:wt01-blink .8s linear infinite}
+.wt01 .scanx{position:absolute;top:0;bottom:0;width:10cqw;left:-12cqw;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--c) 30%,transparent) 85%,var(--c) 92%,transparent);mix-blend-mode:screen;animation:wt01-scanx 2.4s linear infinite}
+@keyframes wt01-v1{0%,25%{opacity:1}25.01%,100%{opacity:0}}
+@keyframes wt01-v2{0%,25%{opacity:0}25.01%,50%{opacity:1}50.01%,100%{opacity:0}}
+@keyframes wt01-v3{0%,50%{opacity:0}50.01%,75%{opacity:1}75.01%,100%{opacity:0}}
+@keyframes wt01-v4{0%,75%{opacity:0}75.01%,100%{opacity:1}}
+@keyframes wt01-blink{0%,55%{opacity:1}56%,100%{opacity:.15}}
+@keyframes wt01-floor{to{background-position:-4cqw 0,0 0}}
+@keyframes wt01-scanx{0%{left:-12cqw;opacity:0}5%{opacity:1}40%{left:104cqw;opacity:1}41%,100%{left:104cqw;opacity:0}}
+@keyframes wt01-marq{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.wt01 *{animation-play-state:paused!important}}
+
+/* ---------- TILE 01 ONLY ---------- */
+.wt01{--c:var(--lime)}
+
+.wt01{--T:6s}
+.wt01 .wall{position:absolute;left:44cqw;top:7cqw;width:46cqw;display:grid;grid-template-columns:repeat(4,1fr);gap:1.4cqw;
+  transform:perspective(90cqw) rotateY(-18deg) rotateX(6deg);transform-origin:left center;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 22%);mask:linear-gradient(90deg,transparent,#000 22%)}
+.wt01 .po{position:relative;height:11.4cqw;transform-style:preserve-3d;animation:wt01-bob 2.4s ease-in-out infinite}
+.wt01 .pf{position:absolute;inset:0;border-radius:.9cqw;padding:.9cqw;display:flex;flex-direction:column;overflow:hidden;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--k) 22%,#1b1b26),#101018 70%);border:.12cqw solid color-mix(in srgb,var(--k) 45%,transparent);
+  box-shadow:0 1.4cqw 2.4cqw rgba(0,0,0,.5);animation:var(--T) linear infinite;animation-delay:inherit}
+.wt01 .pf::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 .15cqw,transparent .15cqw .45cqw)}
+.wt01 .pf::after{content:"";position:absolute;left:0;right:0;top:0;height:.22cqw;background:var(--k)}
+.wt01 .pl{position:relative;align-self:flex-start;font-size:.62cqw;font-weight:700;padding:.2cqw .45cqw;border-radius:.3cqw;background:var(--k);color:#0B0B10}
+.wt01 .pf b{position:relative;margin-top:auto;font-size:2.7cqw;color:var(--txt)}
+.wt01 .pf b{text-shadow:0 0 1.2cqw color-mix(in srgb,var(--k) 45%,transparent)}
+.wt01 .mt{position:relative;font-size:.62cqw;color:var(--k);margin-top:.45cqw}
+.wt01 .a{animation-name:wt01-a}.wt01 .b{animation-name:wt01-b}
+.wt01 .tick{position:relative;height:3cqw;overflow:hidden;display:flex;align-items:center;padding:0 1cqw}
+.wt01 .mq{display:flex;white-space:nowrap;font-size:.85cqw;color:var(--txt);animation:wt01-marq 9s linear infinite}
+@keyframes wt01-a{0%,40%{transform:rotateY(0);opacity:1}45%{transform:rotateY(90deg);opacity:1}45.01%,95%{transform:rotateY(-90deg);opacity:0}95.01%{transform:rotateY(-90deg);opacity:1}100%{transform:rotateY(0);opacity:1}}
+@keyframes wt01-b{0%,45%{transform:rotateY(-90deg);opacity:0}45.01%{transform:rotateY(-90deg);opacity:1}50%,90%{transform:rotateY(0);opacity:1}95%{transform:rotateY(90deg);opacity:1}95.01%,100%{transform:rotateY(90deg);opacity:0}}
+@keyframes wt01-bob{0%,100%{transform:translateY(-.25cqw)}50%{transform:translateY(.25cqw)}}

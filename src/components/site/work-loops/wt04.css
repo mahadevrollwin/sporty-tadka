@@ -1,0 +1,76 @@
+/* ==================================================================
+   SPORTYTADKA · WORK TILE 04 · STATS TO SEARCH — WIDE (expanded state)
+   Place the .wt04 block as the FIRST child of the expanded tile
+   (it is position:absolute; inset:0). Title/buttons stay on top.
+   The SHARED part is identical in all wide tile files: include it once.
+   ================================================================== */
+
+/* ---------- SPORTYTADKA · WORK TILES · WIDE · SHARED (same in every file) ---------- */
+.wt04{--lime:#C8FF3E;--pink:#FF3D9A;--cyan:#3ED8FF;--yel:#FFD23E;--red:#FF4747;--txt:#F1EEFF;--mut:#8A8798;--c:var(--lime);
+  --T:4.8s;--S:1.2s;position:absolute;inset:0;overflow:hidden;container-type:inline-size;pointer-events:none;
+  font-family:"Space Grotesk",system-ui,sans-serif;color:var(--txt)}
+.wt04 *{box-sizing:border-box}
+.wt04 .d{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:800;text-transform:uppercase;line-height:.86}
+.wt04 .m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+.wt04 .amb{position:absolute;inset:0;background:radial-gradient(40% 70% at 72% 42%,color-mix(in srgb,var(--c) 18%,transparent),transparent 70%)}
+.wt04 .floor{position:absolute;left:30%;right:-10%;top:72%;height:40%;opacity:.55;transform:perspective(40cqw) rotateX(62deg);transform-origin:top;
+  background:repeating-linear-gradient(90deg,color-mix(in srgb,var(--c) 18%,transparent) 0 1px,transparent 1px 4cqw),repeating-linear-gradient(0deg,color-mix(in srgb,var(--c) 12%,transparent) 0 1px,transparent 1px 2.4cqw);
+  -webkit-mask:linear-gradient(180deg,#000,transparent 70%);mask:linear-gradient(180deg,#000,transparent 70%);animation:wt04-floor var(--S) linear infinite}
+.wt04 .hud{position:absolute;left:3.4cqw;top:3cqw;display:flex;gap:2.6cqw}
+.wt04 .hud>div{border-left:.2cqw solid var(--c);padding-left:1cqw}
+.wt04 .hud .l{font-size:.8cqw;color:var(--mut)}
+.wt04 .hud .v{font-size:2.6cqw;margin-top:.3cqw}
+.wt04 .hud .v span{color:var(--c)}
+.wt04 .mod{position:absolute;right:3.4cqw;bottom:9.4cqw;width:30cqw}
+.wt04 .mod .row{display:flex;justify-content:space-between;align-items:center;font-size:.75cqw;color:var(--mut);margin-bottom:.7cqw}
+.wt04 .mod .row b{color:var(--c);font-weight:700}
+.wt04 .glass{background:linear-gradient(160deg,rgba(32,32,46,.94),rgba(16,16,24,.9));border:.12cqw solid rgba(255,255,255,.1);border-radius:1.2cqw;box-shadow:0 2cqw 4cqw rgba(0,0,0,.55)}
+.wt04 .glass::after{content:"";position:absolute;left:0;right:0;top:0;height:.25cqw;background:var(--c);border-radius:1.2cqw 1.2cqw 0 0}
+.wt04 .sk{display:block;height:.7cqw;border-radius:.4cqw;background:rgba(241,238,255,.16)}
+.wt04 .s1,.wt04 .s2,.wt04 .s3,.wt04 .s4{animation:var(--T) linear infinite}
+.wt04 .s1{animation-name: wt04-v1}.wt04 .s2{animation-name: wt04-v2}.wt04 .s3{animation-name: wt04-v3}.wt04 .s4{animation-name: wt04-v4}
+.wt04 .blink{animation:wt04-blink .8s linear infinite}
+.wt04 .scanx{position:absolute;top:0;bottom:0;width:10cqw;left:-12cqw;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--c) 30%,transparent) 85%,var(--c) 92%,transparent);mix-blend-mode:screen;animation:wt04-scanx 2.4s linear infinite}
+@keyframes wt04-v1{0%,25%{opacity:1}25.01%,100%{opacity:0}}
+@keyframes wt04-v2{0%,25%{opacity:0}25.01%,50%{opacity:1}50.01%,100%{opacity:0}}
+@keyframes wt04-v3{0%,50%{opacity:0}50.01%,75%{opacity:1}75.01%,100%{opacity:0}}
+@keyframes wt04-v4{0%,75%{opacity:0}75.01%,100%{opacity:1}}
+@keyframes wt04-blink{0%,55%{opacity:1}56%,100%{opacity:.15}}
+@keyframes wt04-floor{to{background-position:-4cqw 0,0 0}}
+@keyframes wt04-scanx{0%{left:-12cqw;opacity:0}5%{opacity:1}40%{left:104cqw;opacity:1}41%,100%{left:104cqw;opacity:0}}
+@keyframes wt04-marq{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.wt04 *{animation-play-state:paused!important}}
+
+/* ---------- TILE 04 ONLY ---------- */
+.wt04{--c:var(--yel)}
+
+.wt04 .serp{position:absolute;left:46cqw;top:6.5cqw;width:42cqw;transform:perspective(90cqw) rotateY(-14deg) rotateX(4deg);transform-origin:left center}
+.wt04 .sbar{position:relative;height:3.6cqw;border-radius:1.8cqw!important;display:flex;align-items:center;gap:.8cqw;padding:0 1.4cqw;border-color:rgba(255,210,62,.55)!important;box-shadow:0 0 2.4cqw rgba(255,210,62,.18)}
+.wt04 .sbar::after{display:none}
+.wt04 .sbar svg{width:1.6cqw;fill:none;stroke:var(--yel);stroke-width:2.4;stroke-linecap:round}
+.wt04 .typed{font-size:1.05cqw;letter-spacing:0;text-transform:none;display:inline-block;overflow:hidden;white-space:nowrap;width:0;animation:wt04-type var(--T) steps(21,end) infinite}
+.wt04 .caret{width:.15cqw;height:1.6cqw;background:var(--yel);margin-left:-.5cqw;animation:wt04-blink .8s linear infinite}
+.wt04 .kb{margin-left:auto;font-size:.6cqw;color:var(--mut);border:.1cqw solid rgba(255,255,255,.2);border-radius:.3cqw;padding:.2cqw .5cqw}
+.wt04 .res{position:relative;height:17.6cqw;margin-top:1.2cqw;padding-left:2.4cqw}
+.wt04 .ranks{position:absolute;left:0;top:0;width:2cqw;font-size:1cqw;color:var(--mut)}
+.wt04 .ranks b{position:absolute;left:0;height:3.8cqw;display:flex;align-items:center;font-weight:700}
+.wt04 .ranks b:nth-child(1){top:0;color:var(--yel)}.wt04 .ranks b:nth-child(2){top:4.5cqw}.wt04 .ranks b:nth-child(3){top:9cqw}.wt04 .ranks b:nth-child(4){top:13.5cqw}
+.wt04 .r{position:absolute;left:2.4cqw;right:0;height:3.8cqw;border-radius:.8cqw!important;display:flex;align-items:center;padding:0 1.2cqw}
+.wt04 .r::after{display:none}
+.wt04 .tx{flex:1;display:flex;flex-direction:column;gap:.4cqw}
+.wt04 .url{font-size:.6cqw;color:var(--mut);letter-spacing:.04em;text-transform:none}
+.wt04 .tx .sk{height:.6cqw}.wt04 .tx .sm{height:.45cqw;opacity:.6}
+.wt04 .o1{top:0;animation:wt04-o1 var(--T) cubic-bezier(.6,0,.3,1) infinite}
+.wt04 .o2{top:4.5cqw;animation:wt04-o2 var(--T) cubic-bezier(.6,0,.3,1) infinite}
+.wt04 .o3{top:9cqw;animation:wt04-o3 var(--T) cubic-bezier(.6,0,.3,1) infinite}
+.wt04 .me{top:13.5cqw;z-index:2;background:linear-gradient(160deg,rgba(255,210,62,.2),rgba(30,26,12,.92))!important;border-color:var(--yel)!important;box-shadow:0 0 2.4cqw rgba(255,210,62,.35)!important;animation:wt04-me var(--T) cubic-bezier(.6,0,.3,1) infinite}
+.wt04 .me .sk{background:rgba(255,210,62,.55)}.wt04 .me .url{color:var(--yel)}
+.wt04 .crown{font-size:1.6cqw;background:var(--yel);color:#0B0B10;padding:.25cqw .6cqw;border-radius:.4cqw;opacity:0;animation:wt04-crown var(--T) linear infinite}
+.wt04 .spark{width:100%;height:4cqw;fill:none;stroke:var(--yel);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:330;filter:drop-shadow(0 0 .5cqw var(--yel));animation:wt04-draw var(--T) ease-out infinite}
+@keyframes wt04-type{0%{width:0}30%,90%{width:21ch}96%,100%{width:0}}
+@keyframes wt04-me{0%,38%{top:13.5cqw}46%{top:9cqw}54%{top:4.5cqw}62%,92%{top:0}99%,100%{top:13.5cqw}}
+@keyframes wt04-o3{0%,38%{top:9cqw}46%,92%{top:13.5cqw}99%,100%{top:9cqw}}
+@keyframes wt04-o2{0%,46%{top:4.5cqw}54%,92%{top:9cqw}99%,100%{top:4.5cqw}}
+@keyframes wt04-o1{0%,54%{top:0}62%,92%{top:4.5cqw}99%,100%{top:0}}
+@keyframes wt04-crown{0%,61%{opacity:0;transform:scale(.4)}64%{opacity:1;transform:scale(1.3)}67%,90%{opacity:1;transform:scale(1)}93%,100%{opacity:0}}
+@keyframes wt04-draw{0%,30%{stroke-dashoffset:330}70%,94%{stroke-dashoffset:0}100%{stroke-dashoffset:330}}

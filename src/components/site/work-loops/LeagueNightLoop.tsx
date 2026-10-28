@@ -1,53 +1,26 @@
 import type { CSSProperties } from "react";
-import "./lgn.css";
+import "./wt05.css";
 
 export function LeagueNightLoop() {
   return (
-    <div className="lgn t05" aria-hidden="true">
-      <div className="glow"></div>
-      <i className="px" style={{ left: "20%", top: "84%", animationDelay: "-.3s" }}></i>
-      <i className="px a" style={{ left: "30%", top: "90%", animationDelay: "-1.5s", width: ".7cqw", height: ".7cqw" }}></i>
-      <i className="px" style={{ left: "76%", top: "86%", animationDelay: "-.9s" }}></i>
-      <i className="px b" style={{ left: "82%", top: "74%", animationDelay: "-2s", width: ".7cqw", height: ".7cqw" }}></i>
-      <i className="px p" style={{ left: "68%", top: "94%", animationDelay: "-1.1s" }}></i>
-      <i className="px" style={{ left: "16%", top: "66%", animationDelay: "-1.8s", width: ".7cqw", height: ".7cqw" }}></i>
-      <div className="beam"></div><div className="emit"></div>
-      <div className="hin">
-        <svg viewBox="-100 -100 200 200">{/* target + dart */}
-          <circle className="st fl" r="72"/>
-          <circle className="st" r="50"/>
-          <circle className="st ff" r="26" style={{ fillOpacity: ".25" }}/>
-          <circle className="st ff" r="8"/>
-          <path className="st faint" d="M-92 0H-76M76 0H92M0-92V-76M0 76V92"/>
-          <circle className="st pulse" r="26"/>
-          <g className="dart"><path className="st" d="M0 0L48-48"/><path className="st ff" d="M0 0L10-4 4-10Z"/><path className="st" d="M40-56L54-70M56-40L70-54M48-48L62-62"/></g>
-        </svg>
-      </div>
-      <div className="stage"><div className="tilt">
-        <div className="hud"><i className="br tl"></i><i className="br tr"></i><i className="br bl"></i><i className="br bri"></i>
-          <span className="tagtop mono">Landing zone · Convert</span></div>
-        <div className="card">
-          <div className="row nav"><span className="row" style={{ gap: "1cqw" }}><i className="logo"></i><span className="sk" style={{ width: "7cqw" }}></span></span>
-            <span className="row" style={{ gap: "1cqw" }}><span className="sk" style={{ width: "4cqw" }}></span><span className="sk" style={{ width: "4cqw" }}></span><span className="sk" style={{ width: "4cqw" }}></span></span></div>
-          <div className="mono eb">Season pass · Limited</div>
-          <div className="disp hl">Join the<br /><span>squad.</span></div>
-          <span className="sk" style={{ width: "86%", marginTop: "1.6cqw" }}></span>
-          <span className="sk" style={{ width: "62%", marginTop: ".8cqw" }}></span>
-          <div className="ctaw">
-            <div className="cta mono">Sign up now</div>
-            <i className="ring"></i>
-            <i className="bp" style={{ "--a": "-20deg" } as CSSProperties}></i><i className="bp" style={{ "--a": "-60deg" } as CSSProperties}></i><i className="bp" style={{ "--a": "-110deg" } as CSSProperties}></i>
-            <i className="bp" style={{ "--a": "-160deg" } as CSSProperties}></i><i className="bp" style={{ "--a": "20deg", background: "var(--lime)" } as CSSProperties}></i><i className="bp" style={{ "--a": "200deg", background: "var(--cyan)" } as CSSProperties}></i>
-            <div className="disp plus">+1</div>
-            <svg className="cur" viewBox="0 0 14 21"><path d="M1 1L1 17 5 13.5 8 20 10.5 19 7.5 12.5 13 12.5Z"/></svg>
-          </div>
-          <div className="stats">
-            <div><div className="mono meta">Sign-ups</div><div className="num disp"><b className="s1">1,284</b><b className="s2">1,285</b><b className="s3">1,286</b><b className="s4">1,287</b></div></div>
-            <div style={{ textAlign: "right" }}><div className="mono meta">Conversion</div><div className="disp conv">12.4%</div></div>
-          </div>
-          <div className="scan"></div>
+    <div className="wt05" aria-hidden="true">
+    <div className="amb"></div><div className="floor"></div>
+      <div className="flow"><i className="dot" style={{ top: "9cqw", animationDelay: "0.0s", "--ty": "15.2cqw" } as CSSProperties} /><i className="dot" style={{ top: "14cqw", animationDelay: "-0.3s", "--ty": "10.2cqw" } as CSSProperties} /><i className="dot" style={{ top: "19cqw", animationDelay: "-0.6s", "--ty": "5.2cqw" } as CSSProperties} /><i className="dot" style={{ top: "24cqw", animationDelay: "-0.9s", "--ty": "0.2cqw" } as CSSProperties} /><i className="dot" style={{ top: "29cqw", animationDelay: "-1.2s", "--ty": "-4.8cqw" } as CSSProperties} /><i className="dot" style={{ top: "12cqw", animationDelay: "-1.5s", "--ty": "12.2cqw" } as CSSProperties} /><i className="dot" style={{ top: "21cqw", animationDelay: "-1.8s", "--ty": "3.2cqw" } as CSSProperties} /><i className="dot" style={{ top: "27cqw", animationDelay: "-2.1s", "--ty": "-2.8cqw" } as CSSProperties} /></div>
+      <div className="page glass">
+        <div className="bar"><i></i><i></i><i></i><span className="m">seasonpass.yourclub.com</span></div>
+        <div className="in">
+          <div className="nav"><i className="lg" /><span className="sk" style={{ width: "4cqw" }}></span><span className="sk" style={{ width: "3cqw", marginLeft: "auto" }}></span><span className="sk" style={{ width: "3cqw" }}></span></div>
+          <div className="m eb">Season pass · Limited</div>
+          <div className="d hl">Join the <span>squad.</span></div>
+          <span className="sk" style={{ width: "60%", marginTop: ".8cqw" }}></span>
+          <div className="ctaw"><div className="lzcta m">Sign up now</div><i className="ring" /><div className="d plus">+1</div>
+            <svg className="cur" viewBox="0 0 14 21"><path d="M1 1L1 17 5 13.5 8 20 10.5 19 7.5 12.5 13 12.5Z"/></svg></div>
+          <div className="cards"><span></span><span></span><span></span></div>
         </div>
-      </div></div>
+      </div>
+      <div className="hud"><div><div className="m l">Pages launched</div><div className="d v">60<span>+</span></div></div><div><div className="m l">Avg. conversion</div><div className="d v">12.4<span>%</span></div></div><div><div className="m l">Load time</div><div className="d v">0.9<span>s</span></div></div></div>
+      <div className="mod"><div className="row m"><span>Funnel · this campaign</span><b><span className="s1">5,904</span><span className="s2" style={{ position: "absolute", marginLeft: "-3.2cqw" }}>5,931</span><span className="s3" style={{ position: "absolute", marginLeft: "-3.2cqw" }}>5,957</span><span className="s4" style={{ position: "absolute", marginLeft: "-3.2cqw" }}>5,986</span> sign-ups</b></div>
+        <div className="fn"><div><span className="m">Visits</span><b style={{ "--w": "100%" } as CSSProperties}></b><em className="m">48K</em></div><div><span className="m">Clicks</span><b style={{ "--w": "30%" } as CSSProperties}></b><em className="m">14K</em></div><div><span className="m">Sign-ups</span><b style={{ "--w": "12.4%" } as CSSProperties}></b><em className="m">12.4%</em></div></div></div>
     </div>
   );
 }

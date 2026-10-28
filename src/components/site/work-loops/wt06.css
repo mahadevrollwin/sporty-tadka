@@ -1,0 +1,79 @@
+/* ==================================================================
+   SPORTYTADKA · WORK TILE 06 · HOME GROUND — WIDE (expanded state)
+   Place the .wt06 block as the FIRST child of the expanded tile
+   (it is position:absolute; inset:0). Title/buttons stay on top.
+   The SHARED part is identical in all wide tile files: include it once.
+   ================================================================== */
+
+/* ---------- SPORTYTADKA · WORK TILES · WIDE · SHARED (same in every file) ---------- */
+.wt06{--lime:#C8FF3E;--pink:#FF3D9A;--cyan:#3ED8FF;--yel:#FFD23E;--red:#FF4747;--txt:#F1EEFF;--mut:#8A8798;--c:var(--lime);
+  --T:4.8s;--S:1.2s;position:absolute;inset:0;overflow:hidden;container-type:inline-size;pointer-events:none;
+  font-family:"Space Grotesk",system-ui,sans-serif;color:var(--txt)}
+.wt06 *{box-sizing:border-box}
+.wt06 .d{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:800;text-transform:uppercase;line-height:.86}
+.wt06 .m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+.wt06 .amb{position:absolute;inset:0;background:radial-gradient(40% 70% at 72% 42%,color-mix(in srgb,var(--c) 18%,transparent),transparent 70%)}
+.wt06 .floor{position:absolute;left:30%;right:-10%;top:72%;height:40%;opacity:.55;transform:perspective(40cqw) rotateX(62deg);transform-origin:top;
+  background:repeating-linear-gradient(90deg,color-mix(in srgb,var(--c) 18%,transparent) 0 1px,transparent 1px 4cqw),repeating-linear-gradient(0deg,color-mix(in srgb,var(--c) 12%,transparent) 0 1px,transparent 1px 2.4cqw);
+  -webkit-mask:linear-gradient(180deg,#000,transparent 70%);mask:linear-gradient(180deg,#000,transparent 70%);animation:wt06-floor var(--S) linear infinite}
+.wt06 .hud{position:absolute;left:3.4cqw;top:3cqw;display:flex;gap:2.6cqw}
+.wt06 .hud>div{border-left:.2cqw solid var(--c);padding-left:1cqw}
+.wt06 .hud .l{font-size:.8cqw;color:var(--mut)}
+.wt06 .hud .v{font-size:2.6cqw;margin-top:.3cqw}
+.wt06 .hud .v span{color:var(--c)}
+.wt06 .mod{position:absolute;right:3.4cqw;bottom:9.4cqw;width:30cqw}
+.wt06 .mod .row{display:flex;justify-content:space-between;align-items:center;font-size:.75cqw;color:var(--mut);margin-bottom:.7cqw}
+.wt06 .mod .row b{color:var(--c);font-weight:700}
+.wt06 .glass{background:linear-gradient(160deg,rgba(32,32,46,.94),rgba(16,16,24,.9));border:.12cqw solid rgba(255,255,255,.1);border-radius:1.2cqw;box-shadow:0 2cqw 4cqw rgba(0,0,0,.55)}
+.wt06 .glass::after{content:"";position:absolute;left:0;right:0;top:0;height:.25cqw;background:var(--c);border-radius:1.2cqw 1.2cqw 0 0}
+.wt06 .sk{display:block;height:.7cqw;border-radius:.4cqw;background:rgba(241,238,255,.16)}
+.wt06 .s1,.wt06 .s2,.wt06 .s3,.wt06 .s4{animation:var(--T) linear infinite}
+.wt06 .s1{animation-name: wt06-v1}.wt06 .s2{animation-name: wt06-v2}.wt06 .s3{animation-name: wt06-v3}.wt06 .s4{animation-name: wt06-v4}
+.wt06 .blink{animation:wt06-blink .8s linear infinite}
+.wt06 .scanx{position:absolute;top:0;bottom:0;width:10cqw;left:-12cqw;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--c) 30%,transparent) 85%,var(--c) 92%,transparent);mix-blend-mode:screen;animation:wt06-scanx 2.4s linear infinite}
+@keyframes wt06-v1{0%,25%{opacity:1}25.01%,100%{opacity:0}}
+@keyframes wt06-v2{0%,25%{opacity:0}25.01%,50%{opacity:1}50.01%,100%{opacity:0}}
+@keyframes wt06-v3{0%,50%{opacity:0}50.01%,75%{opacity:1}75.01%,100%{opacity:0}}
+@keyframes wt06-v4{0%,75%{opacity:0}75.01%,100%{opacity:1}}
+@keyframes wt06-blink{0%,55%{opacity:1}56%,100%{opacity:.15}}
+@keyframes wt06-floor{to{background-position:-4cqw 0,0 0}}
+@keyframes wt06-scanx{0%{left:-12cqw;opacity:0}5%{opacity:1}40%{left:104cqw;opacity:1}41%,100%{left:104cqw;opacity:0}}
+@keyframes wt06-marq{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.wt06 *{animation-play-state:paused!important}}
+
+/* ---------- TILE 06 ONLY ---------- */
+.wt06{--c:var(--cyan)}
+
+.wt06 .site{position:absolute;left:46cqw;top:5.5cqw;width:34cqw;height:25cqw;overflow:hidden;transform:perspective(90cqw) rotateY(-16deg) rotateX(4deg);transform-origin:left center}
+.wt06 .site::after{display:none}
+.wt06 .bar{height:2.2cqw;display:flex;align-items:center;gap:.45cqw;padding:0 1cqw;border-bottom:.1cqw solid rgba(255,255,255,.1);background:rgba(255,255,255,.03)}
+.wt06 .bar>i{width:.7cqw;height:.7cqw;border-radius:50%;background:rgba(255,255,255,.2)}.wt06 .bar>i:first-child{background:var(--red)}
+.wt06 .bar span{margin-left:1cqw;font-size:.65cqw;color:var(--mut);letter-spacing:.03em;text-transform:none;background:rgba(255,255,255,.05);border-radius:.6cqw;padding:.25cqw .8cqw}
+.wt06 .pg{padding:1cqw;display:flex;flex-direction:column;gap:.8cqw;height:calc(100% - 2.2cqw)}
+.wt06 .mid{flex:1;display:grid;grid-template-columns:1.6fr 1fr;gap:.8cqw}
+.wt06 .row3{display:grid;grid-template-columns:repeat(4,1fr);gap:.8cqw;height:5cqw}
+.wt06 .bk{position:relative;border:.12cqw dashed rgba(62,216,255,.45);border-radius:.6cqw}
+.wt06 .f{position:absolute;inset:-.12cqw;border-radius:.6cqw;opacity:0;padding:.8cqw;display:flex;flex-direction:column;gap:.35cqw;
+  background:rgba(30,30,44,.98);border:.12cqw solid rgba(62,216,255,.25);animation:wt06-build var(--T) linear infinite;animation-delay:calc(var(--d) * .28s - 4.8s)}
+.wt06 .nav .f{flex-direction:row;align-items:center;padding:0 .8cqw;gap:.8cqw}
+.wt06 .lg{width:1.2cqw;height:1.2cqw;border-radius:.3cqw;background:var(--cyan);margin-right:auto}
+.wt06 .nav .sk{height:.5cqw}
+.wt06 .pill{font-size:.55cqw;font-weight:700;background:var(--cyan);color:#0B0B10;padding:.2cqw .5cqw;border-radius:.3cqw}
+.wt06 .hero .f{justify-content:flex-end;background:radial-gradient(90% 90% at 85% 20%,rgba(62,216,255,.3),transparent 60%),linear-gradient(160deg,rgba(40,40,58,.98),rgba(20,20,30,.98))}
+.wt06 .meta{font-size:.6cqw;color:var(--mut)}
+.wt06 .ht{font-size:3.4cqw}
+.wt06 .sc{font-size:2.6cqw;margin:.2cqw 0 .3cqw}
+.wt06 .live .f{justify-content:center}
+.wt06 .row3 b{font-size:1.8cqw;margin-top:auto}
+.wt06 .row3 .sk{height:.45cqw}
+.wt06 .phone{position:absolute;left:79cqw;top:10cqw;width:10.4cqw;height:20cqw;border-radius:1.4cqw;padding:.5cqw;background:#0f0f15;border:.15cqw solid rgba(62,216,255,.5);box-shadow:0 1.6cqw 3cqw rgba(0,0,0,.6),0 0 2cqw rgba(62,216,255,.15);
+  transform:perspective(60cqw) rotateY(-12deg);animation:wt06-float 2.4s ease-in-out infinite}
+.wt06 .ps{height:100%;border-radius:1cqw;background:#0c0c12;padding:.6cqw;display:flex;flex-direction:column;gap:.5cqw;overflow:hidden}
+.wt06 .ps .f{padding:.45cqw}
+.wt06 .tick{position:relative;height:3cqw;display:flex;align-items:center;gap:.8cqw;padding:0 0 0 .8cqw;overflow:hidden}
+.wt06 .tick::after{display:none}
+.wt06 .lv{font-size:.65cqw;font-weight:700;background:var(--red);color:#fff;padding:.2cqw .5cqw;border-radius:.3cqw;flex:none}
+.wt06 .mqw{flex:1;overflow:hidden}
+.wt06 .mq{display:flex;white-space:nowrap;font-size:.8cqw;letter-spacing:.04em;color:var(--txt);animation:wt06-marq var(--T) linear infinite}
+@keyframes wt06-build{0%{opacity:0;transform:scale(.96)}3%{opacity:1;transform:scale(1.015)}6%{transform:scale(1)}72%{opacity:1}76%,100%{opacity:0;transform:scale(1)}}
+@keyframes wt06-float{0%,100%{translate:0 -.4cqw}50%{translate:0 .4cqw}}

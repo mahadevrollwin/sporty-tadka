@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { work } from "@/content/home";
-import { MatchdayLoop } from "./MatchdayLoop";
 import {
+  DropDayLoop,
   FanCamLoop,
   FullTimeFeelingsLoop,
   LeagueNightLoop,
@@ -14,7 +14,7 @@ import { StartProjectButton } from "./LeadForm";
 import { DisplayHeading, Kick, Lead, Wrap } from "./ui";
 
 const workLoops: Record<string, () => ReactNode> = {
-  "01": () => <MatchdayLoop />,
+  "01": () => <DropDayLoop />,
   "02": () => <FullTimeFeelingsLoop />,
   "03": () => <TheComebackLoop />,
   "04": () => <ProteinOclockLoop />,
@@ -217,24 +217,28 @@ export function Work({
                     {item.num}
                   </span>
                   {isOpen && workLoops[item.num] ? (
-                    <div className="pointer-events-none absolute inset-x-0 top-0 bottom-[28%] z-[5] flex items-center justify-center overflow-hidden p-3 min-[641px]:bottom-[24%] min-[641px]:p-4">
-                      <div className="aspect-square h-full max-h-full w-auto max-w-full">
+                    <>
+                      <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden">
                         {workLoops[item.num]()}
                       </div>
-                    </div>
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 z-[2] bg-[radial-gradient(70%_75%_at_0%_100%,rgba(13,13,18,.92),transparent_70%)]"
+                      />
+                    </>
                   ) : null}
-                  <span className={`text-[12.5px] font-bold uppercase opacity-90 ${item.catClass}`}>
+                  <span className={`relative z-[3] text-[12.5px] font-bold uppercase opacity-90 ${item.catClass}`}>
                     {item.cat}
                   </span>
                   <span
-                    className={`my-1.5 font-display leading-[0.9] font-black uppercase ${
+                    className={`relative z-[3] my-1.5 font-display leading-[0.9] font-black uppercase ${
                       isOpen ? "text-[34px] min-[641px]:text-[clamp(48px,6vw,84px)]" : "text-[34px]"
                     }`}
                   >
                     {item.title}
                   </span>
                   <p
-                    className={`m-0 text-white/82 ${
+                    className={`relative z-[3] m-0 text-white/82 ${
                       isOpen ? "max-w-[42ch] text-sm min-[641px]:text-lg" : "max-w-[34ch] text-sm"
                     }`}
                   >
