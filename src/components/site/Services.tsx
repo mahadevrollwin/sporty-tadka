@@ -162,8 +162,8 @@ export function Services({
             return (
               <article key={item.n} className="roster-panel">
                 <div aria-hidden className={`pointer-events-none absolute inset-0 ${tone.wash}`} />
-                <div className="roster-body relative z-[1] mx-auto flex h-full w-full max-w-[1160px] items-center justify-between gap-8 px-[22px] pt-[148px] pb-[128px]">
-                  <div className="relative z-[1] max-w-[18ch] shrink-0">
+                <div className="roster-body relative z-[1] mx-auto grid h-full w-full max-w-[1240px] items-center gap-x-10 gap-y-6 px-[22px] pt-[148px] pb-[128px] min-[761px]:grid-cols-[minmax(15rem,0.38fr)_minmax(0,1fr)]">
+                  <div className="relative z-[1] max-w-[18ch]">
                     <p className="m-0 text-[12px] font-semibold tracking-[0.16em] text-dim uppercase">
                       {number} / {label}
                     </p>
@@ -175,8 +175,8 @@ export function Services({
                     <p className="mt-7 mb-0 max-w-[36ch] text-[17px] leading-normal text-soft">{item.copy}</p>
                   </div>
                   {Graphic ? (
-                    <div className="pointer-events-none relative z-[1] ml-auto hidden w-[min(48vw,520px)] shrink-0 min-[761px]:block">
-                      <div className="aspect-[4/3] w-full">
+                    <div className="pointer-events-none relative z-[1] hidden min-w-0 min-[761px]:flex min-[761px]:items-center min-[761px]:justify-end">
+                      <div className="aspect-[4/3] w-full max-h-[min(68vh,640px)] max-w-[760px] [width:min(100%,calc(min(68vh,640px)*4/3))]">
                         <Graphic />
                       </div>
                     </div>
