@@ -20,8 +20,8 @@ function filmsFor(videos: typeof galleryVideos, ids: readonly string[]) {
 
 const defaultSlides = filmsFor(galleryVideos, phoneVideoIds);
 
-/** Screen hole of phone-frame.png (523×1024), tucked under the gold bezel. */
-const screenInset = "inset-[1.56%_2.68%_1.76%_2.68%]";
+/** Screen hole of phone-frame.png (424×814), tucked under the cyan bezel. */
+const screenInset = "inset-[1.86%_5.55%_2.60%_5.55%]";
 
 export function AboutPhone({ videos }: { videos?: { id: string; src: string; poster: string; title: string; category: string }[] } = {}) {
   const slides = videos?.length ? videos : defaultSlides;
@@ -75,7 +75,7 @@ export function AboutPhone({ videos }: { videos?: { id: string; src: string; pos
 
   return (
     <div
-      className="relative aspect-[523/1024] w-[min(100%,260px)] min-[901px]:h-0 min-[901px]:min-h-full min-[901px]:w-auto min-[901px]:max-h-full min-[901px]:justify-self-end"
+      className="relative aspect-[424/814] w-[min(100%,260px)] min-[901px]:h-0 min-[901px]:min-h-full min-[901px]:w-auto min-[901px]:max-h-full min-[901px]:justify-self-end"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -89,7 +89,7 @@ export function AboutPhone({ videos }: { videos?: { id: string; src: string; pos
       <div className="absolute inset-0 overflow-hidden">
         <div
           className={`absolute ${screenInset} z-0 overflow-hidden bg-transparent`}
-          style={{ borderRadius: "10% / 4%" }}
+          style={{ borderRadius: "11% / 5.5%" }}
           aria-live="polite"
           aria-atomic="true"
         >
@@ -139,7 +139,7 @@ export function AboutPhone({ videos }: { videos?: { id: string; src: string; pos
 
         {/* eslint-disable-next-line @next/next/no-img-element -- decorative frame overlay */}
         <img
-          src="/images/phone-frame.png?v=2"
+          src="/images/phone-frame.png?v=3"
           alt=""
           aria-hidden
           draggable={false}
