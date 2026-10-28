@@ -1,0 +1,38 @@
+/* SPORTYTADKA · WHAT WE DO · 04 BROADCAST — transparent 4.8s loop, 4:3. Copy this <style> + the .wwd4 block. SHARED part is identical across all 6. */
+
+/* ---------- SPORTYTADKA · WHAT WE DO · SHARED ---------- */
+.wwd4{--lime:#C8FF3E;--pink:#FF3D9A;--cyan:#3ED8FF;--yel:#FFD23E;--red:#FF4747;--txt:#F1EEFF;--mut:#8A8798;--c:var(--lime);
+  --T:4.8s;--S:1.2s;position:relative;width:100%;height:100%;aspect-ratio:4/3;pointer-events:none;user-select:none}
+.wwd4 svg{display:block;width:100%;height:100%;overflow:visible;color:var(--c)}
+.wwd4 .d{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:800}
+.wwd4 .m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.08em}
+.wwd4 .st{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.wwd4 .fl{fill:currentColor;fill-opacity:.1}
+.wwd4 .ff{fill:currentColor;fill-opacity:.45}
+.wwd4 .faint{opacity:.35}
+.wwd4 .glo{filter:drop-shadow(0 0 3px var(--c)) drop-shadow(0 0 12px color-mix(in srgb,var(--c) 45%,transparent))}
+.wwd4 .vb{transform-box:view-box}
+.wwd4 .fb{transform-box:fill-box;transform-origin:center}
+.wwd4 .s1,.wwd4 .s2,.wwd4 .s3,.wwd4 .s4{animation:var(--T) linear infinite}
+.wwd4 .s1{animation-name: wwd4-v1}.wwd4 .s2{animation-name: wwd4-v2}.wwd4 .s3{animation-name: wwd4-v3}.wwd4 .s4{animation-name: wwd4-v4}
+.wwd4 .blink{animation:wwd4-blink .8s linear infinite}
+.wwd4 .breathe{animation:wwd4-breathe var(--S) ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes wwd4-v1{0%,25%{opacity:1}25.01%,100%{opacity:0}}
+@keyframes wwd4-v2{0%,25%{opacity:0}25.01%,50%{opacity:1}50.01%,100%{opacity:0}}
+@keyframes wwd4-v3{0%,50%{opacity:0}50.01%,75%{opacity:1}75.01%,100%{opacity:0}}
+@keyframes wwd4-v4{0%,75%{opacity:0}75.01%,100%{opacity:1}}
+@keyframes wwd4-blink{0%,55%{opacity:1}56%,100%{opacity:.15}}
+@keyframes wwd4-breathe{0%,100%{opacity:.7;transform:scale(1)}30%{opacity:1;transform:scale(1.06)}}
+@keyframes wwd4-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.wwd4 *{animation-play-state:paused!important}}
+
+/* ---------- SLIDE 04 ONLY ---------- */
+
+.w04 .rep{opacity:0;animation:w04-rep var(--T) linear infinite}
+.w04 .lt1{animation:w04-lt1 var(--T) cubic-bezier(.6,0,.2,1) infinite}
+.w04 .lt2{animation:w04-lt2 var(--T) cubic-bezier(.6,0,.2,1) infinite}
+.w04 .sting{animation:w04-sting var(--T) linear infinite}
+@keyframes w04-rep{0%,50%{opacity:0}53%,94%{opacity:1}96%,100%{opacity:0}}
+@keyframes w04-lt1{0%,4%{transform:translateX(-260px)}10%,38%{transform:translateX(0)}44%,100%{transform:translateX(-260px)}}
+@keyframes w04-lt2{0%,56%{transform:translateX(-260px)}62%,88%{transform:translateX(0)}94%,100%{transform:translateX(-260px)}}
+@keyframes w04-sting{0%{transform:translateX(-80px)}5%,45%{transform:translateX(420px)}45.01%{transform:translateX(-420px)}55%,95%{transform:translateX(420px)}95.01%{transform:translateX(-420px)}100%{transform:translateX(-80px)}}

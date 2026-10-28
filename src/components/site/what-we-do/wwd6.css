@@ -1,0 +1,40 @@
+/* SPORTYTADKA · WHAT WE DO · 06 WEB & GROWTH — transparent 4.8s loop, 4:3. Copy this <style> + the .wwd6 block. SHARED part is identical across all 6. */
+
+/* ---------- SPORTYTADKA · WHAT WE DO · SHARED ---------- */
+.wwd6{--lime:#C8FF3E;--pink:#FF3D9A;--cyan:#3ED8FF;--yel:#FFD23E;--red:#FF4747;--txt:#F1EEFF;--mut:#8A8798;--c:var(--lime);
+  --T:4.8s;--S:1.2s;position:relative;width:100%;height:100%;aspect-ratio:4/3;pointer-events:none;user-select:none}
+.wwd6 svg{display:block;width:100%;height:100%;overflow:visible;color:var(--c)}
+.wwd6 .d{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:800}
+.wwd6 .m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.08em}
+.wwd6 .st{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.wwd6 .fl{fill:currentColor;fill-opacity:.1}
+.wwd6 .ff{fill:currentColor;fill-opacity:.45}
+.wwd6 .faint{opacity:.35}
+.wwd6 .glo{filter:drop-shadow(0 0 3px var(--c)) drop-shadow(0 0 12px color-mix(in srgb,var(--c) 45%,transparent))}
+.wwd6 .vb{transform-box:view-box}
+.wwd6 .fb{transform-box:fill-box;transform-origin:center}
+.wwd6 .s1,.wwd6 .s2,.wwd6 .s3,.wwd6 .s4{animation:var(--T) linear infinite}
+.wwd6 .s1{animation-name: wwd6-v1}.wwd6 .s2{animation-name: wwd6-v2}.wwd6 .s3{animation-name: wwd6-v3}.wwd6 .s4{animation-name: wwd6-v4}
+.wwd6 .blink{animation:wwd6-blink .8s linear infinite}
+.wwd6 .breathe{animation:wwd6-breathe var(--S) ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes wwd6-v1{0%,25%{opacity:1}25.01%,100%{opacity:0}}
+@keyframes wwd6-v2{0%,25%{opacity:0}25.01%,50%{opacity:1}50.01%,100%{opacity:0}}
+@keyframes wwd6-v3{0%,50%{opacity:0}50.01%,75%{opacity:1}75.01%,100%{opacity:0}}
+@keyframes wwd6-v4{0%,75%{opacity:0}75.01%,100%{opacity:1}}
+@keyframes wwd6-blink{0%,55%{opacity:1}56%,100%{opacity:.15}}
+@keyframes wwd6-breathe{0%,100%{opacity:.7;transform:scale(1)}30%{opacity:1;transform:scale(1.06)}}
+@keyframes wwd6-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.wwd6 *{animation-play-state:paused!important}}
+
+/* ---------- SLIDE 06 ONLY ---------- */
+
+.w06 .bar{animation:w06-bar var(--T) cubic-bezier(.3,0,.2,1) infinite;animation-delay:calc(var(--d) * .16s - 4.8s)}
+.w06 .arrow{animation:w06-arrow var(--T) ease-in-out infinite}
+.w06 .medal{opacity:0;animation:w06-medal var(--T) ease-out infinite}
+.w06 .score{animation:w06-score var(--T) ease-out infinite}
+.w06 .win{animation:w06-float 2.4s ease-in-out infinite}
+@keyframes w06-bar{0%{transform:scaleY(.06)}14%{transform:scaleY(1.05)}18%,80%{transform:scaleY(1)}92%,100%{transform:scaleY(.06)}}
+@keyframes w06-arrow{0%,28%{stroke-dashoffset:420}50%,84%{stroke-dashoffset:0}94%,100%{stroke-dashoffset:420}}
+@keyframes w06-medal{0%,48%{opacity:0;transform:scale(.3)}53%{opacity:1;transform:scale(1.2)}57%,84%{opacity:1;transform:scale(1)}90%,100%{opacity:0;transform:scale(.6)}}
+@keyframes w06-score{0%,10%{stroke-dashoffset:138.2}45%,88%{stroke-dashoffset:2.8}96%,100%{stroke-dashoffset:138.2}}
+@keyframes w06-float{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}

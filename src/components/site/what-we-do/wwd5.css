@@ -1,0 +1,36 @@
+/* SPORTYTADKA · WHAT WE DO · 05 FILMS — transparent 4.8s loop, 4:3. Copy this <style> + the .wwd5 block. SHARED part is identical across all 6. */
+
+/* ---------- SPORTYTADKA · WHAT WE DO · SHARED ---------- */
+.wwd5{--lime:#C8FF3E;--pink:#FF3D9A;--cyan:#3ED8FF;--yel:#FFD23E;--red:#FF4747;--txt:#F1EEFF;--mut:#8A8798;--c:var(--lime);
+  --T:4.8s;--S:1.2s;position:relative;width:100%;height:100%;aspect-ratio:4/3;pointer-events:none;user-select:none}
+.wwd5 svg{display:block;width:100%;height:100%;overflow:visible;color:var(--c)}
+.wwd5 .d{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:800}
+.wwd5 .m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.08em}
+.wwd5 .st{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.wwd5 .fl{fill:currentColor;fill-opacity:.1}
+.wwd5 .ff{fill:currentColor;fill-opacity:.45}
+.wwd5 .faint{opacity:.35}
+.wwd5 .glo{filter:drop-shadow(0 0 3px var(--c)) drop-shadow(0 0 12px color-mix(in srgb,var(--c) 45%,transparent))}
+.wwd5 .vb{transform-box:view-box}
+.wwd5 .fb{transform-box:fill-box;transform-origin:center}
+.wwd5 .s1,.wwd5 .s2,.wwd5 .s3,.wwd5 .s4{animation:var(--T) linear infinite}
+.wwd5 .s1{animation-name: wwd5-v1}.wwd5 .s2{animation-name: wwd5-v2}.wwd5 .s3{animation-name: wwd5-v3}.wwd5 .s4{animation-name: wwd5-v4}
+.wwd5 .blink{animation:wwd5-blink .8s linear infinite}
+.wwd5 .breathe{animation:wwd5-breathe var(--S) ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes wwd5-v1{0%,25%{opacity:1}25.01%,100%{opacity:0}}
+@keyframes wwd5-v2{0%,25%{opacity:0}25.01%,50%{opacity:1}50.01%,100%{opacity:0}}
+@keyframes wwd5-v3{0%,50%{opacity:0}50.01%,75%{opacity:1}75.01%,100%{opacity:0}}
+@keyframes wwd5-v4{0%,75%{opacity:0}75.01%,100%{opacity:1}}
+@keyframes wwd5-blink{0%,55%{opacity:1}56%,100%{opacity:.15}}
+@keyframes wwd5-breathe{0%,100%{opacity:.7;transform:scale(1)}30%{opacity:1;transform:scale(1.06)}}
+@keyframes wwd5-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.wwd5 *{animation-play-state:paused!important}}
+
+/* ---------- SLIDE 05 ONLY ---------- */
+
+.w05 .reel{animation:w05-reel var(--T) linear infinite}
+.w05 .flare{animation:w05-flare var(--T) ease-in-out infinite}
+.w05 .focus{stroke:var(--txt);animation:w05-focus 2.4s cubic-bezier(.3,0,.2,1) infinite}
+@keyframes w05-reel{to{transform:translateX(-320px)}}
+@keyframes w05-flare{0%,100%{transform:translateX(-120px);opacity:.2}50%{transform:translateX(120px);opacity:1}}
+@keyframes w05-focus{0%{transform:scale(1.6);stroke:var(--txt);opacity:.4}22%{transform:scale(.92)}28%,88%{transform:scale(1);stroke:var(--pink);opacity:1}100%{transform:scale(1.6);opacity:.4}}

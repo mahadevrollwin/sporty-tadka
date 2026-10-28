@@ -1,0 +1,40 @@
+/* SPORTYTADKA · WHAT WE DO · 03 FITNESS BRANDS — transparent 4.8s loop, 4:3. Copy this <style> + the .wwd3 block. SHARED part is identical across all 6. */
+
+/* ---------- SPORTYTADKA · WHAT WE DO · SHARED ---------- */
+.wwd3{--lime:#C8FF3E;--pink:#FF3D9A;--cyan:#3ED8FF;--yel:#FFD23E;--red:#FF4747;--txt:#F1EEFF;--mut:#8A8798;--c:var(--lime);
+  --T:4.8s;--S:1.2s;position:relative;width:100%;height:100%;aspect-ratio:4/3;pointer-events:none;user-select:none}
+.wwd3 svg{display:block;width:100%;height:100%;overflow:visible;color:var(--c)}
+.wwd3 .d{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:800}
+.wwd3 .m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.08em}
+.wwd3 .st{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.wwd3 .fl{fill:currentColor;fill-opacity:.1}
+.wwd3 .ff{fill:currentColor;fill-opacity:.45}
+.wwd3 .faint{opacity:.35}
+.wwd3 .glo{filter:drop-shadow(0 0 3px var(--c)) drop-shadow(0 0 12px color-mix(in srgb,var(--c) 45%,transparent))}
+.wwd3 .vb{transform-box:view-box}
+.wwd3 .fb{transform-box:fill-box;transform-origin:center}
+.wwd3 .s1,.wwd3 .s2,.wwd3 .s3,.wwd3 .s4{animation:var(--T) linear infinite}
+.wwd3 .s1{animation-name: wwd3-v1}.wwd3 .s2{animation-name: wwd3-v2}.wwd3 .s3{animation-name: wwd3-v3}.wwd3 .s4{animation-name: wwd3-v4}
+.wwd3 .blink{animation:wwd3-blink .8s linear infinite}
+.wwd3 .breathe{animation:wwd3-breathe var(--S) ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes wwd3-v1{0%,25%{opacity:1}25.01%,100%{opacity:0}}
+@keyframes wwd3-v2{0%,25%{opacity:0}25.01%,50%{opacity:1}50.01%,100%{opacity:0}}
+@keyframes wwd3-v3{0%,50%{opacity:0}50.01%,75%{opacity:1}75.01%,100%{opacity:0}}
+@keyframes wwd3-v4{0%,75%{opacity:0}75.01%,100%{opacity:1}}
+@keyframes wwd3-blink{0%,55%{opacity:1}56%,100%{opacity:.15}}
+@keyframes wwd3-breathe{0%,100%{opacity:.7;transform:scale(1)}30%{opacity:1;transform:scale(1.06)}}
+@keyframes wwd3-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.wwd3 *{animation-play-state:paused!important}}
+
+/* ---------- SLIDE 03 ONLY ---------- */
+
+.w03 .shake{transform-box:view-box;transform-origin:200px 250px;animation:w03-shake var(--T) ease-in-out infinite}
+.w03 .wave{animation:w03-wave var(--S) linear infinite}
+.w03 .bp{opacity:0;animation:w03-burst var(--T) ease-out infinite}
+.w03 .ring{transform-origin:200px 40px;opacity:0;animation:w03-ring var(--T) ease-out infinite}
+.w03 .seg{fill:var(--yel);fill-opacity:.12;stroke:var(--yel);stroke-opacity:.4;animation:w03-seg var(--T) linear infinite;animation-delay:calc(var(--d) * .14s - 4.8s)}
+@keyframes w03-shake{0%,2%{transform:rotate(0)}6%{transform:rotate(-9deg)}10%{transform:rotate(8deg)}14%{transform:rotate(-8deg)}18%{transform:rotate(7deg)}22%{transform:rotate(-5deg)}26%{transform:rotate(3deg)}30%,100%{transform:rotate(0)}}
+@keyframes w03-wave{to{transform:translateX(-80px)}}
+@keyframes w03-burst{0%,30%{opacity:0;transform:rotate(var(--a)) translateX(0)}33%{opacity:1}55%,100%{opacity:0;transform:rotate(var(--a)) translateX(70px) rotate(90deg)}}
+@keyframes w03-ring{0%,30%{opacity:0;transform:scale(.4)}33%{opacity:1}58%,100%{opacity:0;transform:scale(4)}}
+@keyframes w03-seg{0%{fill-opacity:.12}3%,64%{fill-opacity:.95;filter:drop-shadow(0 0 4px var(--yel))}70%,100%{fill-opacity:.12}}

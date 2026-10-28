@@ -1,0 +1,38 @@
+/* SPORTYTADKA · WHAT WE DO · 02 ATHLETES — transparent 4.8s loop, 4:3. Copy this <style> + the .wwd2 block. SHARED part is identical across all 6. */
+
+/* ---------- SPORTYTADKA · WHAT WE DO · SHARED ---------- */
+.wwd2{--lime:#C8FF3E;--pink:#FF3D9A;--cyan:#3ED8FF;--yel:#FFD23E;--red:#FF4747;--txt:#F1EEFF;--mut:#8A8798;--c:var(--lime);
+  --T:4.8s;--S:1.2s;position:relative;width:100%;height:100%;aspect-ratio:4/3;pointer-events:none;user-select:none}
+.wwd2 svg{display:block;width:100%;height:100%;overflow:visible;color:var(--c)}
+.wwd2 .d{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:800}
+.wwd2 .m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.08em}
+.wwd2 .st{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.wwd2 .fl{fill:currentColor;fill-opacity:.1}
+.wwd2 .ff{fill:currentColor;fill-opacity:.45}
+.wwd2 .faint{opacity:.35}
+.wwd2 .glo{filter:drop-shadow(0 0 3px var(--c)) drop-shadow(0 0 12px color-mix(in srgb,var(--c) 45%,transparent))}
+.wwd2 .vb{transform-box:view-box}
+.wwd2 .fb{transform-box:fill-box;transform-origin:center}
+.wwd2 .s1,.wwd2 .s2,.wwd2 .s3,.wwd2 .s4{animation:var(--T) linear infinite}
+.wwd2 .s1{animation-name: wwd2-v1}.wwd2 .s2{animation-name: wwd2-v2}.wwd2 .s3{animation-name: wwd2-v3}.wwd2 .s4{animation-name: wwd2-v4}
+.wwd2 .blink{animation:wwd2-blink .8s linear infinite}
+.wwd2 .breathe{animation:wwd2-breathe var(--S) ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes wwd2-v1{0%,25%{opacity:1}25.01%,100%{opacity:0}}
+@keyframes wwd2-v2{0%,25%{opacity:0}25.01%,50%{opacity:1}50.01%,100%{opacity:0}}
+@keyframes wwd2-v3{0%,50%{opacity:0}50.01%,75%{opacity:1}75.01%,100%{opacity:0}}
+@keyframes wwd2-v4{0%,75%{opacity:0}75.01%,100%{opacity:1}}
+@keyframes wwd2-blink{0%,55%{opacity:1}56%,100%{opacity:.15}}
+@keyframes wwd2-breathe{0%,100%{opacity:.7;transform:scale(1)}30%{opacity:1;transform:scale(1.06)}}
+@keyframes wwd2-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.wwd2 *{animation-play-state:paused!important}}
+
+/* ---------- SLIDE 02 ONLY ---------- */
+
+.w02 .card{animation:w02-turn var(--T) ease-in-out infinite}
+.w02 .shine{animation:w02-shine var(--T) ease-in-out infinite}
+.w02 .chev{color:var(--cyan);animation:w02-chev var(--S) linear infinite}
+.w02 .badge{opacity:0;animation:w02-badge var(--T) ease-out infinite}
+@keyframes w02-turn{0%,100%{transform:scaleX(1) rotate(-3deg)}50%{transform:scaleX(.9) rotate(2deg)}}
+@keyframes w02-shine{0%,30%{transform:skewX(-18deg) translateX(0)}55%,100%{transform:skewX(-18deg) translateX(240px)}}
+@keyframes w02-chev{0%{transform:translateY(14px);opacity:0}30%{opacity:1}100%{transform:translateY(-14px);opacity:0}}
+@keyframes w02-badge{0%,38%{opacity:0;transform:scale(.4)}43%{opacity:1;transform:scale(1.15)}47%,80%{opacity:1;transform:scale(1)}86%,100%{opacity:0}}

@@ -1,7 +1,25 @@
 "use client";
 
+import type { ComponentType } from "react";
 import { useEffect, useRef, useState } from "react";
 import { services } from "@/content/home";
+import {
+  BrandAthletesFilmsGraphic,
+  BrandedGamesGraphic,
+  EventsActivationsGraphic,
+  ReactiveContentGraphic,
+  SocialCommunityGraphic,
+  SportsBrandingGraphic,
+} from "./what-we-do";
+
+const serviceGraphics: ComponentType[] = [
+  ReactiveContentGraphic,
+  BrandAthletesFilmsGraphic,
+  SportsBrandingGraphic,
+  SocialCommunityGraphic,
+  BrandedGamesGraphic,
+  EventsActivationsGraphic,
+];
 
 const tones = [
   {
@@ -140,11 +158,12 @@ export function Services({
             const lead = item.headlineLead;
             const accent = item.headlineAccent;
             const tone = tones[index % tones.length];
+            const Graphic = serviceGraphics[index];
             return (
               <article key={item.n} className="roster-panel">
                 <div aria-hidden className={`pointer-events-none absolute inset-0 ${tone.wash}`} />
-                <div className="roster-body relative z-[1] mx-auto flex h-full w-full max-w-[1160px] items-center px-[22px] pt-[148px] pb-[128px]">
-                  <div className="max-w-[18ch]">
+                <div className="roster-body relative z-[1] mx-auto flex h-full w-full max-w-[1160px] items-center justify-between gap-8 px-[22px] pt-[148px] pb-[128px]">
+                  <div className="relative z-[1] max-w-[18ch] shrink-0">
                     <p className="m-0 text-[12px] font-semibold tracking-[0.16em] text-dim uppercase">
                       {number} / {label}
                     </p>
@@ -155,10 +174,17 @@ export function Services({
                     </h2>
                     <p className="mt-7 mb-0 max-w-[36ch] text-[17px] leading-normal text-soft">{item.copy}</p>
                   </div>
+                  {Graphic ? (
+                    <div className="pointer-events-none relative z-[1] ml-auto hidden w-[min(48vw,520px)] shrink-0 min-[761px]:block">
+                      <div className="aspect-[4/3] w-full">
+                        <Graphic />
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
                 <span
                   aria-hidden
-                  className="roster-number pointer-events-none absolute right-[4vw] bottom-[108px] font-display text-[18vw] leading-none font-black text-transparent [-webkit-text-stroke:1px_rgba(244,242,255,0.18)]"
+                  className="roster-number pointer-events-none absolute right-[4vw] bottom-[108px] font-display text-[18vw] leading-none font-black text-transparent [-webkit-text-stroke:1px_rgba(244,242,255,0.18)] min-[761px]:hidden"
                 >
                   {number}
                 </span>

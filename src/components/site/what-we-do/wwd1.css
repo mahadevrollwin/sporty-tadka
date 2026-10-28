@@ -1,0 +1,41 @@
+/* SPORTYTADKA · WHAT WE DO · 01 MATCH-DAY — transparent 4.8s loop, 4:3. Copy this <style> + the .wwd1 block. SHARED part is identical across all 6. */
+
+/* ---------- SPORTYTADKA · WHAT WE DO · SHARED ---------- */
+.wwd1{--lime:#C8FF3E;--pink:#FF3D9A;--cyan:#3ED8FF;--yel:#FFD23E;--red:#FF4747;--txt:#F1EEFF;--mut:#8A8798;--c:var(--lime);
+  --T:4.8s;--S:1.2s;position:relative;width:100%;height:100%;aspect-ratio:4/3;pointer-events:none;user-select:none}
+.wwd1 svg{display:block;width:100%;height:100%;overflow:visible;color:var(--c)}
+.wwd1 .d{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:800}
+.wwd1 .m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.08em}
+.wwd1 .st{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.wwd1 .fl{fill:currentColor;fill-opacity:.1}
+.wwd1 .ff{fill:currentColor;fill-opacity:.45}
+.wwd1 .faint{opacity:.35}
+.wwd1 .glo{filter:drop-shadow(0 0 3px var(--c)) drop-shadow(0 0 12px color-mix(in srgb,var(--c) 45%,transparent))}
+.wwd1 .vb{transform-box:view-box}
+.wwd1 .fb{transform-box:fill-box;transform-origin:center}
+.wwd1 .s1,.wwd1 .s2,.wwd1 .s3,.wwd1 .s4{animation:var(--T) linear infinite}
+.wwd1 .s1{animation-name: wwd1-v1}.wwd1 .s2{animation-name: wwd1-v2}.wwd1 .s3{animation-name: wwd1-v3}.wwd1 .s4{animation-name: wwd1-v4}
+.wwd1 .blink{animation:wwd1-blink .8s linear infinite}
+.wwd1 .breathe{animation:wwd1-breathe var(--S) ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes wwd1-v1{0%,25%{opacity:1}25.01%,100%{opacity:0}}
+@keyframes wwd1-v2{0%,25%{opacity:0}25.01%,50%{opacity:1}50.01%,100%{opacity:0}}
+@keyframes wwd1-v3{0%,50%{opacity:0}50.01%,75%{opacity:1}75.01%,100%{opacity:0}}
+@keyframes wwd1-v4{0%,75%{opacity:0}75.01%,100%{opacity:1}}
+@keyframes wwd1-blink{0%,55%{opacity:1}56%,100%{opacity:.15}}
+@keyframes wwd1-breathe{0%,100%{opacity:.7;transform:scale(1)}30%{opacity:1;transform:scale(1.06)}}
+@keyframes wwd1-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.wwd1 *{animation-play-state:paused!important}}
+
+/* ---------- SLIDE 01 ONLY ---------- */
+
+.w01 .bolt{fill:var(--lime);fill-opacity:.1;stroke:var(--lime);stroke-width:1.5;stroke-linejoin:round;filter:drop-shadow(0 0 8px var(--lime));animation:w01-bolt var(--S) linear infinite}
+.w01 .prog{animation:w01-prog var(--T) cubic-bezier(.5,0,.3,1) infinite}
+.w01 .hand{transform-origin:200px 150px;animation:wwd1-spin var(--S) linear infinite}
+.w01 .crown{transform-box:fill-box;transform-origin:center bottom;animation:w01-crown var(--S) ease-out infinite}
+.w01 .streak{animation:w01-streak .9s linear infinite}
+.w01 .post{animation:w01-post var(--T) cubic-bezier(.3,0,.2,1) infinite}
+@keyframes w01-bolt{0%,40%{opacity:.9}42%{opacity:.2}44%{opacity:1}46%{opacity:.4}48%,100%{opacity:.9}}
+@keyframes w01-prog{0%{stroke-dashoffset:414.7}88%,94%{stroke-dashoffset:0}100%{stroke-dashoffset:414.7}}
+@keyframes w01-crown{0%,6%{transform:scaleY(1)}10%{transform:scaleY(.55)}18%,100%{transform:scaleY(1)}}
+@keyframes w01-streak{0%{transform:translateX(40px);opacity:0}30%{opacity:1}100%{transform:translateX(-60px);opacity:0}}
+@keyframes w01-post{0%{transform:translate(var(--fx),var(--fy)) scale(.15);opacity:0}5%{opacity:1}16%{transform:translate(0,0) scale(1.06)}20%{transform:none}70%{opacity:1;transform:none}80%,100%{opacity:0;transform:translateY(-10px)}}

@@ -1,0 +1,26 @@
+import type { CSSProperties } from "react";
+import "./wwd6.css";
+
+export function EventsActivationsGraphic() {
+  return (
+    <div className="wwd6 w06" style={{ "--c": "var(--lime)" } as CSSProperties} aria-hidden="true">
+    <svg viewBox="0 0 400 300"><defs><radialGradient id="g06"><stop offset="0" stopColor="#C8FF3E" stopOpacity="0.32"/><stop offset=".55" stopColor="#C8FF3E" stopOpacity="0.107"/><stop offset="1" stopColor="#C8FF3E" stopOpacity="0"/></radialGradient></defs><circle className="breathe" cx="250" cy="170" r="150" fill="url(#g06)"/>
+      <g stroke="var(--lime)" strokeOpacity=".12" fill="none"><path d="M110 290L230 350"/><path d="M110 290L50 320"/><path d="M150 270L270 330"/><path d="M150 270L90 300"/><path d="M190 250L310 310"/><path d="M190 250L130 280"/><path d="M230 230L350 290"/><path d="M230 230L170 260"/><path d="M270 210L390 270"/><path d="M270 210L210 240"/><path d="M310 190L430 250"/><path d="M310 190L250 220"/><path d="M350 170L470 230"/><path d="M350 170L290 200"/></g>
+      <g className="glo"><g className="bar vb" style={{ "--d": "0", transformOrigin: "150px 272px" } as CSSProperties}><polygon points="130,226 150,236 150,272 130,262" fill="var(--lime)" fillOpacity=".22" stroke="var(--lime)" strokeWidth="1.2"/><polygon points="150,236 170,226 170,262 150,272" fill="var(--lime)" fillOpacity=".1" stroke="var(--lime)" strokeWidth="1.2"/><polygon points="150,216 170,226 150,236 130,226" fill="var(--lime)" fillOpacity=".7" stroke="var(--lime)" strokeWidth="1.2"/></g><g className="bar vb" style={{ "--d": "1", transformOrigin: "196px 250px" } as CSSProperties}><polygon points="176,178 196,188 196,250 176,240" fill="var(--lime)" fillOpacity=".22" stroke="var(--lime)" strokeWidth="1.2"/><polygon points="196,188 216,178 216,240 196,250" fill="var(--lime)" fillOpacity=".1" stroke="var(--lime)" strokeWidth="1.2"/><polygon points="196,168 216,178 196,188 176,178" fill="var(--lime)" fillOpacity=".7" stroke="var(--lime)" strokeWidth="1.2"/></g><g className="bar vb" style={{ "--d": "2", transformOrigin: "242px 228px" } as CSSProperties}><polygon points="222,126 242,136 242,228 222,218" fill="var(--lime)" fillOpacity=".22" stroke="var(--lime)" strokeWidth="1.2"/><polygon points="242,136 262,126 262,218 242,228" fill="var(--lime)" fillOpacity=".1" stroke="var(--lime)" strokeWidth="1.2"/><polygon points="242,116 262,126 242,136 222,126" fill="var(--lime)" fillOpacity=".7" stroke="var(--lime)" strokeWidth="1.2"/></g><g className="bar vb" style={{ "--d": "3", transformOrigin: "288px 206px" } as CSSProperties}><polygon points="268,72 288,82 288,206 268,196" fill="var(--lime)" fillOpacity=".22" stroke="var(--lime)" strokeWidth="1.2"/><polygon points="288,82 308,72 308,196 288,206" fill="var(--lime)" fillOpacity=".1" stroke="var(--lime)" strokeWidth="1.2"/><polygon points="288,62 308,72 288,82 268,72" fill="var(--lime)" fillOpacity=".7" stroke="var(--lime)" strokeWidth="1.2"/></g><g className="bar vb" style={{ "--d": "4", transformOrigin: "334px 184px" } as CSSProperties}><polygon points="314,14 334,24 334,184 314,174" fill="var(--lime)" fillOpacity=".22" stroke="var(--lime)" strokeWidth="1.2"/><polygon points="334,24 354,14 354,174 334,184" fill="var(--lime)" fillOpacity=".1" stroke="var(--lime)" strokeWidth="1.2"/><polygon points="334,4 354,14 334,24 314,14" fill="var(--lime)" fillOpacity=".7" stroke="var(--lime)" strokeWidth="1.2"/></g></g>
+      <polyline className="arrow" points="150,208 196,160 242,108 288,54 334,-4 372,46" fill="none" stroke="var(--txt)" strokeWidth="2.2" strokeLinejoin="round" strokeLinecap="round" strokeDasharray="420"/>
+      <g className="medal fb"><circle cx="366" cy="44" r="18" fill="var(--lime)"/><circle cx="366" cy="44" r="22" fill="none" stroke="var(--lime)" strokeOpacity=".5"/>
+        <text x="366" y="52" textAnchor="middle" className="d" fontSize="21" fill="#0B0B10">#1</text></g>
+      <g className="win"><g className="glo"><rect x="22" y="26" width="150" height="96" rx="7" fill="#12121a" stroke="var(--lime)" strokeWidth="1.2"/></g>
+        <circle cx="33" cy="37" r="2.5" fill="var(--red)"/><circle cx="42" cy="37" r="2.5" fill="rgba(255,255,255,.25)"/><circle cx="51" cy="37" r="2.5" fill="rgba(255,255,255,.25)"/>
+        <rect x="62" y="32" width="100" height="10" rx="5" fill="rgba(255,255,255,.06)"/><text x="68" y="39.5" className="m" fontSize="5.5" fill="var(--mut)">yourclub.com</text>
+        <line x1="22" y1="48" x2="172" y2="48" stroke="rgba(255,255,255,.1)"/>
+        <circle cx="58" cy="85" r="22" fill="none" stroke="rgba(255,255,255,.1)" strokeWidth="5"/>
+        <circle className="score" cx="58" cy="85" r="22" fill="none" stroke="var(--lime)" strokeWidth="5" strokeLinecap="round" strokeDasharray="138.2" transform="rotate(-90 58 85)"/>
+        <text x="58" y="91" textAnchor="middle" className="d" fontSize="18" fill="var(--txt)">98</text>
+        <text x="92" y="68" className="m" fontSize="6" fill="var(--mut)">SEO SCORE</text>
+        <rect x="92" y="76" width="66" height="5" rx="2.5" fill="rgba(241,238,255,.25)"/><rect x="92" y="86" width="48" height="5" rx="2.5" fill="rgba(241,238,255,.15)"/>
+        <text x="92" y="106" className="m" fontSize="6.5" fill="var(--lime)">LCP 1.1s · A11Y 100</text></g>
+    </svg>
+    </div>
+  );
+}
