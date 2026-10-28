@@ -201,8 +201,8 @@ export function Work({
                     {item.num}
                   </span>
                   {isOpen && item.num === "01" ? (
-                    <div className="pointer-events-none absolute inset-x-0 top-0 bottom-[34%] z-[5] flex items-center justify-center px-4 pt-10 min-[641px]:bottom-[30%] min-[641px]:px-8">
-                      <div className="w-[min(100%,240px)] min-[641px]:w-[min(46%,380px)]">
+                    <div className="pointer-events-none absolute inset-x-0 top-0 bottom-[26%] z-[5] flex items-center justify-center px-3 pt-8 min-[641px]:bottom-[22%] min-[641px]:px-6 min-[641px]:pt-6">
+                      <div className="w-[min(100%,320px)] min-[641px]:w-[min(62%,520px)] min-[901px]:w-[min(58%,560px)]">
                         <MatchdayLoop />
                       </div>
                     </div>
