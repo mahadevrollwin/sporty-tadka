@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { work } from "@/content/home";
+import { MatchdayLoop } from "./MatchdayLoop";
 import { StartProjectButton } from "./LeadForm";
 import { DisplayHeading, Kick, Lead, Wrap } from "./ui";
 
@@ -199,6 +200,13 @@ export function Work({
                   >
                     {item.num}
                   </span>
+                  {isOpen && item.num === "01" ? (
+                    <div className="pointer-events-none absolute inset-x-0 top-0 bottom-[34%] z-[5] flex items-center justify-center px-4 pt-10 min-[641px]:bottom-[30%] min-[641px]:px-8">
+                      <div className="w-[min(100%,240px)] min-[641px]:w-[min(46%,380px)]">
+                        <MatchdayLoop />
+                      </div>
+                    </div>
+                  ) : null}
                   <span className={`text-[12.5px] font-bold uppercase opacity-90 ${item.catClass}`}>
                     {item.cat}
                   </span>
