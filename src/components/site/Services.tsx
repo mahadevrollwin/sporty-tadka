@@ -162,15 +162,14 @@ export function Services({
             return (
               <article key={item.n} className="roster-panel">
                 <div aria-hidden className={`pointer-events-none absolute inset-0 ${tone.wash}`} />
-                <div className="roster-body relative z-[1] mx-auto grid h-full w-full max-w-[1240px] items-center gap-x-10 gap-y-6 px-[22px] pt-[148px] pb-[128px] min-[761px]:grid-cols-[minmax(15rem,0.38fr)_minmax(0,1fr)]">
-                  <div className="relative z-[1] max-w-[18ch]">
+                <div className="roster-body relative z-[1] mx-auto grid h-full w-full max-w-[1240px] items-center gap-x-10 gap-y-6 px-[22px] pt-[148px] pb-[128px] min-[761px]:grid-cols-[minmax(17rem,0.42fr)_minmax(0,1fr)]">
+                  <div className="relative z-[1] min-w-0">
                     <p className="m-0 text-[12px] font-semibold tracking-[0.16em] text-dim uppercase">
                       {number} / {label}
                     </p>
-                    <h2 className="mt-4 mb-0 font-display text-[clamp(56px,8.2vw,108px)] leading-[0.84] font-black uppercase">
-                      {lead}
-                      <br />
-                      <span className={tone.text}>{accent}</span>
+                    <h2 className="mt-4 mb-0 font-display text-[clamp(52px,7.4vw,96px)] leading-[0.84] font-black uppercase">
+                      <span className="block whitespace-nowrap">{lead}</span>
+                      <span className={`block whitespace-nowrap ${tone.text}`}>{accent}</span>
                     </h2>
                     <p className="mt-7 mb-0 max-w-[36ch] text-[17px] leading-normal text-soft">{item.copy}</p>
                   </div>
