@@ -93,7 +93,7 @@ function HeroVideo() {
       preload="auto"
       {...{ "webkit-playsinline": "true" }}
     >
-      <source src="/video/hero-football.mp4?v=2" type="video/mp4" />
+      <source src="/video/hero-football.mp4?v=3" type="video/mp4" />
     </video>
   );
 }
