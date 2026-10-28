@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import "./tcb.css";
 
 export function TheComebackLoop() {
@@ -33,8 +34,8 @@ export function TheComebackLoop() {
           <div className="mono up">+12.4K this week</div>
           <div className="xp"><div className="row mono meta"><span>LVL 12</span><span className="lu">Level up!</span><span>LVL 13</span></div><div className="xpbar"><i></i></div></div>
           <div className="week">
-            <div style={{ "--d": "0" }}>M<i><s></s></i></div><div style={{ "--d": "1" }}>T<i><s></s></i></div><div style={{ "--d": "2" }}>W<i><s></s></i></div>
-            <div style={{ "--d": "3" }}>T<i><s></s></i></div><div style={{ "--d": "4" }}>F<i><s></s></i></div><div style={{ "--d": "5" }}>S<i><s></s></i></div><div style={{ "--d": "6" }}>S<i><s></s></i></div>
+            <div style={{ "--d": "0" } as CSSProperties}>M<i><s></s></i></div><div style={{ "--d": "1" } as CSSProperties}>T<i><s></s></i></div><div style={{ "--d": "2" } as CSSProperties}>W<i><s></s></i></div>
+            <div style={{ "--d": "3" } as CSSProperties}>T<i><s></s></i></div><div style={{ "--d": "4" } as CSSProperties}>F<i><s></s></i></div><div style={{ "--d": "5" } as CSSProperties}>S<i><s></s></i></div><div style={{ "--d": "6" } as CSSProperties}>S<i><s></s></i></div>
           </div>
           <div className="toasts">
             <div className="toast s1"><div className="tin"><i style={{ background: "var(--lime)" }}></i>+1.2K new followers</div></div>

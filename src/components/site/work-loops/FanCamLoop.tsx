@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import "./fcm.css";
 
 export function FanCamLoop() {
@@ -32,13 +33,13 @@ export function FanCamLoop() {
         <div className="card">
           <div className="chrome"><i></i><i></i><i></i><span className="url mono">yourclub.com</span></div>
           <div className="pg">
-            <div className="bk" style={{ "--d": "0", height: "4cqw" }}><div className="f nav"><i className="lg"></i><span className="sk" style={{ width: "5cqw" }}></span><span className="sk" style={{ width: "5cqw" }}></span><span className="sk" style={{ width: "5cqw" }}></span></div></div>
-            <div className="bk" style={{ "--d": "1", height: "4cqw" }}><div className="f tick"><span className="lv mono">Live</span><div className="mqw"><span className="mq mono">IND 184/4 (17.2) &nbsp;·&nbsp; BRA 2–1 ARG 78&apos; &nbsp;·&nbsp; P1 +3.214s &nbsp;·&nbsp; KO R3 2:41 &nbsp;·&nbsp; IND 184/4 (17.2) &nbsp;·&nbsp; BRA 2–1 ARG 78&apos; &nbsp;·&nbsp; P1 +3.214s &nbsp;·&nbsp; KO R3 2:41 &nbsp;·&nbsp; </span></div></div></div>
-            <div className="bk" style={{ "--d": "2", flex: "1" }}><div className="f hero"><div className="mono meta" style={{ color: "var(--cyan)" }}>Matchday 12</div><div className="disp ht">Match<br />centre</div><span className="sk" style={{ width: "60%", marginTop: "1.2cqw" }}></span></div></div>
+            <div className="bk" style={{ "--d": "0", height: "4cqw" } as CSSProperties}><div className="f nav"><i className="lg"></i><span className="sk" style={{ width: "5cqw" }}></span><span className="sk" style={{ width: "5cqw" }}></span><span className="sk" style={{ width: "5cqw" }}></span></div></div>
+            <div className="bk" style={{ "--d": "1", height: "4cqw" } as CSSProperties}><div className="f tick"><span className="lv mono">Live</span><div className="mqw"><span className="mq mono">IND 184/4 (17.2) &nbsp;·&nbsp; BRA 2–1 ARG 78&apos; &nbsp;·&nbsp; P1 +3.214s &nbsp;·&nbsp; KO R3 2:41 &nbsp;·&nbsp; IND 184/4 (17.2) &nbsp;·&nbsp; BRA 2–1 ARG 78&apos; &nbsp;·&nbsp; P1 +3.214s &nbsp;·&nbsp; KO R3 2:41 &nbsp;·&nbsp; </span></div></div></div>
+            <div className="bk" style={{ "--d": "2", flex: "1" } as CSSProperties}><div className="f hero"><div className="mono meta" style={{ color: "var(--cyan)" }}>Matchday 12</div><div className="disp ht">Match<br />centre</div><span className="sk" style={{ width: "60%", marginTop: "1.2cqw" }}></span></div></div>
             <div className="cards">
-              <div className="bk" style={{ "--d": "3" }}><div className="f cd"><span className="mono meta">FT</span><b className="disp">2–1</b><span className="sk"></span></div></div>
-              <div className="bk" style={{ "--d": "4" }}><div className="f cd"><span className="mono meta" style={{ color: "var(--red)" }}>Live</span><b className="disp">184/4</b><span className="sk"></span></div></div>
-              <div className="bk" style={{ "--d": "5" }}><div className="f cd"><span className="mono meta">Sat</span><b className="disp">9 PM</b><span className="sk"></span></div></div>
+              <div className="bk" style={{ "--d": "3" } as CSSProperties}><div className="f cd"><span className="mono meta">FT</span><b className="disp">2–1</b><span className="sk"></span></div></div>
+              <div className="bk" style={{ "--d": "4" } as CSSProperties}><div className="f cd"><span className="mono meta" style={{ color: "var(--red)" }}>Live</span><b className="disp">184/4</b><span className="sk"></span></div></div>
+              <div className="bk" style={{ "--d": "5" } as CSSProperties}><div className="f cd"><span className="mono meta">Sat</span><b className="disp">9 PM</b><span className="sk"></span></div></div>
             </div>
           </div>
           <div className="scan"></div>

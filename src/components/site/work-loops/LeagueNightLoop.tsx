@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import "./lgn.css";
 
 export function LeagueNightLoop() {
@@ -35,8 +36,8 @@ export function LeagueNightLoop() {
           <div className="ctaw">
             <div className="cta mono">Sign up now</div>
             <i className="ring"></i>
-            <i className="bp" style={{ "--a": "-20deg" }}></i><i className="bp" style={{ "--a": "-60deg" }}></i><i className="bp" style={{ "--a": "-110deg" }}></i>
-            <i className="bp" style={{ "--a": "-160deg" }}></i><i className="bp" style={{ "--a": "20deg", background: "var(--lime)" }}></i><i className="bp" style={{ "--a": "200deg", background: "var(--cyan)" }}></i>
+            <i className="bp" style={{ "--a": "-20deg" } as CSSProperties}></i><i className="bp" style={{ "--a": "-60deg" } as CSSProperties}></i><i className="bp" style={{ "--a": "-110deg" } as CSSProperties}></i>
+            <i className="bp" style={{ "--a": "-160deg" } as CSSProperties}></i><i className="bp" style={{ "--a": "20deg", background: "var(--lime)" } as CSSProperties}></i><i className="bp" style={{ "--a": "200deg", background: "var(--cyan)" } as CSSProperties}></i>
             <div className="disp plus">+1</div>
             <svg className="cur" viewBox="0 0 14 21"><path d="M1 1L1 17 5 13.5 8 20 10.5 19 7.5 12.5 13 12.5Z"/></svg>
           </div>

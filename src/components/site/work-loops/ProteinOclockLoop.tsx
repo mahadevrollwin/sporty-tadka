@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import "./poc.css";
 
 export function ProteinOclockLoop() {

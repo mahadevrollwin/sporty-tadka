@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import "./ftf.css";
 
 export function FullTimeFeelingsLoop() {
@@ -29,11 +30,11 @@ export function FullTimeFeelingsLoop() {
           <div className="notch"></div>
           <div className="feed">
             <div className="strip">
-              <div className="clip" style={{ "--k": "var(--pink)" }}><div className="disp big">Goal!</div><div className="mono cap">#football · 0:14</div></div>
-              <div className="clip" style={{ "--k": "var(--lime)" }}><div className="disp big">Six!</div><div className="mono cap">#cricket · 0:09</div></div>
-              <div className="clip" style={{ "--k": "var(--cyan)" }}><div className="disp big">Lights<br />out.</div><div className="mono cap">#racing · 0:21</div></div>
-              <div className="clip" style={{ "--k": "var(--yel)" }}><div className="disp big">KO!</div><div className="mono cap">#fightnight · 0:07</div></div>
-              <div className="clip" style={{ "--k": "var(--pink)" }}><div className="disp big">Goal!</div><div className="mono cap">#football · 0:14</div></div>
+              <div className="clip" style={{ "--k": "var(--pink)" } as CSSProperties}><div className="disp big">Goal!</div><div className="mono cap">#football · 0:14</div></div>
+              <div className="clip" style={{ "--k": "var(--lime)" } as CSSProperties}><div className="disp big">Six!</div><div className="mono cap">#cricket · 0:09</div></div>
+              <div className="clip" style={{ "--k": "var(--cyan)" } as CSSProperties}><div className="disp big">Lights<br />out.</div><div className="mono cap">#racing · 0:21</div></div>
+              <div className="clip" style={{ "--k": "var(--yel)" } as CSSProperties}><div className="disp big">KO!</div><div className="mono cap">#fightnight · 0:07</div></div>
+              <div className="clip" style={{ "--k": "var(--pink)" } as CSSProperties}><div className="disp big">Goal!</div><div className="mono cap">#football · 0:14</div></div>
             </div>
             <div className="ovl">
               <div className="row"><span className="disp" style={{ fontSize: "3.2cqw" }}>Reels</span><span className="mono meta" style={{ fontSize: "1.3cqw" }}>For you</span></div>
