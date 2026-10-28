@@ -306,7 +306,21 @@ function mapServices(value: unknown) {
       },
     ];
   });
-  return items.length > 0 ? items : localHome.services;
+  if (items.length === 0) return localHome.services;
+
+  // Prefer repo headline copy so title updates in home.ts are not stuck behind stale CMS data.
+  return items.map((item, index) => {
+    const local =
+      localHome.services.find((entry) => entry.n === item.n) ?? localHome.services[index];
+    if (!local) return item;
+    return {
+      ...item,
+      title: local.title,
+      headlineLead: local.headlineLead,
+      headlineAccent: local.headlineAccent,
+      copy: item.copy || local.copy,
+    };
+  });
 }
 
 function mapAudiences(value: unknown) {
