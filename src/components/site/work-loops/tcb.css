@@ -1,0 +1,113 @@
+/* ============================================================
+   SPORTYTADKA · WORK TILE 03 · CHANNEL TAKEOVER — LOOP GRAPHIC
+   Transparent, 4.8s seamless loop. Copy this <style> + the .tcb block.
+   The SHARED part is identical across tiles 02–06: include it once.
+   ============================================================ */
+
+/* ---------- SPORTYTADKA LOOP · SHARED (identical in every tile file) ---------- */
+.tcb{
+  --lime:#C8FF3E; --pink:#FF3D9A; --cyan:#3ED8FF; --yel:#FFD23E; --red:#FF4747;
+  --txt:#F1EEFF; --mut:#8A8798; --line:rgba(255,255,255,.09); --c:var(--lime);
+  --T:4.8s; --S:1.2s;
+  position:relative; width:100%; height:100%; aspect-ratio:1/1; container-type:inline-size; overflow:visible;
+  font-family:"Space Grotesk",system-ui,sans-serif; color:var(--txt); pointer-events:none; user-select:none;
+}
+.tcb *{box-sizing:border-box}
+.tcb .disp{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:800;line-height:.86;letter-spacing:-.01em;text-transform:uppercase}
+.tcb .mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.tcb .glow{position:absolute;left:12%;right:12%;top:22%;bottom:2%;border-radius:50%;
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--c) 26%,transparent),color-mix(in srgb,var(--c) 7%,transparent) 55%,transparent);
+  filter:blur(3cqw);animation:tcb-breathe var(--S) ease-in-out infinite}
+.tcb .px{position:absolute;width:1cqw;height:1cqw;background:var(--c);opacity:0;animation:tcb-rise 2.4s linear infinite}
+.tcb .px.a{background:var(--lime)} .tcb .px.b{background:var(--cyan)} .tcb .px.p{background:var(--pink)}
+/* hologram */
+.tcb .beam{position:absolute;left:50%;top:10cqw;width:38cqw;margin-left:-19cqw;height:27cqw;
+  clip-path:polygon(0 0,100% 0,55% 100%,45% 100%);background:linear-gradient(0deg,var(--c),transparent 92%);
+  opacity:.18;animation:tcb-beam var(--S) linear infinite}
+.tcb .emit{position:absolute;left:50%;top:35.4cqw;width:16cqw;height:2.4cqw;margin-left:-8cqw;border-radius:50%;
+  background:radial-gradient(closest-side,var(--c),transparent);opacity:.8}
+.tcb .hin{position:absolute;left:50%;top:1cqw;width:30cqw;height:30cqw;margin-left:-15cqw;animation:tcb-flick var(--S) linear infinite}
+.tcb .hin svg{width:100%;height:100%;overflow:visible;color:var(--c);
+  filter:drop-shadow(0 0 .8cqw var(--c)) drop-shadow(0 0 2.4cqw color-mix(in srgb,var(--c) 45%,transparent));
+  -webkit-mask:repeating-linear-gradient(180deg,#000 0 .55cqw,rgba(0,0,0,.35) .55cqw .85cqw);
+          mask:repeating-linear-gradient(180deg,#000 0 .55cqw,rgba(0,0,0,.35) .55cqw .85cqw);
+  animation:tcb-bob 2.4s ease-in-out infinite}
+.tcb .hin svg *{vector-effect:non-scaling-stroke}
+.tcb .st{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tcb .fl{fill:currentColor;fill-opacity:.1}
+.tcb .ff{fill:currentColor;fill-opacity:.45}
+.tcb .faint{opacity:.35}
+.tcb .tb{transform-box:fill-box;transform-origin:center}
+/* card */
+.tcb .stage{position:absolute;inset:0;perspective:160cqw}
+.tcb .tilt{position:absolute;left:27cqw;top:36cqw;width:46cqw;height:58cqw;transform-style:preserve-3d;
+  transform:rotateX(8deg) rotateY(-14deg) rotateZ(-2deg);animation:tcb-float 2.4s ease-in-out infinite}
+.tcb .hud{position:absolute;inset:-3.6cqw}
+.tcb .br{position:absolute;width:4.6cqw;height:4.6cqw;border:.42cqw solid var(--c);animation:tcb-brk var(--S) ease-out infinite}
+.tcb .br.tl{top:0;left:0;border-right:0;border-bottom:0} .tcb .br.tr{top:0;right:0;border-left:0;border-bottom:0}
+.tcb .br.bl{bottom:0;left:0;border-right:0;border-top:0} .tcb .br.bri{bottom:0;right:0;border-left:0;border-top:0}
+.tcb .tagtop{position:absolute;top:-1.1cqw;left:6cqw;font-size:1.7cqw;color:var(--c);background:#0B0B10;padding:0 1cqw}
+.tcb .card{position:absolute;inset:0;border-radius:2cqw;overflow:hidden;
+  background:linear-gradient(160deg,rgba(30,30,42,.94),rgba(18,18,26,.8));
+  border:.25cqw solid var(--line);box-shadow:0 3cqw 6cqw rgba(0,0,0,.45);padding:3cqw;display:flex;flex-direction:column}
+.tcb .card::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:5;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 .25cqw,transparent .25cqw .75cqw)}
+.tcb .card::after{content:"";position:absolute;left:0;right:0;top:0;height:.5cqw;background:var(--c);z-index:6}
+.tcb .scan{position:absolute;left:0;right:0;height:9cqw;top:-10cqw;z-index:6;pointer-events:none;
+  background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--c) 0%,transparent) 30%,color-mix(in srgb,var(--c) 45%,transparent) 92%,var(--c) 96%,transparent);
+  mix-blend-mode:screen;animation:tcb-scan 2.4s linear infinite}
+.tcb .row{display:flex;justify-content:space-between;align-items:center;position:relative}
+.tcb .meta{font-size:1.6cqw;color:var(--mut)}
+.tcb .pill{display:inline-block;font-size:1.65cqw;padding:.45cqw 1.1cqw;border-radius:.6cqw;font-weight:700;background:var(--c);color:#0B0B10}
+.tcb .sk{display:block;height:1.3cqw;border-radius:.7cqw;background:rgba(241,238,255,.16)}
+/* segment visibility (4 x 1.2s) */
+.tcb .s1,.tcb .s2,.tcb .s3,.tcb .s4{animation:var(--T) linear infinite}
+.tcb .s1{animation-name:tcb-v1} .tcb .s2{animation-name:tcb-v2} .tcb .s3{animation-name:tcb-v3} .tcb .s4{animation-name:tcb-v4}
+@keyframes tcb-v1{0%,25%{opacity:1}25.01%,100%{opacity:0}}
+@keyframes tcb-v2{0%,25%{opacity:0}25.01%,50%{opacity:1}50.01%,100%{opacity:0}}
+@keyframes tcb-v3{0%,50%{opacity:0}50.01%,75%{opacity:1}75.01%,100%{opacity:0}}
+@keyframes tcb-v4{0%,75%{opacity:0}75.01%,100%{opacity:1}}
+@keyframes tcb-flick{0%,46%{opacity:1;transform:none}47%{opacity:.35;transform:translateX(.8cqw)}48%{opacity:1;transform:translateX(-.5cqw)}50%{opacity:.7;transform:none}52%,100%{opacity:1}}
+@keyframes tcb-beam{0%,46%{opacity:.2}47%{opacity:.06}50%{opacity:.16}52%,100%{opacity:.2}}
+@keyframes tcb-bob{0%,100%{translate:0 -.8cqw}50%{translate:0 .8cqw}}
+@keyframes tcb-scan{0%{top:-10cqw;opacity:0}5%{opacity:1}30%{top:52cqw;opacity:.9}36%,100%{top:58cqw;opacity:0}}
+@keyframes tcb-float{0%,100%{translate:0 -.9cqw}50%{translate:0 .9cqw}}
+@keyframes tcb-breathe{0%,100%{opacity:.75;scale:1}20%{opacity:1;scale:1.05}}
+@keyframes tcb-brk{0%{scale:1.2;opacity:.3}25%,100%{scale:1;opacity:1}}
+@keyframes tcb-rise{0%{translate:0 0;opacity:0}15%{opacity:.9}85%{opacity:.6}100%{translate:0 -34cqw;opacity:0}}
+@keyframes tcb-blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes tcb-spin{to{rotate:360deg}}
+@media (prefers-reduced-motion:reduce){.tcb *{animation-play-state:paused!important}}
+
+/* ---------- TILE 03 ONLY ---------- */
+.t03{--c:var(--cyan)}
+
+.t03 .who{display:flex;align-items:center;gap:1.2cqw}
+.t03 .av{width:5cqw;height:5cqw;border-radius:50%;flex:none;background:conic-gradient(var(--cyan),var(--lime),var(--pink),var(--cyan));box-shadow:0 0 0 .4cqw rgba(62,216,255,.25)}
+.t03 .who .meta{display:block;margin-top:.6cqw;font-size:1.35cqw}
+.t03 .onair{background:var(--red);color:#fff;font-size:1.4cqw}
+.t03 .onair b{animation:tcb-blink .6s linear infinite}
+.t03 .lbl{margin-top:2.8cqw;font-size:1.55cqw;color:var(--mut)}
+.t03 .big{font-size:14cqw;margin:.6cqw 0 .4cqw}
+.t03 .up{font-size:1.55cqw;color:var(--lime)}
+.t03 .xp{margin-top:2.4cqw}
+.t03 .xp .row{font-size:1.4cqw}
+.t03 .lu{color:var(--lime);opacity:0;animation:t03-lu var(--T) linear infinite}
+.t03 .xpbar{height:1.6cqw;border-radius:.9cqw;background:rgba(255,255,255,.08);margin-top:.8cqw;overflow:hidden;border:.2cqw solid rgba(62,216,255,.3)}
+.t03 .xpbar i{display:block;height:100%;width:4%;background:linear-gradient(90deg,var(--cyan),var(--lime));box-shadow:0 0 1.5cqw var(--cyan);animation:t03-xp var(--T) cubic-bezier(.4,0,.2,1) infinite}
+.t03 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:.8cqw;margin-top:2.2cqw}
+.t03 .week div{display:flex;flex-direction:column;align-items:center;gap:.5cqw;font-family:"JetBrains Mono",monospace;font-size:1.25cqw;color:var(--mut)}
+.t03 .week i{width:100%;aspect-ratio:1;border-radius:.8cqw;border:.2cqw solid rgba(255,255,255,.14);position:relative;overflow:hidden}
+.t03 .week s{position:absolute;inset:0;background:var(--cyan);opacity:0;animation:t03-day var(--T) linear infinite;animation-delay:calc(var(--d) * .45s - 4.8s)}
+.t03 .week s::after{content:"";position:absolute;left:36%;top:18%;width:26%;height:46%;border:solid #0B0B10;border-width:0 .4cqw .4cqw 0;transform:rotate(45deg)}
+.t03 .toasts{margin-top:auto;position:relative;height:5.4cqw}
+.t03 .toast{position:absolute;inset:0}
+.t03 .tin{height:100%;display:flex;align-items:center;gap:1.2cqw;padding:0 1.4cqw;border-radius:1.2cqw;font-size:1.55cqw;
+  background:rgba(62,216,255,.1);border:.2cqw solid rgba(62,216,255,.3);animation:t03-toast var(--S) ease-out infinite}
+.t03 .tin i{width:1.4cqw;height:1.4cqw;border-radius:50%;flex:none}
+.t03 .wv{transform-box:view-box;transform-origin:100px 36px;animation:t03-wave var(--S) ease-out infinite}
+@keyframes t03-xp{0%{width:4%}84%,96%{width:100%}100%{width:4%}}
+@keyframes t03-lu{0%,82%{opacity:0}85%,94%{opacity:1}97%,100%{opacity:0}}
+@keyframes t03-day{0%{opacity:0;transform:scale(.4)}4%{opacity:1;transform:scale(1.1)}7%{transform:scale(1)}70%{opacity:1}74%,100%{opacity:0}}
+@keyframes t03-toast{0%{transform:translateY(70%);opacity:0}12%{transform:none;opacity:1}86%{opacity:1}100%{opacity:0}}
+@keyframes t03-wave{0%{transform:scale(.35);opacity:0}15%{opacity:1}100%{transform:scale(2.1);opacity:0}}

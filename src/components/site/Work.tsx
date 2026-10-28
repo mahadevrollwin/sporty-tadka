@@ -1,10 +1,26 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { work } from "@/content/home";
 import { MatchdayLoop } from "./MatchdayLoop";
+import {
+  FanCamLoop,
+  FullTimeFeelingsLoop,
+  LeagueNightLoop,
+  ProteinOclockLoop,
+  TheComebackLoop,
+} from "./work-loops";
 import { StartProjectButton } from "./LeadForm";
 import { DisplayHeading, Kick, Lead, Wrap } from "./ui";
+
+const workLoops: Record<string, () => ReactNode> = {
+  "01": () => <MatchdayLoop />,
+  "02": () => <FullTimeFeelingsLoop />,
+  "03": () => <TheComebackLoop />,
+  "04": () => <ProteinOclockLoop />,
+  "05": () => <LeagueNightLoop />,
+  "06": () => <FanCamLoop />,
+};
 
 type Flip =
   | { type: "open"; num: string; dx: number; dy: number; sx: number; sy: number }
@@ -200,10 +216,10 @@ export function Work({
                   >
                     {item.num}
                   </span>
-                  {isOpen && item.num === "01" ? (
+                  {isOpen && workLoops[item.num] ? (
                     <div className="pointer-events-none absolute inset-x-0 top-0 bottom-[28%] z-[5] flex items-center justify-center overflow-hidden p-3 min-[641px]:bottom-[24%] min-[641px]:p-4">
                       <div className="aspect-square h-full max-h-full w-auto max-w-full">
-                        <MatchdayLoop />
+                        {workLoops[item.num]()}
                       </div>
                     </div>
                   ) : null}
