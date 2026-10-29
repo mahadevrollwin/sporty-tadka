@@ -780,10 +780,13 @@ var resizeTimeoutId = -1;
 
 var starCrushBgm = null;
 var starCrushWhoosh = null;
+var starCrushWin = null;
+var starCrushGameOver = null;
 var starCrushMusicStarted = false;
 var starCrushMusicEnabled = localStorage.getItem("starCrushMusic") !== "off";
 var STAR_CRUSH_BGM_VOLUME = 0.38;
-var STAR_CRUSH_WHOOSH_VOLUME = 0.55;
+var STAR_CRUSH_WHOOSH_VOLUME = 0.7;
+var STAR_CRUSH_STINGER_VOLUME = 0.75;
 
 function initStarCrushAudioElements(){
     if(!starCrushBgm){
@@ -793,10 +796,33 @@ function initStarCrushAudioElements(){
         starCrushBgm.volume = STAR_CRUSH_BGM_VOLUME;
     }
     if(!starCrushWhoosh){
-        starCrushWhoosh = new Audio("/tech-crush/audio/whoosh.wav");
+        starCrushWhoosh = new Audio("/tech-crush/audio/whoosh.mp3");
         starCrushWhoosh.preload = "auto";
         starCrushWhoosh.volume = STAR_CRUSH_WHOOSH_VOLUME;
     }
+    if(!starCrushWin){
+        starCrushWin = new Audio("/tech-crush/audio/win.mp3");
+        starCrushWin.preload = "auto";
+        starCrushWin.volume = STAR_CRUSH_STINGER_VOLUME;
+    }
+    if(!starCrushGameOver){
+        starCrushGameOver = new Audio("/tech-crush/audio/game-over.wav");
+        starCrushGameOver.preload = "auto";
+        starCrushGameOver.volume = STAR_CRUSH_STINGER_VOLUME;
+    }
+}
+
+function playStarCrushSound(audio, volume){
+    if(!starCrushMusicEnabled || !audio) return;
+    try{
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = volume;
+        var playPromise = audio.play();
+        if(playPromise && typeof playPromise.catch === "function"){
+            playPromise.catch(function(){});
+        }
+    }catch(err){}
 }
 
 function startStarCrushMusic(){
@@ -821,17 +847,20 @@ function stopStarCrushMusic(){
 }
 
 function playCrushWhoosh(){
-    if(!starCrushMusicEnabled) return;
     initStarCrushAudioElements();
-    try{
-        starCrushWhoosh.pause();
-        starCrushWhoosh.currentTime = 0;
-        starCrushWhoosh.volume = STAR_CRUSH_WHOOSH_VOLUME;
-        var playPromise = starCrushWhoosh.play();
-        if(playPromise && typeof playPromise.catch === "function"){
-            playPromise.catch(function(){});
-        }
-    }catch(err){}
+    playStarCrushSound(starCrushWhoosh, STAR_CRUSH_WHOOSH_VOLUME);
+}
+
+function playWinSound(){
+    initStarCrushAudioElements();
+    stopStarCrushMusic();
+    playStarCrushSound(starCrushWin, STAR_CRUSH_STINGER_VOLUME);
+}
+
+function playGameOverSound(){
+    initStarCrushAudioElements();
+    stopStarCrushMusic();
+    playStarCrushSound(starCrushGameOver, STAR_CRUSH_STINGER_VOLUME);
 }
 
 function setStarCrushMusicEnabled(enabled){
@@ -1046,7 +1075,10 @@ function levelScreenPlayButtonClickHandler(){
 function gameOverScreenPlayButtonClickHandler(){
     document.getElementById("gameOverScreen").style.display = "none";
     document.getElementById("winScreen").style.display = "none";
+    if(starCrushWin){ starCrushWin.pause(); starCrushWin.currentTime = 0; }
+    if(starCrushGameOver){ starCrushGameOver.pause(); starCrushGameOver.currentTime = 0; }
     playGame();
+    startStarCrushMusic();
 }
 
 function nextLevel(){
@@ -1267,6 +1299,7 @@ function publishScore() {
 
 function showCongratsScreen(){
     publishScore();
+    playWinSound();
     displayPanel(document.getElementById("winScreen"));
     document.getElementById("winScore").innerHTML = score.format();
     document.getElementById("acquisitionsList").appendChild(createIconImage(9));
@@ -1274,6 +1307,7 @@ function showCongratsScreen(){
 
 function gameOver(){
     publishScore();
+    playGameOverSound();
     displayPanel(document.getElementById("gameOverScreen"));
     document.getElementById("gameOverScore").innerHTML = score.format();
 }
