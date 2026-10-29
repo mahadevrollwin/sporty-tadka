@@ -1142,6 +1142,7 @@ function nextLevel(){
     updateMoves();
     renderModelGameState();
     if(level>1){
+        playWinSound();
         displayPanel(document.getElementById("levelScreen"));
         document.getElementById("levelScore").innerHTML = "$"+score.format();
         document.getElementById("levelP").innerHTML = level;
