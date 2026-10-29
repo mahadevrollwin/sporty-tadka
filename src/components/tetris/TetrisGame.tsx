@@ -222,7 +222,7 @@ export function TetrisLaunch({ onPlay }: { onPlay: () => void }) {
   const best = useBest("tetrisScore");
   return (
     <>
-      <GameStage src="/images/games/tetris.png" wash="bg-canvas/58" contentClassName="gap-4 px-6 py-8">
+      <GameStage src="/images/games/tetris.png" contentClassName="gap-4 px-6 py-8">
         <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
           Tetris
         </span>

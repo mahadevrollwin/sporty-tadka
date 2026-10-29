@@ -20,16 +20,16 @@ const phaseText: Record<Phase, string> = {
 };
 
 const phaseWash: Record<Phase, string> = {
-  idle: "bg-canvas/55",
-  wait: "bg-[#2a0f22]/78",
-  go: "bg-lime/88",
-  foul: "bg-[#3a1206]/82",
-  done: "bg-[#0c1204]/72",
+  idle: "bg-canvas/78",
+  wait: "bg-[#2a0f22]/88",
+  go: "bg-lime/90",
+  foul: "bg-[#3a1206]/88",
+  done: "bg-[#0c1204]/82",
 };
 
 export function GameStage({
   src,
-  wash = "bg-canvas/55",
+  wash = "bg-canvas/78",
   className = "",
   contentClassName = "",
   children,
@@ -41,10 +41,12 @@ export function GameStage({
   children: ReactNode;
 }) {
   return (
-    <div className={`relative flex min-h-[270px] flex-1 overflow-hidden rounded-[14px] ${className}`}>
+    <div
+      className={`relative flex min-h-[270px] flex-1 overflow-hidden rounded-[14px] bg-canvas ${className}`}
+    >
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-cover bg-center"
+        className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.34]"
         style={{ backgroundImage: `url(${src})` }}
       />
       <span aria-hidden className={`pointer-events-none absolute inset-0 ${wash}`} />
@@ -172,11 +174,11 @@ export function ReactionGame() {
             tap();
           }
         }}
-        className={`relative flex min-h-[270px] flex-1 cursor-pointer overflow-hidden rounded-[14px] border-0 font-sans transition-colors ${phaseText[phase]}`}
+        className={`relative flex min-h-[270px] flex-1 cursor-pointer overflow-hidden rounded-[14px] border-0 bg-canvas font-sans transition-colors ${phaseText[phase]}`}
       >
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-cover bg-center"
+          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.34]"
           style={{ backgroundImage: "url(/images/games/reaction.png)" }}
         />
         <span aria-hidden className={`pointer-events-none absolute inset-0 ${phaseWash[phase]}`} />
@@ -279,7 +281,7 @@ export function TimingGame() {
 
   return (
     <>
-      <GameStage src="/images/games/timing.png" wash="bg-canvas/60" contentClassName="gap-[18px]">
+      <GameStage src="/images/games/timing.png" contentClassName="gap-[18px]">
         <div className="text-[15px] text-dim">
           Ball <b className="mx-1 font-display text-xl text-ink">{ball}</b>/6 · Runs{" "}
           <b className="mx-1 font-display text-xl text-lime">{runs}</b>
@@ -311,7 +313,7 @@ export function TimingGame() {
 
 export function RapidGame({ onPlay }: { onPlay: () => void }) {
   return (
-    <GameStage src="/images/games/star-crush.png" wash="bg-canvas/58" contentClassName="gap-4 px-6 py-8">
+    <GameStage src="/images/games/star-crush.png" contentClassName="gap-4 px-6 py-8">
       <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
         Star Crush
       </span>
@@ -331,7 +333,7 @@ export function RapidGame({ onPlay }: { onPlay: () => void }) {
 
 export function ScamAlertLaunch({ onPlay }: { onPlay: () => void }) {
   return (
-    <GameStage src="/images/games/cricket-iq.png" wash="bg-canvas/58" contentClassName="gap-4 px-6 py-8">
+    <GameStage src="/images/games/cricket-iq.png" contentClassName="gap-4 px-6 py-8">
       <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
         Cricket IQ
       </span>
