@@ -148,6 +148,67 @@
   overflow: hidden;
 }
 
+.roster-graphic-frame {
+  max-width: min(100%, 420px);
+  max-height: min(38vh, 340px);
+  width: min(100%, calc(min(38vh, 340px) * 4 / 3));
+}
+
+@media (min-width: 761px) {
+  .roster-graphic-frame {
+    max-width: 760px;
+    max-height: min(68vh, 640px);
+    width: min(100%, calc(min(68vh, 640px) * 4 / 3));
+  }
+}
+
+/* Mobile portrait: animation stacks under copy */
+@media (max-width: 760px) and (orientation: portrait) {
+  .roster-body {
+    align-content: start;
+    align-items: start;
+  }
+
+  .roster-graphic {
+    justify-content: flex-start;
+    margin-top: 4px;
+  }
+}
+
+/* Mobile landscape: keep side-by-side art inside the pin, clear of bottom chrome */
+@media (max-width: 760px) and (orientation: landscape) {
+  .roster-body {
+    grid-template-columns: minmax(11rem, 0.4fr) minmax(0, 1fr);
+    align-content: center;
+    align-items: center;
+    gap: 1rem 1.25rem;
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+
+  .roster-body h2 {
+    margin-top: 8px;
+    font-size: clamp(32px, 6.2vw, 56px);
+  }
+
+  .roster-body p:last-of-type {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  .roster-graphic {
+    justify-content: flex-end;
+    align-self: center;
+    max-height: 100%;
+  }
+
+  .roster-graphic-frame {
+    max-width: min(48vw, 460px);
+    max-height: min(58svh, 280px);
+    width: min(100%, calc(min(58svh, 280px) * 4 / 3));
+  }
+}
+
 @media (max-height: 700px) {
   .roster-body {
     align-items: flex-start;
@@ -168,6 +229,19 @@
   .roster-number {
     bottom: 72px;
     font-size: 18vw;
+  }
+}
+
+@media (max-width: 760px) and (orientation: landscape) and (max-height: 700px) {
+  .roster-body {
+    align-items: center;
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .roster-graphic-frame {
+    max-height: min(52svh, 240px);
+    width: min(100%, calc(min(52svh, 240px) * 4 / 3));
   }
 }
 
