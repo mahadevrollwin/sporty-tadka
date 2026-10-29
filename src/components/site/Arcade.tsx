@@ -21,10 +21,10 @@ const phaseText: Record<Phase, string> = {
 
 const phaseWash: Record<Phase, string> = {
   idle: "bg-transparent",
-  wait: "bg-[#2a0f22]/86",
-  go: "bg-lime/90",
-  foul: "bg-[#3a1206]/86",
-  done: "bg-[#0c1204]/78",
+  wait: "bg-[#2a0f22]",
+  go: "bg-lime",
+  foul: "bg-[#3a1206]",
+  done: "bg-[linear-gradient(180deg,#101a06,#0c1204)]",
 };
 
 export function GameStage({
@@ -176,11 +176,13 @@ export function ReactionGame() {
         }}
         className={`relative flex min-h-[270px] flex-1 cursor-pointer overflow-hidden rounded-[14px] border-0 bg-canvas font-sans transition-colors ${phaseText[phase]}`}
       >
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url(/images/games/reaction.png)" }}
-        />
+        {phase === "idle" && (
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: "url(/images/games/reaction.png)" }}
+          />
+        )}
         <span aria-hidden className={`pointer-events-none absolute inset-0 ${phaseWash[phase]}`} />
         <span className="relative z-[1] flex w-full flex-1 flex-col items-center justify-center gap-3 px-[22px] py-[22px] text-center">
           <span className={`flex gap-3 ${lightsVisible ? "" : "hidden"}`}>
@@ -324,31 +326,33 @@ export function TimingGame() {
 
   return (
     <>
-      <GameStage src="/images/games/timing.png" contentClassName="gap-[18px]">
-        <div className="text-[15px] text-dim">
-          Ball <b className="mx-1 font-display text-xl text-ink">{ball}</b>/6 · Runs{" "}
-          <b className="mx-1 font-display text-xl text-lime">{runs}</b>
+      <div className="relative flex min-h-[270px] flex-1 overflow-hidden rounded-[14px] bg-[linear-gradient(180deg,#141021,#0e0b18)]">
+        <div className="relative z-[1] flex w-full flex-1 flex-col items-center justify-center gap-[18px] px-[22px] py-[22px] text-center">
+          <div className="text-[15px] text-dim">
+            Ball <b className="mx-1 font-display text-xl text-ink">{ball}</b>/6 · Runs{" "}
+            <b className="mx-1 font-display text-xl text-lime">{runs}</b>
+          </div>
+          <div className="relative h-14 w-full max-w-xl overflow-hidden rounded-xl border border-line bg-panel/90">
+            <div className="absolute inset-y-0 right-[44%] left-[44%] bg-lime/35" />
+            <div className="absolute inset-y-0 left-[36%] w-[8%] bg-yellow/22" />
+            <div className="absolute inset-y-0 left-[56%] w-[8%] bg-yellow/22" />
+            <div className="absolute inset-y-0 left-[26%] w-[10%] bg-magenta/16" />
+            <div className="absolute inset-y-0 left-[64%] w-[10%] bg-magenta/16" />
+            <div
+              ref={markerRef}
+              className="absolute -top-1 -bottom-1 w-1 bg-white shadow-[0_0_12px_#fff]"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={swing}
+            className="cursor-pointer self-center rounded-lg bg-lime px-6 py-3.5 font-sans text-[15.5px] font-bold text-pitch shadow-[0_0_26px_rgba(198,255,61,.4)] hover:bg-[#d4ff5c]"
+          >
+            {done ? "Play again" : "Hit!"}
+          </button>
+          <div className="min-h-[22px] text-[15px] text-dim">{message}</div>
         </div>
-        <div className="relative h-14 w-full max-w-xl overflow-hidden rounded-xl border border-line bg-panel/90">
-          <div className="absolute inset-y-0 right-[44%] left-[44%] bg-lime/35" />
-          <div className="absolute inset-y-0 left-[36%] w-[8%] bg-yellow/22" />
-          <div className="absolute inset-y-0 left-[56%] w-[8%] bg-yellow/22" />
-          <div className="absolute inset-y-0 left-[26%] w-[10%] bg-magenta/16" />
-          <div className="absolute inset-y-0 left-[64%] w-[10%] bg-magenta/16" />
-          <div
-            ref={markerRef}
-            className="absolute -top-1 -bottom-1 w-1 bg-white shadow-[0_0_12px_#fff]"
-          />
-        </div>
-        <button
-          type="button"
-          onClick={swing}
-          className="cursor-pointer self-center rounded-lg bg-lime px-6 py-3.5 font-sans text-[15.5px] font-bold text-pitch shadow-[0_0_26px_rgba(198,255,61,.4)] hover:bg-[#d4ff5c]"
-        >
-          {done ? "Play again" : "Hit!"}
-        </button>
-        <div className="min-h-[22px] text-[15px] text-dim">{message}</div>
-      </GameStage>
+      </div>
       <GameMeta label="Runs in one over" best={best == null ? "—" : String(best)} />
     </>
   );
