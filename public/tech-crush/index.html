@@ -171,9 +171,61 @@
         padding-right: 5px;
     }
 
+    #soundToggle{
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 100;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        margin: 0;
+        padding: 0;
+        border: 1px solid rgba(244, 242, 255, 0.16);
+        border-radius: 999px;
+        background: rgba(22, 17, 34, 0.88);
+        color: #c6ff3d;
+        box-shadow: 0 0 18px rgba(198, 255, 61, 0.18);
+        cursor: pointer;
+    }
+
+    #soundToggle:hover{
+        background: rgba(30, 24, 46, 0.95);
+        color: #d4ff5c;
+    }
+
+    #soundToggle svg{
+        width: 20px;
+        height: 20px;
+        display: block;
+    }
+
+    #soundToggle[aria-pressed="true"]{
+        color: #8a879c;
+    }
+
 </style>
 </head>
 <body>
+<button
+    id="soundToggle"
+    type="button"
+    aria-label="Mute music"
+    aria-pressed="false"
+    title="Mute music"
+>
+    <svg id="soundIconOn" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 9v6h3.2L12 19V5L7.2 9H4z" fill="currentColor"/>
+        <path d="M15.2 8.2a4.2 4.2 0 010 7.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M17.6 5.5a7.5 7.5 0 010 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <svg id="soundIconOff" viewBox="0 0 24 24" fill="none" aria-hidden="true" hidden>
+        <path d="M4 9v6h3.2L12 19V5L7.2 9H4z" fill="currentColor"/>
+        <path d="M16 9l5 5M21 9l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+</button>
 <div id="canvasContainer"></div>
 <div id="scoreBoard">
     <p >STAR CRUSH!</p>
@@ -696,9 +748,164 @@ var requiredStageWidth = 880;
 var requiredStageHeight = 700;
 var resizeTimeoutId = -1;
 
+var starCrushAudioCtx = null;
+var starCrushMusicGain = null;
+var starCrushSfxGain = null;
+var starCrushMusicNodes = [];
+var starCrushMusicStarted = false;
+var starCrushMusicEnabled = localStorage.getItem("starCrushMusic") !== "off";
+
+function ensureStarCrushAudio(){
+    var AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if(!AudioCtx) return null;
+    if(!starCrushAudioCtx){
+        starCrushAudioCtx = new AudioCtx();
+        starCrushMusicGain = starCrushAudioCtx.createGain();
+        starCrushMusicGain.gain.value = starCrushMusicEnabled ? 0.085 : 0;
+        starCrushMusicGain.connect(starCrushAudioCtx.destination);
+        starCrushSfxGain = starCrushAudioCtx.createGain();
+        starCrushSfxGain.gain.value = starCrushMusicEnabled ? 0.42 : 0;
+        starCrushSfxGain.connect(starCrushAudioCtx.destination);
+    }
+    if(starCrushAudioCtx.state === "suspended"){
+        starCrushAudioCtx.resume();
+    }
+    return starCrushAudioCtx;
+}
+
+function startStarCrushMusic(){
+    var ctx = ensureStarCrushAudio();
+    if(!ctx || starCrushMusicStarted) return;
+    starCrushMusicStarted = true;
+
+    var voices = [
+        { freq: 196.0, type: "sine", gain: 0.035, lfo: 0.07 },
+        { freq: 246.94, type: "triangle", gain: 0.018, lfo: 0.09 },
+        { freq: 293.66, type: "sine", gain: 0.028, lfo: 0.05 },
+        { freq: 392.0, type: "sine", gain: 0.016, lfo: 0.11 }
+    ];
+
+    voices.forEach(function(voice){
+        var osc = ctx.createOscillator();
+        osc.type = voice.type;
+        osc.frequency.value = voice.freq;
+
+        var gain = ctx.createGain();
+        gain.gain.value = voice.gain;
+
+        var filter = ctx.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.value = 920;
+        filter.Q.value = 0.6;
+
+        var lfo = ctx.createOscillator();
+        lfo.type = "sine";
+        lfo.frequency.value = voice.lfo;
+        var lfoGain = ctx.createGain();
+        lfoGain.gain.value = voice.gain * 0.45;
+        lfo.connect(lfoGain);
+        lfoGain.connect(gain.gain);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(starCrushMusicGain);
+        osc.start();
+        lfo.start();
+        starCrushMusicNodes.push(osc, lfo, gain, filter);
+    });
+
+    // Soft pulsing pad for a light loop feel
+    var pulse = ctx.createOscillator();
+    pulse.type = "sine";
+    pulse.frequency.value = 98;
+    var pulseGain = ctx.createGain();
+    pulseGain.gain.value = 0.02;
+    var pulseLfo = ctx.createOscillator();
+    pulseLfo.frequency.value = 0.18;
+    var pulseLfoGain = ctx.createGain();
+    pulseLfoGain.gain.value = 0.012;
+    pulseLfo.connect(pulseLfoGain);
+    pulseLfoGain.connect(pulseGain.gain);
+    pulse.connect(pulseGain);
+    pulseGain.connect(starCrushMusicGain);
+    pulse.start();
+    pulseLfo.start();
+    starCrushMusicNodes.push(pulse, pulseLfo, pulseGain);
+}
+
+function playCrushWhoosh(){
+    if(!starCrushMusicEnabled) return;
+    var ctx = ensureStarCrushAudio();
+    if(!ctx || !starCrushSfxGain) return;
+
+    var duration = 0.32;
+    var sampleRate = ctx.sampleRate;
+    var frameCount = Math.floor(sampleRate * duration);
+    var buffer = ctx.createBuffer(1, frameCount, sampleRate);
+    var data = buffer.getChannelData(0);
+    for(var i = 0; i < frameCount; i++){
+        var t = i / sampleRate;
+        var env = Math.sin((Math.PI * t) / duration) * Math.exp(-t * 5.5);
+        data[i] = (Math.random() * 2 - 1) * env;
+    }
+
+    var source = ctx.createBufferSource();
+    source.buffer = buffer;
+    var filter = ctx.createBiquadFilter();
+    filter.type = "bandpass";
+    filter.Q.value = 0.75;
+    var now = ctx.currentTime;
+    filter.frequency.setValueAtTime(520, now);
+    filter.frequency.exponentialRampToValueAtTime(2800, now + 0.22);
+
+    var swooshGain = ctx.createGain();
+    swooshGain.gain.setValueAtTime(0.001, now);
+    swooshGain.gain.exponentialRampToValueAtTime(0.9, now + 0.04);
+    swooshGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    source.connect(filter);
+    filter.connect(swooshGain);
+    swooshGain.connect(starCrushSfxGain);
+    source.start(now);
+}
+
+function setStarCrushMusicEnabled(enabled){
+    starCrushMusicEnabled = enabled;
+    localStorage.setItem("starCrushMusic", enabled ? "on" : "off");
+    if(starCrushMusicGain){
+        starCrushMusicGain.gain.value = enabled ? 0.085 : 0;
+    }
+    if(starCrushSfxGain){
+        starCrushSfxGain.gain.value = enabled ? 0.42 : 0;
+    }
+    var toggle = document.getElementById("soundToggle");
+    var iconOn = document.getElementById("soundIconOn");
+    var iconOff = document.getElementById("soundIconOff");
+    if(!toggle || !iconOn || !iconOff) return;
+    toggle.setAttribute("aria-pressed", enabled ? "false" : "true");
+    toggle.setAttribute("aria-label", enabled ? "Mute music" : "Unmute music");
+    toggle.title = enabled ? "Mute music" : "Unmute music";
+    iconOn.hidden = !enabled;
+    iconOff.hidden = enabled;
+}
+
+function initStarCrushSoundToggle(){
+    var toggle = document.getElementById("soundToggle");
+    if(!toggle) return;
+    setStarCrushMusicEnabled(starCrushMusicEnabled);
+    toggle.addEventListener("click", function(){
+        ensureStarCrushAudio();
+        setStarCrushMusicEnabled(!starCrushMusicEnabled);
+        if(starCrushMusicEnabled && !starCrushMusicStarted){
+            // Keep ready; music starts when CRUSH! is pressed
+        }
+    });
+}
+
 function init(){
     canvasContainer = document.getElementById("canvasContainer");
     window.onresize = resizeHandler;
+    initStarCrushSoundToggle();
     commitResize();
 }
 
@@ -864,6 +1071,7 @@ function playGame(){
 function startScreenPlayButtonClickHandler(){
     document.getElementById("startScreen").style.display = "none";
     enableUserInput();
+    startStarCrushMusic();
 }
 
 function levelScreenPlayButtonClickHandler(){
@@ -1012,6 +1220,9 @@ function renderTechCrush(){
 
 function setScoreCells(){
     scoreCells = model.getMatches(model.grid);
+    if(scoreCells.length > 0){
+        playCrushWhoosh();
+    }
     updateScoreWithMatches(scoreCells, model.grid);
     model.removeMatches();
 }
