@@ -25,6 +25,7 @@ import {
   writeLocalCounts,
   writeLocalPick,
   type ItemReactionState,
+  type ReactionCounts,
   type ReactionType,
   type ReactionsMap,
 } from "@/lib/gallery-reactions";
@@ -38,6 +39,7 @@ type MasonryInstance = {
 
 type ReactionsApi = {
   stateFor: (itemId: string) => ItemReactionState;
+  countsFor: (itemId: string) => ReactionCounts;
   pickFor: (itemId: string) => ReactionType | null;
   likesFor: (itemId: string) => number;
   displayFor: (itemId: string) => ReactionType | null;
@@ -159,6 +161,13 @@ function useGalleryReactions(): ReactionsApi {
 
   return {
     stateFor: (itemId) => states[itemId] ?? emptyState(),
+    countsFor: (itemId) => {
+      const counts = { ...(states[itemId] ?? emptyState()).counts };
+      const pick = picks[itemId];
+      // Same as likesFor: the viewer's own pick counts even before the server catches up.
+      if (pick && counts[pick] < 1) counts[pick] = 1;
+      return counts;
+    },
     pickFor: (itemId) => picks[itemId] ?? null,
     likesFor: (itemId) => {
       const likes = likesTotal(states[itemId]);
@@ -370,7 +379,7 @@ function ReactionButtons({
 }) {
   return (
     <div
-      className="inline-flex items-center gap-0.5 rounded-full border border-line bg-canvas/80 px-1.5 py-1 shadow-[0_8px_24px_rgba(0,0,0,.35)] backdrop-blur-md"
+      className="inline-flex items-center gap-0.5 rounded-full border border-line bg-canvas/80 px-1.5 py-1 shadow-[0_8px_24px_rgba(0,0,0,.35)] backdrop-blur-md sm:gap-1"
       role="group"
       aria-label="Reactions"
     >
@@ -388,7 +397,7 @@ function ReactionButtons({
               event.stopPropagation();
               onReact(option.id);
             }}
-            className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-[16px] leading-none transition hover:scale-110 hover:bg-elevated/80 ${
+            className={`flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-[21px] leading-none transition hover:scale-110 hover:bg-elevated/80 sm:h-10 sm:w-10 sm:text-[24px] ${
               active ? "bg-elevated scale-110 ring-1 ring-lime/50" : ""
             }`}
           >
@@ -425,37 +434,82 @@ function ReactionBar({
   );
 }
 
-function LikesBadge({
+function ReactionSummary({
   likes,
+  counts,
   reaction,
-  positionClass = "top-3 right-3",
+  className,
+  openUp = false,
 }: {
   likes: number;
+  counts: ReactionCounts;
   reaction?: ReactionType | null;
-  positionClass?: string;
+  className: string;
+  openUp?: boolean;
 }) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const breakdownId = useId();
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
   if (likes <= 0) return null;
+  const used = REACTION_OPTIONS.filter((option) => counts[option.id] > 0);
 
   return (
-    <span
-      className={`pointer-events-none absolute z-[5] inline-flex items-center gap-1 rounded-full border border-line bg-canvas/70 px-2.5 py-1 text-[11px] font-bold tracking-wide text-ink backdrop-blur-sm ${positionClass}`}
-    >
-      <span aria-hidden="true">{reactionEmoji(reaction)}</span>
-      <span>{formatCount(likes)}</span>
-      <span className="sr-only">likes</span>
-    </span>
-  );
-}
-
-function LikesLabel({ likes, reaction }: { likes: number; reaction?: ReactionType | null }) {
-  if (likes <= 0) return null;
-
-  return (
-    <span className="inline-flex items-center gap-1 rounded-full border border-line bg-elevated/80 px-2.5 py-1 text-[11px] font-bold tracking-wide text-ink">
-      <span aria-hidden="true">{reactionEmoji(reaction)}</span>
-      <span>{formatCount(likes)}</span>
-      <span className="sr-only">likes</span>
-    </span>
+    <div ref={rootRef} className={className}>
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={breakdownId}
+        title="See reactions"
+        onClick={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          setOpen((value) => !value);
+        }}
+        className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border bg-canvas/75 px-3 py-1 text-[13px] font-bold tracking-wide text-ink backdrop-blur-sm transition hover:border-lime ${
+          open ? "border-lime" : "border-line"
+        }`}
+      >
+        <span aria-hidden="true" className="text-[20px] leading-none">
+          {reactionEmoji(reaction)}
+        </span>
+        <span>{formatCount(likes)}</span>
+        <span className="sr-only">{likes === 1 ? "reaction" : "reactions"}, show breakdown</span>
+      </button>
+      {open ? (
+        <ul
+          id={breakdownId}
+          className={`absolute left-0 z-20 m-0 min-w-[170px] ${openUp ? "bottom-full mb-2" : "top-full mt-2"} list-none rounded-xl border border-line bg-panel/95 p-1.5 shadow-[0_12px_32px_rgba(0,0,0,.45)] backdrop-blur-md`}
+          onClick={(event) => event.stopPropagation()}
+        >
+          {used.map((option) => (
+            <li key={option.id} className="flex items-center gap-2.5 rounded-lg px-2 py-1.5">
+              <span aria-hidden="true" className="text-[22px] leading-none">
+                {option.emoji}
+              </span>
+              <span className="flex-1 text-[13px] font-semibold whitespace-nowrap text-soft">{option.label}</span>
+              <span className="text-[14px] font-bold text-ink">{formatCount(counts[option.id])}</span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
   );
 }
 
@@ -493,11 +547,6 @@ function ImageCard({
             loading="lazy"
             className="block h-auto w-full transition duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
           />
-          <LikesBadge
-            likes={reactions.likesFor(item.id)}
-            reaction={reactions.displayFor(item.id)}
-            positionClass="top-3 left-3"
-          />
           <CardMeta category={item.category} title={item.title} />
         </button>
         <ReactionBar
@@ -507,6 +556,12 @@ function ImageCard({
           positionClass="bottom-[4.5rem]"
         />
       </div>
+      <ReactionSummary
+        likes={reactions.likesFor(item.id)}
+        counts={reactions.countsFor(item.id)}
+        reaction={reactions.displayFor(item.id)}
+        className="absolute top-3 left-3 z-10"
+      />
       <DownloadLink
         src={item.src}
         title={item.title}
@@ -644,7 +699,13 @@ function Lightbox({
             </h2>
             {item.type === "video" ? (
               <div className="flex flex-wrap items-center gap-2">
-                <LikesLabel likes={likes} reaction={reactions.displayFor(item.id)} />
+                <ReactionSummary
+                  likes={likes}
+                  counts={reactions.countsFor(item.id)}
+                  reaction={reactions.displayFor(item.id)}
+                  className="relative"
+                  openUp
+                />
                 <ReactionButtons
                   selected={reactions.pickFor(item.id)}
                   onReact={(reaction) => reactions.react(item.id, reaction)}
