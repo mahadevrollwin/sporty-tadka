@@ -44,7 +44,6 @@ export function Play() {
                   aria-selected={selected}
                   onClick={() => {
                     setActive(game.id);
-                    if (game.id === "tetris") setTetrisOpen(true);
                     if (game.id === "rapid") setCrushOpen(true);
                     if (game.id === "scam") setScamOpen(true);
                   }}
