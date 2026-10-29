@@ -6,12 +6,13 @@ import path from "node:path";
 // public/scam-alert/questions.js. Always patches the untouched original bundle, so it can be re-run.
 const dir = "public/scam-alert";
 const assets = path.join(dir, "assets");
+const sources = "scripts/scam-alert-src";
 const SRC_MAIN = "index-714395d5.js";
 const SRC_HOWLER = "howler-5f3e5a7a.js";
 const CARDS_PER_ROUND = 9;
 
-let js = fs.readFileSync(path.join(assets, SRC_MAIN), "utf8");
-let howler = fs.readFileSync(path.join(assets, SRC_HOWLER), "utf8");
+let js = fs.readFileSync(path.join(sources, SRC_MAIN), "utf8");
+let howler = fs.readFileSync(path.join(sources, SRC_HOWLER), "utf8");
 
 function replaceOnce(source, from, to, label) {
   const count = source.split(from).length - 1;
@@ -74,6 +75,12 @@ js = replaceOnce(
   'src:"/scam-alert/images/card-back.svg",alt:""',
   "card back",
 );
+js = replaceOnce(
+  js,
+  'src:"/images/airtel-logo.png",alt:"Airtel",className:"h-10 mx-auto mb-3 object-contain"',
+  'src:"/scam-alert/images/card-back.svg",alt:"",className:"howto-icon"',
+  "how to play logo",
+);
 
 js = replaceOnce(
   js,
@@ -112,6 +119,7 @@ const copy = [
   ["The faster you find the safe link, the higher you score!", "The faster you pick the right player, the higher you score!"],
   ["That's the correct link. Great job!", "That's the right player. Great job!"],
   ['"Please wait loading messages..."', '"Get ready, loading players..."'],
+  ['"Scam Alert Challenge"', '"Cricket IQ Challenge"'],
 ];
 for (const [from, to] of copy) js = replaceOnce(js, from, to, `copy: ${from.slice(0, 30)}`);
 
@@ -122,7 +130,7 @@ js = replaceOnce(js, `import("./${SRC_HOWLER}")`, `import("./${howlerName}")`, "
 howler = replaceOnce(howler, `from"./${SRC_MAIN}"`, `from"./${mainName}"`, "main import");
 
 for (const file of fs.readdirSync(assets)) {
-  if (/^(index|howler)-[0-9a-f]{8}\.js$/.test(file) && ![SRC_MAIN, SRC_HOWLER].includes(file)) {
+  if (/^(index|howler)-[0-9a-f]{8}\.js$/.test(file)) {
     fs.unlinkSync(path.join(assets, file));
   }
 }
