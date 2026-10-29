@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { recordScore } from "@/lib/record-score";
 import { loadBest, saveBest, useBest } from "@/lib/scores";
@@ -11,13 +11,57 @@ function randomBetween(min: number, max: number) {
 
 type Phase = "idle" | "wait" | "go" | "foul" | "done";
 
-const padClass: Record<Phase, string> = {
-  idle: "bg-[linear-gradient(180deg,#141021,#0e0b18)] text-ink",
-  wait: "bg-[#2a0f22] text-magenta",
-  go: "bg-lime text-pitch",
-  foul: "bg-[#3a1206] text-[#ff8a5c]",
-  done: "bg-[linear-gradient(180deg,#101a06,#0c1204)] text-lime",
+const phaseText: Record<Phase, string> = {
+  idle: "text-ink",
+  wait: "text-magenta",
+  go: "text-pitch",
+  foul: "text-[#ff8a5c]",
+  done: "text-lime",
 };
+
+const phaseWash: Record<Phase, string> = {
+  idle: "bg-canvas/55",
+  wait: "bg-[#2a0f22]/78",
+  go: "bg-lime/88",
+  foul: "bg-[#3a1206]/82",
+  done: "bg-[#0c1204]/72",
+};
+
+export function GameStage({
+  src,
+  wash = "bg-canvas/55",
+  className = "",
+  contentClassName = "",
+  children,
+  as: Tag = "div",
+  ...props
+}: {
+  src: string;
+  wash?: string;
+  className?: string;
+  contentClassName?: string;
+  children: ReactNode;
+  as?: "div" | "button";
+} & ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <Tag
+      className={`relative flex min-h-[270px] flex-1 overflow-hidden rounded-[14px] ${className}`}
+      {...props}
+    >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${src})` }}
+      />
+      <span aria-hidden className={`pointer-events-none absolute inset-0 ${wash}`} />
+      <span
+        className={`relative z-[1] flex w-full flex-1 flex-col items-center justify-center gap-3 px-[22px] py-[22px] text-center ${contentClassName}`}
+      >
+        {children}
+      </span>
+    </Tag>
+  );
+}
 
 function GameMeta({ label, best }: { label: string; best: string }) {
   return (
@@ -124,9 +168,12 @@ export function ReactionGame() {
 
   return (
     <>
-      <button
+      <GameStage
+        as="button"
         type="button"
         aria-live="polite"
+        src="/images/games/reaction.png"
+        wash={phaseWash[phase]}
         onClick={tap}
         onKeyDown={(event) => {
           if (event.key === " " || event.key === "Enter") {
@@ -134,7 +181,7 @@ export function ReactionGame() {
             tap();
           }
         }}
-        className={`flex min-h-[270px] flex-1 cursor-pointer flex-col items-center justify-center gap-3 rounded-[14px] border-0 px-[22px] py-[22px] text-center font-sans transition-colors ${padClass[phase]}`}
+        className={`cursor-pointer border-0 font-sans transition-colors ${phaseText[phase]}`}
       >
         <span className={`flex gap-3 ${lightsVisible ? "" : "hidden"}`}>
           {Array.from({ length: 5 }, (_, index) => (
@@ -152,7 +199,7 @@ export function ReactionGame() {
           {headline}
         </span>
         <span className="max-w-[26ch] text-[15px] opacity-90">{detail}</span>
-      </button>
+      </GameStage>
       <GameMeta label="Reaction time" best={best == null ? "—" : `${best} ms`} />
     </>
   );
@@ -233,12 +280,12 @@ export function TimingGame() {
 
   return (
     <>
-      <div className="flex flex-1 flex-col justify-center gap-[18px] text-center">
+      <GameStage src="/images/games/timing.png" wash="bg-canvas/60" contentClassName="gap-[18px]">
         <div className="text-[15px] text-dim">
           Ball <b className="mx-1 font-display text-xl text-ink">{ball}</b>/6 · Runs{" "}
           <b className="mx-1 font-display text-xl text-lime">{runs}</b>
         </div>
-        <div className="relative h-14 overflow-hidden rounded-xl border border-line bg-panel">
+        <div className="relative h-14 w-full max-w-xl overflow-hidden rounded-xl border border-line bg-panel/90">
           <div className="absolute inset-y-0 right-[44%] left-[44%] bg-lime/35" />
           <div className="absolute inset-y-0 left-[36%] w-[8%] bg-yellow/22" />
           <div className="absolute inset-y-0 left-[56%] w-[8%] bg-yellow/22" />
@@ -257,7 +304,7 @@ export function TimingGame() {
           {done ? "Play again" : "Hit!"}
         </button>
         <div className="min-h-[22px] text-[15px] text-dim">{message}</div>
-      </div>
+      </GameStage>
       <GameMeta label="Runs in one over" best={best == null ? "—" : String(best)} />
     </>
   );
@@ -265,7 +312,7 @@ export function TimingGame() {
 
 export function RapidGame({ onPlay }: { onPlay: () => void }) {
   return (
-    <div className="flex min-h-[270px] flex-1 flex-col items-center justify-center gap-4 rounded-[14px] bg-[linear-gradient(180deg,#141021,#0e0b18)] px-6 py-8 text-center">
+    <GameStage src="/images/games/star-crush.png" wash="bg-canvas/58" contentClassName="gap-4 px-6 py-8">
       <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
         Star Crush
       </span>
@@ -279,13 +326,13 @@ export function RapidGame({ onPlay }: { onPlay: () => void }) {
       >
         Play Star Crush
       </button>
-    </div>
+    </GameStage>
   );
 }
 
 export function ScamAlertLaunch({ onPlay }: { onPlay: () => void }) {
   return (
-    <div className="flex min-h-[270px] flex-1 flex-col items-center justify-center gap-4 rounded-[14px] bg-[linear-gradient(180deg,#1a0c10,#12080c)] px-6 py-8 text-center">
+    <GameStage src="/images/games/cricket-iq.png" wash="bg-canvas/58" contentClassName="gap-4 px-6 py-8">
       <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
         Cricket IQ
       </span>
@@ -300,7 +347,7 @@ export function ScamAlertLaunch({ onPlay }: { onPlay: () => void }) {
       >
         Play Cricket IQ
       </button>
-    </div>
+    </GameStage>
   );
 }
 

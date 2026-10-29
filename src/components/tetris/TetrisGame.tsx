@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { GameStage } from "@/components/site/Arcade";
 import { recordScore, rememberPlayer } from "@/lib/record-score";
 import { useBest } from "@/lib/scores";
 import { Block, BoardShape, SHAPES } from "./types";
@@ -221,7 +222,7 @@ export function TetrisLaunch({ onPlay }: { onPlay: () => void }) {
   const best = useBest("tetrisScore");
   return (
     <>
-      <div className="flex min-h-[270px] flex-1 flex-col items-center justify-center gap-4 rounded-[14px] bg-[linear-gradient(180deg,#141021,#0e0b18)] px-6 py-8 text-center">
+      <GameStage src="/images/games/tetris.png" wash="bg-canvas/58" contentClassName="gap-4 px-6 py-8">
         <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
           Tetris
         </span>
@@ -235,7 +236,7 @@ export function TetrisLaunch({ onPlay }: { onPlay: () => void }) {
         >
           Play Tetris
         </button>
-      </div>
+      </GameStage>
       <div className="flex justify-between border-t border-line-soft pt-3 text-[13px] text-dim">
         <span>Lines and drops</span>
         <span>
