@@ -30,12 +30,14 @@ const phaseWash: Record<Phase, string> = {
 export function GameStage({
   src,
   wash = "bg-canvas/68",
+  imageOpacity = 0.48,
   className = "",
   contentClassName = "",
   children,
 }: {
   src: string;
   wash?: string;
+  imageOpacity?: number;
   className?: string;
   contentClassName?: string;
   children: ReactNode;
@@ -46,8 +48,8 @@ export function GameStage({
     >
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.48]"
-        style={{ backgroundImage: `url(${src})` }}
+        className="pointer-events-none absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${src})`, opacity: imageOpacity }}
       />
       <span aria-hidden className={`pointer-events-none absolute inset-0 ${wash}`} />
       <span
@@ -377,7 +379,11 @@ export function RapidGame({ onPlay }: { onPlay: () => void }) {
 
 export function ScamAlertLaunch({ onPlay }: { onPlay: () => void }) {
   return (
-    <GameStage src="/images/games/cricket-iq.png" contentClassName="gap-4 px-6 py-8">
+    <GameStage
+      src="/images/games/cricket-iq.png"
+      imageOpacity={0.62}
+      contentClassName="gap-4 px-6 py-8"
+    >
       <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
         Cricket IQ
       </span>
