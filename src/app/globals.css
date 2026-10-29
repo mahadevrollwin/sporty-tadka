@@ -189,53 +189,58 @@
   }
 }
 
-/* Mobile landscape: side-by-side, clear chrome, no bottom spill */
-@media (max-width: 760px) and (orientation: landscape) {
+/*
+  Short landscape (phones/tablets rotated): width is often >760px, so this
+  must key off height + orientation — not max-width — or chrome/copy collide.
+*/
+@media (orientation: landscape) and (max-height: 520px) {
   .roster-chrome-top > div {
     flex-direction: row;
+    align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    padding-top: 52px;
+    padding-top: 56px;
     font-size: 10px;
   }
 
   .roster-body {
-    grid-template-columns: minmax(10.5rem, 0.42fr) minmax(0, 1fr);
-    align-content: center !important;
-    align-items: center !important;
-    gap: 0.75rem 1rem;
-    padding-top: 78px;
-    padding-bottom: 58px;
+    grid-template-columns: minmax(11rem, 0.4fr) minmax(0, 1fr) !important;
+    align-content: start !important;
+    align-items: start !important;
+    gap: 0.55rem 1rem;
+    padding-top: 96px !important;
+    padding-bottom: 52px !important;
   }
 
   .roster-body h2 {
-    margin-top: 6px;
-    font-size: clamp(30px, 5.8vw, 52px);
+    margin-top: 4px !important;
+    font-size: clamp(28px, 5.2vw, 48px) !important;
   }
 
   .roster-body p:last-of-type {
-    margin-top: 8px;
-    font-size: 13px;
+    margin-top: 6px !important;
+    font-size: 13px !important;
   }
 
   .roster-graphic {
     justify-content: flex-end;
-    align-self: center;
+    align-self: start;
     max-height: 100%;
   }
 
   .roster-graphic-frame {
-    max-width: min(46vw, 420px);
-    max-height: min(54svh, 250px);
-    width: min(100%, calc(min(54svh, 250px) * 4 / 3));
+    max-width: min(44vw, 400px);
+    max-height: min(48svh, 220px);
+    width: min(100%, calc(min(48svh, 220px) * 4 / 3));
   }
 }
 
-/* Short desktop / tablet heights only — do not override mobile orientation rules */
-@media (min-width: 761px) and (max-height: 700px) {
+/* Short tall viewports (desktop/tablet portrait-ish heights) */
+@media (min-width: 761px) and (max-height: 700px) and (orientation: portrait),
+  (min-width: 761px) and (min-height: 521px) and (max-height: 700px) {
   .roster-body {
     align-items: flex-start;
-    padding-top: 108px;
+    padding-top: 136px;
     padding-bottom: 84px;
   }
 
