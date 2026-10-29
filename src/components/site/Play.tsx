@@ -44,7 +44,6 @@ export function Play() {
                   aria-selected={selected}
                   onClick={() => {
                     setActive(game.id);
-                    if (game.id === "rapid") setCrushOpen(true);
                     if (game.id === "scam") setScamOpen(true);
                   }}
                   className={`min-w-[50%] flex-1 cursor-pointer border-r border-line-soft px-3.5 py-[15px] font-display text-[17px] font-extrabold tracking-[0.02em] uppercase last:border-r-0 min-[641px]:min-w-[150px] ${
