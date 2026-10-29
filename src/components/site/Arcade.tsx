@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { recordScore } from "@/lib/record-score";
 import { loadBest, saveBest, useBest } from "@/lib/scores";
@@ -33,21 +33,15 @@ export function GameStage({
   className = "",
   contentClassName = "",
   children,
-  as: Tag = "div",
-  ...props
 }: {
   src: string;
   wash?: string;
   className?: string;
   contentClassName?: string;
   children: ReactNode;
-  as?: "div" | "button";
-} & ButtonHTMLAttributes<HTMLButtonElement>) {
+}) {
   return (
-    <Tag
-      className={`relative flex min-h-[270px] flex-1 overflow-hidden rounded-[14px] ${className}`}
-      {...props}
-    >
+    <div className={`relative flex min-h-[270px] flex-1 overflow-hidden rounded-[14px] ${className}`}>
       <span
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-cover bg-center"
@@ -59,7 +53,7 @@ export function GameStage({
       >
         {children}
       </span>
-    </Tag>
+    </div>
   );
 }
 
@@ -168,12 +162,9 @@ export function ReactionGame() {
 
   return (
     <>
-      <GameStage
-        as="button"
+      <button
         type="button"
         aria-live="polite"
-        src="/images/games/reaction.png"
-        wash={phaseWash[phase]}
         onClick={tap}
         onKeyDown={(event) => {
           if (event.key === " " || event.key === "Enter") {
@@ -181,25 +172,33 @@ export function ReactionGame() {
             tap();
           }
         }}
-        className={`cursor-pointer border-0 font-sans transition-colors ${phaseText[phase]}`}
+        className={`relative flex min-h-[270px] flex-1 cursor-pointer overflow-hidden rounded-[14px] border-0 font-sans transition-colors ${phaseText[phase]}`}
       >
-        <span className={`flex gap-3 ${lightsVisible ? "" : "hidden"}`}>
-          {Array.from({ length: 5 }, (_, index) => (
-            <span
-              key={index}
-              className={`h-6 w-6 rounded-full ${
-                index < lightsOn
-                  ? "bg-magenta shadow-[0_0_16px_var(--color-magenta)]"
-                  : "bg-white/12 shadow-[inset_0_0_0_2px_rgba(255,255,255,.15)]"
-              }`}
-            />
-          ))}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url(/images/games/reaction.png)" }}
+        />
+        <span aria-hidden className={`pointer-events-none absolute inset-0 ${phaseWash[phase]}`} />
+        <span className="relative z-[1] flex w-full flex-1 flex-col items-center justify-center gap-3 px-[22px] py-[22px] text-center">
+          <span className={`flex gap-3 ${lightsVisible ? "" : "hidden"}`}>
+            {Array.from({ length: 5 }, (_, index) => (
+              <span
+                key={index}
+                className={`h-6 w-6 rounded-full ${
+                  index < lightsOn
+                    ? "bg-magenta shadow-[0_0_16px_var(--color-magenta)]"
+                    : "bg-white/12 shadow-[inset_0_0_0_2px_rgba(255,255,255,.15)]"
+                }`}
+              />
+            ))}
+          </span>
+          <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
+            {headline}
+          </span>
+          <span className="max-w-[26ch] text-[15px] opacity-90">{detail}</span>
         </span>
-        <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
-          {headline}
-        </span>
-        <span className="max-w-[26ch] text-[15px] opacity-90">{detail}</span>
-      </GameStage>
+      </button>
       <GameMeta label="Reaction time" best={best == null ? "—" : `${best} ms`} />
     </>
   );
