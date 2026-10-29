@@ -164,8 +164,8 @@ export const games = [
   { id: "reaction", label: "Reaction", emoji: "⚡" },
   { id: "timing", label: "Timing", emoji: "🏏" },
   { id: "tetris", label: "Tetris", emoji: "🧱" },
-  { id: "rapid", label: "Tech Crush", emoji: "💥" },
-  { id: "scam", label: "Scam Alert", emoji: "🚨" },
+  { id: "rapid", label: "Star Crush", emoji: "💥" },
+  { id: "scam", label: "Cricket IQ", emoji: "🧠" },
 ] as const;
 
 export type GameId = (typeof games)[number]["id"];

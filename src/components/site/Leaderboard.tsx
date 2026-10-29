@@ -79,7 +79,7 @@ export function Leaderboard() {
       const payload = event.data as { source?: string; game?: string; score?: number } | null;
       if (payload?.source !== "sporty-tadka" || payload.game !== "rapid" || typeof payload.score !== "number") return;
       void recordScore({ game: "rapid", score: payload.score, remember: true }).then((result) => {
-        if (result === "failed") setNotice("That Tech Crush score didn't save.");
+        if (result === "failed") setNotice("That Star Crush score didn't save.");
       });
     };
 

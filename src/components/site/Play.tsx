@@ -29,7 +29,7 @@ export function Play() {
         <Kick tone="lime" label="The Locker Room" note="Because we can't help ourselves" />
         <DisplayHeading>Five games. No mercy.</DisplayHeading>
         <Lead>
-          Test your reflexes, timing, and nerve. Tetris, Tech Crush, and Scam Alert each open in
+          Test your reflexes, timing, and nerve. Tetris, Star Crush, and Cricket IQ each open in
           their own window.
         </Lead>
         <div className="mt-[38px] overflow-hidden rounded-[18px] border border-line bg-elevated">

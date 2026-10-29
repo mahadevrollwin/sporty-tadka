@@ -267,17 +267,17 @@ export function RapidGame({ onPlay }: { onPlay: () => void }) {
   return (
     <div className="flex min-h-[270px] flex-1 flex-col items-center justify-center gap-4 rounded-[14px] bg-[linear-gradient(180deg,#141021,#0e0b18)] px-6 py-8 text-center">
       <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
-        Tech Crush
+        Star Crush
       </span>
       <p className="m-0 max-w-[40ch] text-[15px] text-soft">
-        Match three logos and take the companies over. The board opens on its own.
+        Match three sports stars and build your roster. The board opens on its own.
       </p>
       <button
         type="button"
         onClick={onPlay}
         className="cursor-pointer rounded-lg bg-lime px-6 py-3.5 font-bold text-pitch shadow-[0_0_26px_rgba(198,255,61,.4)] hover:bg-[#d4ff5c]"
       >
-        Play Tech Crush
+        Play Star Crush
       </button>
     </div>
   );
@@ -287,7 +287,7 @@ export function ScamAlertLaunch({ onPlay }: { onPlay: () => void }) {
   return (
     <div className="flex min-h-[270px] flex-1 flex-col items-center justify-center gap-4 rounded-[14px] bg-[linear-gradient(180deg,#1a0c10,#12080c)] px-6 py-8 text-center">
       <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
-        Scam Alert
+        Cricket IQ
       </span>
       <p className="m-0 max-w-[42ch] text-[15px] text-soft">
         Pick the right cricketer for a random question before the clock runs out. The challenge
@@ -298,7 +298,7 @@ export function ScamAlertLaunch({ onPlay }: { onPlay: () => void }) {
         onClick={onPlay}
         className="cursor-pointer rounded-lg bg-lime px-6 py-3.5 font-bold text-pitch shadow-[0_0_26px_rgba(198,255,61,.4)] hover:bg-[#d4ff5c]"
       >
-        Play Scam Alert
+        Play Cricket IQ
       </button>
     </div>
   );
@@ -325,7 +325,7 @@ export function ScamAlertModal({ open, onClose }: { open: boolean; onClose: () =
     <div className="fixed inset-0 z-[80] flex flex-col bg-canvas">
       <div className="flex items-center justify-between border-b border-line bg-panel px-4 py-2">
         <span className="font-display text-2xl font-black tracking-[0.02em] uppercase">
-          <span className="text-lime">Scam</span> <span className="text-magenta">Alert</span>
+          <span className="text-lime">Cricket</span> <span className="text-magenta">IQ</span>
         </span>
         <button
           type="button"
@@ -335,7 +335,7 @@ export function ScamAlertModal({ open, onClose }: { open: boolean; onClose: () =
           Close
         </button>
       </div>
-      <iframe title="Scam Alert" src="/scam-alert/index.html" className="min-h-0 w-full flex-1 border-0 bg-canvas" />
+      <iframe title="Cricket IQ" src="/scam-alert/index.html" className="min-h-0 w-full flex-1 border-0 bg-canvas" />
     </div>,
     document.body,
   );
@@ -362,7 +362,7 @@ export function TechCrushModal({ open, onClose }: { open: boolean; onClose: () =
     <div className="fixed inset-0 z-[80] flex flex-col bg-canvas">
       <div className="flex items-center justify-between border-b border-line bg-panel px-4 py-2">
         <span className="font-display text-2xl font-black tracking-[0.02em] uppercase">
-          <span className="text-lime">Tech</span> <span className="text-magenta">Crush</span>
+          <span className="text-lime">Star</span> <span className="text-magenta">Crush</span>
         </span>
         <button
           type="button"
@@ -372,7 +372,7 @@ export function TechCrushModal({ open, onClose }: { open: boolean; onClose: () =
           Close
         </button>
       </div>
-      <iframe title="Tech Crush" src="/tech-crush/index.html" className="min-h-0 w-full flex-1 border-0 bg-canvas" />
+      <iframe title="Star Crush" src="/tech-crush/index.html" className="min-h-0 w-full flex-1 border-0 bg-canvas" />
     </div>,
     document.body,
   );
