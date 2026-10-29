@@ -18,7 +18,7 @@ export function BrandedGamesGraphic() {
       <g stroke="rgba(241,238,255,.18)"><path d="M147 34V266M253 34V266M40 111H360M40 189H360"/></g>
       <path d="M192 150H208M200 142V158" stroke="var(--txt)" strokeWidth="1.2"/>
       <g className="focus fb"><path d="M172 132V122H182M218 122H228V132M228 168V178H218M182 178H172V168" fill="none" strokeWidth="2"/></g>
-      <text x="50" y="52" className="m" fontSize="9" font-weight="700" fill="var(--red)"><tspan className="blink">●</tspan> REC</text>
+      <text x="50" y="52" className="m" fontSize="9" fontWeight="700" fill="var(--red)"><tspan className="blink">●</tspan> REC</text>
       <text x="350" y="52" textAnchor="end" className="m" fontSize="7.5" fill="var(--txt)">4K · 24 FPS · 2.39:1</text>
       <text x="50" y="256" className="m" fontSize="8.5" fill="var(--txt)">00:00:12:</text><g className="m" fontSize="8.5" fill="var(--pink)"><text x="113" y="256" className="s1">04</text><text x="113" y="256" className="s2">10</text><text x="113" y="256" className="s3">16</text><text x="113" y="256" className="s4">22</text></g>
       <text x="350" y="256" textAnchor="end" className="m" fontSize="7.5" fill="var(--mut)">ISO 800 · ƒ1.8</text>

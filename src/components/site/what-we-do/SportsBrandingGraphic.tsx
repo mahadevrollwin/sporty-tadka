@@ -26,11 +26,11 @@ export function SportsBrandingGraphic() {
         </g>
       </g>
       <g><rect x="-19.4" y="-9" width="38.8" height="18" rx="9" fill="#0B0B10" fillOpacity=".85" style={{ stroke: "var(--yel)" }}/>
-          <text y="3" textAnchor="middle" className="m" fontSize="7.5" font-weight="700" style={{ fill: "var(--yel)" }}>WHEY</text>
+          <text y="3" textAnchor="middle" className="m" fontSize="7.5" fontWeight="700" style={{ fill: "var(--yel)" }}>WHEY</text>
           <animateMotion dur="4.8s" repeatCount="indefinite" begin="0.0s" path="M80 168A120 38 0 1 0 320 168A120 38 0 1 0 80 168"/></g><g><rect x="-16.3" y="-9" width="32.6" height="18" rx="9" fill="#0B0B10" fillOpacity=".85" style={{ stroke: "var(--lime)" }}/>
-          <text y="3" textAnchor="middle" className="m" fontSize="7.5" font-weight="700" style={{ fill: "var(--lime)" }}>GYM</text>
+          <text y="3" textAnchor="middle" className="m" fontSize="7.5" fontWeight="700" style={{ fill: "var(--lime)" }}>GYM</text>
           <animateMotion dur="4.8s" repeatCount="indefinite" begin="-1.6s" path="M80 168A120 38 0 1 0 320 168A120 38 0 1 0 80 168"/></g><g><rect x="-28.7" y="-9" width="57.4" height="18" rx="9" fill="#0B0B10" fillOpacity=".85" style={{ stroke: "var(--pink)" }}/>
-          <text y="3" textAnchor="middle" className="m" fontSize="7.5" font-weight="700" style={{ fill: "var(--pink)" }}>APPAREL</text>
+          <text y="3" textAnchor="middle" className="m" fontSize="7.5" fontWeight="700" style={{ fill: "var(--pink)" }}>APPAREL</text>
           <animateMotion dur="4.8s" repeatCount="indefinite" begin="-3.2s" path="M80 168A120 38 0 1 0 320 168A120 38 0 1 0 80 168"/></g>
       <g><rect className="seg" x="338" y="226" width="26" height="12" rx="2" style={{ "--d": "0" } as CSSProperties}/><rect className="seg" x="338" y="210" width="26" height="12" rx="2" style={{ "--d": "1" } as CSSProperties}/><rect className="seg" x="338" y="194" width="26" height="12" rx="2" style={{ "--d": "2" } as CSSProperties}/><rect className="seg" x="338" y="178" width="26" height="12" rx="2" style={{ "--d": "3" } as CSSProperties}/><rect className="seg" x="338" y="162" width="26" height="12" rx="2" style={{ "--d": "4" } as CSSProperties}/><rect className="seg" x="338" y="146" width="26" height="12" rx="2" style={{ "--d": "5" } as CSSProperties}/><rect className="seg" x="338" y="130" width="26" height="12" rx="2" style={{ "--d": "6" } as CSSProperties}/><rect className="seg" x="338" y="114" width="26" height="12" rx="2" style={{ "--d": "7" } as CSSProperties}/><rect className="seg" x="338" y="98" width="26" height="12" rx="2" style={{ "--d": "8" } as CSSProperties}/><rect className="seg" x="338" y="82" width="26" height="12" rx="2" style={{ "--d": "9" } as CSSProperties}/></g>
       <text x="351" y="58" textAnchor="middle" className="m" fontSize="7" fill="var(--mut)">POWER</text>
