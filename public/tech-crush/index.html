@@ -784,30 +784,45 @@ var starCrushWin = null;
 var starCrushGameOver = null;
 var starCrushMusicStarted = false;
 var starCrushMusicEnabled = localStorage.getItem("starCrushMusic") !== "off";
-var STAR_CRUSH_BGM_VOLUME = 0.38;
+var STAR_CRUSH_BGM_VOLUME = 0.82;
 var STAR_CRUSH_WHOOSH_VOLUME = 0.7;
 var STAR_CRUSH_STINGER_VOLUME = 0.75;
+var STAR_CRUSH_AUDIO_BASE = (function(){
+    try{
+        var scriptUrl = window.location.href.replace(/[#?].*$/, "");
+        var base = scriptUrl.substring(0, scriptUrl.lastIndexOf("/") + 1);
+        return base + "audio/";
+    }catch(err){
+        return "audio/";
+    }
+})();
+
+function createStarCrushAudio(fileName, loop){
+    var audio = new Audio(STAR_CRUSH_AUDIO_BASE + fileName);
+    audio.preload = "auto";
+    audio.loop = !!loop;
+    audio.playsInline = true;
+    audio.setAttribute("playsinline", "true");
+    audio.setAttribute("webkit-playsinline", "true");
+    try{ audio.load(); }catch(err){}
+    return audio;
+}
 
 function initStarCrushAudioElements(){
     if(!starCrushBgm){
-        starCrushBgm = new Audio("/tech-crush/audio/bgm.wav");
-        starCrushBgm.loop = true;
-        starCrushBgm.preload = "auto";
+        starCrushBgm = createStarCrushAudio("bgm.wav", true);
         starCrushBgm.volume = STAR_CRUSH_BGM_VOLUME;
     }
     if(!starCrushWhoosh){
-        starCrushWhoosh = new Audio("/tech-crush/audio/whoosh.mp3");
-        starCrushWhoosh.preload = "auto";
+        starCrushWhoosh = createStarCrushAudio("whoosh.mp3", false);
         starCrushWhoosh.volume = STAR_CRUSH_WHOOSH_VOLUME;
     }
     if(!starCrushWin){
-        starCrushWin = new Audio("/tech-crush/audio/win.mp3");
-        starCrushWin.preload = "auto";
+        starCrushWin = createStarCrushAudio("win.mp3", false);
         starCrushWin.volume = STAR_CRUSH_STINGER_VOLUME;
     }
     if(!starCrushGameOver){
-        starCrushGameOver = new Audio("/tech-crush/audio/game-over.wav");
-        starCrushGameOver.preload = "auto";
+        starCrushGameOver = createStarCrushAudio("game-over.wav", false);
         starCrushGameOver.volume = STAR_CRUSH_STINGER_VOLUME;
     }
 }
@@ -817,6 +832,7 @@ function playStarCrushSound(audio, volume){
     try{
         audio.pause();
         audio.currentTime = 0;
+        audio.muted = false;
         audio.volume = volume;
         var playPromise = audio.play();
         if(playPromise && typeof playPromise.catch === "function"){
@@ -832,12 +848,37 @@ function startStarCrushMusic(){
         starCrushBgm.pause();
         return;
     }
-    starCrushBgm.volume = STAR_CRUSH_BGM_VOLUME;
-    var playPromise = starCrushBgm.play();
-    if(playPromise && typeof playPromise.catch === "function"){
-        playPromise.catch(function(err){
-            console.warn("Star Crush music play blocked:", err);
-        });
+
+    var audio = starCrushBgm;
+    audio.muted = false;
+    audio.loop = true;
+    audio.volume = STAR_CRUSH_BGM_VOLUME;
+
+    var attemptPlay = function(){
+        var playPromise = audio.play();
+        if(playPromise && typeof playPromise.then === "function"){
+            playPromise.then(function(){
+                // Playing
+            }).catch(function(err){
+                console.warn("Star Crush music play blocked:", err);
+                // Retry once the file is ready after a user gesture
+                var retry = function(){
+                    audio.play().catch(function(){});
+                };
+                audio.addEventListener("canplay", retry, { once: true });
+                try{ audio.load(); }catch(loadErr){}
+            });
+        }
+    };
+
+    if(audio.readyState >= 2){
+        attemptPlay();
+    }else{
+        audio.addEventListener("canplaythrough", attemptPlay, { once: true });
+        audio.addEventListener("canplay", attemptPlay, { once: true });
+        try{ audio.load(); }catch(err){}
+        // Also try immediately — many browsers allow play() while buffering
+        attemptPlay();
     }
 }
 
@@ -863,34 +904,38 @@ function playGameOverSound(){
     playStarCrushSound(starCrushGameOver, STAR_CRUSH_STINGER_VOLUME);
 }
 
+function updateStarCrushMuteUi(){
+    var toggle = document.getElementById("soundToggle");
+    var iconOn = document.getElementById("soundIconOn");
+    var iconOff = document.getElementById("soundIconOff");
+    if(!toggle || !iconOn || !iconOff) return;
+    toggle.setAttribute("aria-pressed", starCrushMusicEnabled ? "false" : "true");
+    toggle.setAttribute("aria-label", starCrushMusicEnabled ? "Mute music" : "Unmute music");
+    toggle.title = starCrushMusicEnabled ? "Mute music" : "Unmute music";
+    iconOn.hidden = !starCrushMusicEnabled;
+    iconOff.hidden = starCrushMusicEnabled;
+}
+
 function setStarCrushMusicEnabled(enabled){
     starCrushMusicEnabled = enabled;
     localStorage.setItem("starCrushMusic", enabled ? "on" : "off");
     initStarCrushAudioElements();
     if(enabled){
-        if(starCrushMusicStarted){
-            startStarCrushMusic();
-        }
+        startStarCrushMusic();
     }else{
         stopStarCrushMusic();
     }
-    var toggle = document.getElementById("soundToggle");
-    var iconOn = document.getElementById("soundIconOn");
-    var iconOff = document.getElementById("soundIconOff");
-    if(!toggle || !iconOn || !iconOff) return;
-    toggle.setAttribute("aria-pressed", enabled ? "false" : "true");
-    toggle.setAttribute("aria-label", enabled ? "Mute music" : "Unmute music");
-    toggle.title = enabled ? "Mute music" : "Unmute music";
-    iconOn.hidden = !enabled;
-    iconOff.hidden = enabled;
+    updateStarCrushMuteUi();
 }
 
 function initStarCrushSoundToggle(){
     var toggle = document.getElementById("soundToggle");
     if(!toggle) return;
     initStarCrushAudioElements();
-    setStarCrushMusicEnabled(starCrushMusicEnabled);
-    toggle.addEventListener("click", function(){
+    updateStarCrushMuteUi();
+    toggle.addEventListener("click", function(event){
+        event.preventDefault();
+        event.stopPropagation();
         setStarCrushMusicEnabled(!starCrushMusicEnabled);
     });
 }
@@ -1070,6 +1115,7 @@ function startScreenPlayButtonClickHandler(){
 function levelScreenPlayButtonClickHandler(){
     document.getElementById("levelScreen").style.display = "none";
     enableUserInput();
+    startStarCrushMusic();
 }
 
 function gameOverScreenPlayButtonClickHandler(){
