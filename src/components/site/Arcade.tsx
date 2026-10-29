@@ -20,16 +20,16 @@ const phaseText: Record<Phase, string> = {
 };
 
 const phaseWash: Record<Phase, string> = {
-  idle: "bg-canvas/78",
-  wait: "bg-[#2a0f22]/88",
+  idle: "bg-canvas/68",
+  wait: "bg-[#2a0f22]/86",
   go: "bg-lime/90",
-  foul: "bg-[#3a1206]/88",
-  done: "bg-[#0c1204]/82",
+  foul: "bg-[#3a1206]/86",
+  done: "bg-[#0c1204]/78",
 };
 
 export function GameStage({
   src,
-  wash = "bg-canvas/78",
+  wash = "bg-canvas/68",
   className = "",
   contentClassName = "",
   children,
@@ -46,7 +46,7 @@ export function GameStage({
     >
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.34]"
+        className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.48]"
         style={{ backgroundImage: `url(${src})` }}
       />
       <span aria-hidden className={`pointer-events-none absolute inset-0 ${wash}`} />
@@ -178,7 +178,7 @@ export function ReactionGame() {
       >
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.34]"
+          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.48]"
           style={{ backgroundImage: "url(/images/games/reaction.png)" }}
         />
         <span aria-hidden className={`pointer-events-none absolute inset-0 ${phaseWash[phase]}`} />
