@@ -143,8 +143,8 @@ export function Services({
   return (
     <section id="services" ref={rootRef} aria-label="What we do" className="roster-scroll relative bg-canvas">
       <div className="roster-pin">
-        <div className="roster-chrome pointer-events-none absolute inset-x-0 top-0 z-20">
-          <div className="mx-auto flex max-w-[1160px] flex-col gap-1.5 px-[22px] pt-32 text-[11px] font-semibold tracking-[0.14em] uppercase min-[761px]:flex-row min-[761px]:items-start min-[761px]:justify-between min-[761px]:pt-[88px] min-[761px]:text-[12px]">
+        <div className="roster-chrome roster-chrome-top pointer-events-none absolute inset-x-0 top-0 z-20">
+          <div className="mx-auto flex max-w-[1160px] flex-col gap-1 px-[22px] pt-[72px] text-[11px] font-semibold tracking-[0.14em] uppercase min-[761px]:flex-row min-[761px]:items-start min-[761px]:justify-between min-[761px]:gap-1.5 min-[761px]:pt-[88px] min-[761px]:text-[12px]">
             <span className="text-dim">
               What we do <span className="text-ink">· The full-time roster</span>
             </span>
@@ -162,21 +162,21 @@ export function Services({
             return (
               <article key={item.n} className="roster-panel">
                 <div aria-hidden className={`pointer-events-none absolute inset-0 ${tone.wash}`} />
-                <div className="roster-body relative z-[1] mx-auto grid h-full w-full max-w-[1240px] grid-cols-1 content-center items-center gap-x-8 gap-y-5 px-[22px] pt-[120px] pb-[112px] min-[761px]:grid-cols-[minmax(17rem,0.42fr)_minmax(0,1fr)] min-[761px]:gap-x-10 min-[761px]:pt-[148px] min-[761px]:pb-[128px]">
+                <div className="roster-body relative z-[1] mx-auto grid h-full w-full max-w-[1240px] grid-cols-1 content-start items-start gap-x-8 gap-y-4 px-[22px] pt-[132px] pb-[96px] min-[761px]:grid-cols-[minmax(17rem,0.42fr)_minmax(0,1fr)] min-[761px]:content-center min-[761px]:items-center min-[761px]:gap-x-10 min-[761px]:gap-y-5 min-[761px]:pt-[148px] min-[761px]:pb-[128px]">
                   <div className="roster-copy relative z-[1] min-w-0">
                     <p className="m-0 text-[12px] font-semibold tracking-[0.16em] text-dim uppercase">
                       {number} / {label}
                     </p>
-                    <h2 className="mt-4 mb-0 font-display text-[clamp(44px,11vw,96px)] leading-[0.84] font-black uppercase min-[761px]:text-[clamp(52px,7.4vw,96px)]">
+                    <h2 className="mt-3 mb-0 font-display text-[clamp(40px,10vw,96px)] leading-[0.84] font-black uppercase min-[761px]:mt-4 min-[761px]:text-[clamp(52px,7.4vw,96px)]">
                       <span className="block whitespace-nowrap">{lead}</span>
                       <span className={`block whitespace-nowrap ${tone.text}`}>{accent}</span>
                     </h2>
-                    <p className="mt-5 mb-0 max-w-[36ch] text-[16px] leading-normal text-soft min-[761px]:mt-7 min-[761px]:text-[17px]">
+                    <p className="mt-4 mb-0 max-w-[36ch] text-[15px] leading-normal text-soft min-[761px]:mt-7 min-[761px]:text-[17px]">
                       {item.copy}
                     </p>
                   </div>
                   {Graphic ? (
-                    <div className="roster-graphic pointer-events-none relative z-[1] flex min-w-0 items-center justify-center min-[761px]:justify-end">
+                    <div className="roster-graphic pointer-events-none relative z-[1] flex min-w-0 items-center justify-start min-[761px]:justify-end">
                       <div className="roster-graphic-frame aspect-[4/3] w-full">
                         <Graphic />
                       </div>
