@@ -290,7 +290,8 @@ export function ScamAlertLaunch({ onPlay }: { onPlay: () => void }) {
         Scam Alert
       </span>
       <p className="m-0 max-w-[42ch] text-[15px] text-soft">
-        Spot the one safe link before the clock runs out. The challenge opens full screen.
+        Pick the right cricketer for a random question before the clock runs out. The challenge
+        opens full screen.
       </p>
       <button
         type="button"
