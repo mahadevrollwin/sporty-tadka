@@ -45,7 +45,8 @@
 
     #scoreBoard{
         position: absolute;
-        display: block;
+        display: flex;
+        flex-direction: column;
         box-sizing: border-box;
         padding: 14px 12px;
         width: 170px;
@@ -56,6 +57,7 @@
         color: #dad8ea;
         font-weight: 600;
         box-shadow: 0 0 28px rgba(198, 255, 61, 0.16);
+        overflow: hidden;
     }
 
     #scoreBoard p:first-child{
@@ -161,14 +163,42 @@
         background: #d4ff5c;
     }
 
+    #acquisitions{
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: auto;
+    }
+
     #acquisitionsList{
-        padding: 0px;
-        margin: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        align-content: flex-start;
+        gap: 4px;
+        padding: 0;
+        margin: 0;
+        width: 100%;
     }
 
     #acquisitionsList img{
-        margin-right: 5px;
-        padding-right: 5px;
+        width: 34px;
+        height: 34px;
+        margin: 0;
+        padding: 0;
+        object-fit: cover;
+        border-radius: 6px;
+        flex: 0 0 auto;
+    }
+
+    #scoreBoard.compact #acquisitions{
+        flex: 0 0 auto;
+        max-height: 42px;
+        overflow: auto;
+    }
+
+    #scoreBoard.compact #acquisitionsList img{
+        width: 28px;
+        height: 28px;
     }
 
     #soundToggle{
@@ -243,7 +273,7 @@
     </div>
     <p>Acquisitions:</p>
     <div id="acquisitions">
-        <span id="acquisitionsList" />
+        <div id="acquisitionsList"></div>
     </div>
 </div>
 <div id="startScreen" class="overlayPanel">
