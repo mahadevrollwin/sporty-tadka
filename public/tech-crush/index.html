@@ -220,14 +220,10 @@
     <p>Boo-hoo right? You made $<span id="gameOverScore" /></span> in just a few minutes!</p>
     <p>Surely you've got one more to share this ;)</p>
     <button onclick="gameOverScreenPlayButtonClickHandler()" >PLAY AGAIN!</button>
-    <p>Show some support and share:</p>
-    <span id="gameOverScreenShareSpan" />
 </div>
 <div id="winScreen" class="overlayPanel">
     <h2>WIN! CONGRATULATIONS!</h2>
     <p>You are now worth $<span id="winScore" /></span></p>
-    <p>As your first act of philanthropy, help the poor developer who made this by clicking the fine icons below and sharing:</p>
-    <span id="winScreenShareSpan" />
     <button onclick="gameOverScreenPlayButtonClickHandler()" >CRUSH AGAIN!</button>
 </div>
 <script>
@@ -459,8 +455,8 @@
             this.grid[i + this.gameModelCols] = cellGem;
             matches = [];
             this.getMatchesForColumn(index, this.grid, matches);
-            this.getMatchesForRow(i%this.gameModelCols, this.grid, matches);
-            this.getMatchesForRow((i + this.gameModelCols)%this.gameModelCols, this.grid, matches);
+            this.getMatchesForRow(Math.floor(i / this.gameModelCols), this.grid, matches);
+            this.getMatchesForRow(Math.floor(i / this.gameModelCols) + 1, this.grid, matches);
             this.grid[i + this.gameModelCols] = this.grid[i];
             this.grid[i] = cellGem;
             if(matches.length>0){
@@ -728,6 +724,7 @@ function commitResize(){
 
     var bounds = {x:0, y:0, width : getWidth(canvasContainer) , height : getHeight(canvasContainer)};
     var scoreBoard = document.getElementById("scoreBoard");
+    gridRows = gridCols = gridSize;
     canvas.width = 700;
     canvas.height = 700;
 
@@ -759,13 +756,23 @@ function fitStage(bounds, scoreBoard){
     var bar = 108;
     var pad = 8;
     var availW = Math.max(160, bounds.width - pad * 2);
-    var availH = Math.max(160, bounds.height - bar - pad);
-    var display = Math.floor(Math.min(availW, availH));
+    var availH = Math.max(160, bounds.height - bar - 6 - pad);
 
-    canvas.style.width = display + "px";
-    canvas.style.height = display + "px";
-    canvas.style.left = Math.floor((bounds.width - display) / 2) + "px";
-    canvas.style.top = (bar + 6) + "px";
+    // Portrait phones get fewer, bigger columns; rows fill the height and tiles stay square.
+    var portrait = availH > availW;
+    gridCols = portrait ? mobileGridCols : gridSize;
+    var base = Math.min(availW, availH) / gridCols;
+    gridRows = Math.max(gridCols, Math.floor(availH / base));
+    var cell = Math.min(availW / gridCols, availH / gridRows);
+    var displayW = Math.floor(cell * gridCols);
+    var displayH = Math.floor(cell * gridRows);
+
+    canvas.width = gridCols * cellSize;
+    canvas.height = gridRows * cellSize;
+    canvas.style.width = displayW + "px";
+    canvas.style.height = displayH + "px";
+    canvas.style.left = Math.floor((bounds.width - displayW) / 2) + "px";
+    canvas.style.top = (bar + 6 + Math.floor((availH - displayH) / 2)) + "px";
 
     scoreBoard.style.left = pad + "px";
     scoreBoard.style.top = "6px";
@@ -799,6 +806,9 @@ function stageTooSmallHandler(bounds){
 var brands = ["Ronaldo", "Messi", "Kohli", "Rohit", "Dhoni", "Perry", "Sindhu", "Chhetri", "Chopra"];
 var model;
 var gridSize = 10;
+var mobileGridCols = 6;
+var gridRows = gridSize;
+var gridCols = gridSize;
 var variants = 6;
 var unitAnimator = new Sakri.UnitAnimator();
 
@@ -826,7 +836,7 @@ function enableUserInput(){
 
 function startGame(){
 
-    model = new Sakri.TechCrushModel(gridSize, gridSize, variants);
+    model = new Sakri.TechCrushModel(gridRows, gridCols, variants);
 
     canvas.style.touchAction = "none";
     canvas.addEventListener("touchstart", startSwipeHandler, {passive: false});
@@ -1085,14 +1095,12 @@ function showCongratsScreen(){
     displayPanel(document.getElementById("winScreen"));
     document.getElementById("winScore").innerHTML = score.format();
     document.getElementById("acquisitionsList").appendChild(createIconImage(9));
-    addShareLinksToSpan(document.getElementById("winScreenShareSpan"));
 }
 
 function gameOver(){
     publishScore();
     displayPanel(document.getElementById("gameOverScreen"));
     document.getElementById("gameOverScore").innerHTML = score.format();
-    addShareLinksToSpan(document.getElementById("gameOverScreenShareSpan"));
 }
 
 //===========================================
@@ -1330,7 +1338,7 @@ function animateShuffleOutComplete(){
 //===========================================
 
 function renderModelGameState(){
-    context.clearRect(0,0, model.gameModelCols*cellSize, this.gameModelRows*cellSize);
+    context.clearRect(0,0, model.gameModelCols*cellSize, model.gameModelRows*cellSize);
     var x, y, i, gem;
     for(var i=0; i<model.grid.length; i++){
         gem = model.grid[i];
