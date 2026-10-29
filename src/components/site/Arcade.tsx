@@ -215,12 +215,14 @@ export function TimingGame() {
   const runsRef = useRef(0);
   const doneRef = useRef(false);
   const best = useBest("st_over");
+  const [started, setStarted] = useState(false);
   const [ball, setBall] = useState(1);
   const [runs, setRuns] = useState(0);
   const [done, setDone] = useState(false);
   const [message, setMessage] = useState("Stop the marker in the green for a SIX.");
 
   useEffect(() => {
+    if (!started || done) return;
     let frame = 0;
     const tick = () => {
       pos.current += dir.current * speed.current;
@@ -237,7 +239,7 @@ export function TimingGame() {
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, []);
+  }, [started, done]);
 
   function scoreAt(position: number) {
     const distance = Math.abs(position - 50);
@@ -247,16 +249,23 @@ export function TimingGame() {
     return 0;
   }
 
+  function begin() {
+    ballRef.current = 1;
+    runsRef.current = 0;
+    speed.current = 0.9;
+    pos.current = 0;
+    dir.current = 1;
+    doneRef.current = false;
+    setBall(1);
+    setRuns(0);
+    setDone(false);
+    setMessage("Stop the marker in the green for a SIX.");
+    setStarted(true);
+  }
+
   function swing() {
     if (doneRef.current) {
-      ballRef.current = 1;
-      runsRef.current = 0;
-      speed.current = 0.9;
-      doneRef.current = false;
-      setBall(1);
-      setRuns(0);
-      setDone(false);
-      setMessage("Stop the marker in the green for a SIX.");
+      begin();
       return;
     }
     const scored = scoreAt(pos.current);
@@ -277,6 +286,41 @@ export function TimingGame() {
       setBall(ballRef.current);
       speed.current += 0.18;
     }
+  }
+
+  if (!started) {
+    return (
+      <>
+        <button
+          type="button"
+          aria-live="polite"
+          onClick={begin}
+          onKeyDown={(event) => {
+            if (event.key === " " || event.key === "Enter") {
+              event.preventDefault();
+              begin();
+            }
+          }}
+          className="relative flex min-h-[270px] flex-1 cursor-pointer overflow-hidden rounded-[14px] border-0 bg-canvas font-sans text-ink"
+        >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.48]"
+            style={{ backgroundImage: "url(/images/games/timing.png)" }}
+          />
+          <span aria-hidden className="pointer-events-none absolute inset-0 bg-canvas/68" />
+          <span className="relative z-[1] flex w-full flex-1 flex-col items-center justify-center gap-3 px-[22px] py-[22px] text-center">
+            <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
+              Tap to start
+            </span>
+            <span className="max-w-[28ch] text-[15px] opacity-90">
+              Timing test — stop the marker in the green for a SIX.
+            </span>
+          </span>
+        </button>
+        <GameMeta label="Runs in one over" best={best == null ? "—" : String(best)} />
+      </>
+    );
   }
 
   return (
