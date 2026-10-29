@@ -20,7 +20,7 @@ const phaseText: Record<Phase, string> = {
 };
 
 const phaseWash: Record<Phase, string> = {
-  idle: "bg-canvas/68",
+  idle: "bg-transparent",
   wait: "bg-[#2a0f22]/86",
   go: "bg-lime/90",
   foul: "bg-[#3a1206]/86",
@@ -29,15 +29,13 @@ const phaseWash: Record<Phase, string> = {
 
 export function GameStage({
   src,
-  wash = "bg-canvas/68",
-  imageOpacity = 0.48,
+  wash = "bg-transparent",
   className = "",
   contentClassName = "",
   children,
 }: {
   src: string;
   wash?: string;
-  imageOpacity?: number;
   className?: string;
   contentClassName?: string;
   children: ReactNode;
@@ -49,7 +47,7 @@ export function GameStage({
       <span
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${src})`, opacity: imageOpacity }}
+        style={{ backgroundImage: `url(${src})` }}
       />
       <span aria-hidden className={`pointer-events-none absolute inset-0 ${wash}`} />
       <span
@@ -180,7 +178,7 @@ export function ReactionGame() {
       >
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.48]"
+          className="pointer-events-none absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url(/images/games/reaction.png)" }}
         />
         <span aria-hidden className={`pointer-events-none absolute inset-0 ${phaseWash[phase]}`} />
@@ -307,10 +305,9 @@ export function TimingGame() {
         >
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.48]"
+            className="pointer-events-none absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: "url(/images/games/timing.png)" }}
           />
-          <span aria-hidden className="pointer-events-none absolute inset-0 bg-canvas/68" />
           <span className="relative z-[1] flex w-full flex-1 flex-col items-center justify-center gap-3 px-[22px] py-[22px] text-center">
             <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
               Tap to start
@@ -379,11 +376,7 @@ export function RapidGame({ onPlay }: { onPlay: () => void }) {
 
 export function ScamAlertLaunch({ onPlay }: { onPlay: () => void }) {
   return (
-    <GameStage
-      src="/images/games/cricket-iq.png"
-      imageOpacity={0.62}
-      contentClassName="gap-4 px-6 py-8"
-    >
+    <GameStage src="/images/games/cricket-iq.png" contentClassName="gap-4 px-6 py-8">
       <span className="font-display text-[clamp(38px,7vw,64px)] leading-[0.88] font-black uppercase">
         Cricket IQ
       </span>
