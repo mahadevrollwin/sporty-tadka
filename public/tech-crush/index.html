@@ -748,135 +748,72 @@ var requiredStageWidth = 880;
 var requiredStageHeight = 700;
 var resizeTimeoutId = -1;
 
-var starCrushAudioCtx = null;
-var starCrushMusicGain = null;
-var starCrushSfxGain = null;
-var starCrushMusicNodes = [];
+var starCrushBgm = null;
+var starCrushWhoosh = null;
 var starCrushMusicStarted = false;
 var starCrushMusicEnabled = localStorage.getItem("starCrushMusic") !== "off";
+var STAR_CRUSH_BGM_VOLUME = 0.38;
+var STAR_CRUSH_WHOOSH_VOLUME = 0.55;
 
-function ensureStarCrushAudio(){
-    var AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if(!AudioCtx) return null;
-    if(!starCrushAudioCtx){
-        starCrushAudioCtx = new AudioCtx();
-        starCrushMusicGain = starCrushAudioCtx.createGain();
-        starCrushMusicGain.gain.value = starCrushMusicEnabled ? 0.085 : 0;
-        starCrushMusicGain.connect(starCrushAudioCtx.destination);
-        starCrushSfxGain = starCrushAudioCtx.createGain();
-        starCrushSfxGain.gain.value = starCrushMusicEnabled ? 0.42 : 0;
-        starCrushSfxGain.connect(starCrushAudioCtx.destination);
+function initStarCrushAudioElements(){
+    if(!starCrushBgm){
+        starCrushBgm = new Audio("/tech-crush/audio/bgm.wav");
+        starCrushBgm.loop = true;
+        starCrushBgm.preload = "auto";
+        starCrushBgm.volume = STAR_CRUSH_BGM_VOLUME;
     }
-    if(starCrushAudioCtx.state === "suspended"){
-        starCrushAudioCtx.resume();
+    if(!starCrushWhoosh){
+        starCrushWhoosh = new Audio("/tech-crush/audio/whoosh.wav");
+        starCrushWhoosh.preload = "auto";
+        starCrushWhoosh.volume = STAR_CRUSH_WHOOSH_VOLUME;
     }
-    return starCrushAudioCtx;
 }
 
 function startStarCrushMusic(){
-    var ctx = ensureStarCrushAudio();
-    if(!ctx || starCrushMusicStarted) return;
+    initStarCrushAudioElements();
     starCrushMusicStarted = true;
+    if(!starCrushMusicEnabled){
+        starCrushBgm.pause();
+        return;
+    }
+    starCrushBgm.volume = STAR_CRUSH_BGM_VOLUME;
+    var playPromise = starCrushBgm.play();
+    if(playPromise && typeof playPromise.catch === "function"){
+        playPromise.catch(function(err){
+            console.warn("Star Crush music play blocked:", err);
+        });
+    }
+}
 
-    var voices = [
-        { freq: 196.0, type: "sine", gain: 0.035, lfo: 0.07 },
-        { freq: 246.94, type: "triangle", gain: 0.018, lfo: 0.09 },
-        { freq: 293.66, type: "sine", gain: 0.028, lfo: 0.05 },
-        { freq: 392.0, type: "sine", gain: 0.016, lfo: 0.11 }
-    ];
-
-    voices.forEach(function(voice){
-        var osc = ctx.createOscillator();
-        osc.type = voice.type;
-        osc.frequency.value = voice.freq;
-
-        var gain = ctx.createGain();
-        gain.gain.value = voice.gain;
-
-        var filter = ctx.createBiquadFilter();
-        filter.type = "lowpass";
-        filter.frequency.value = 920;
-        filter.Q.value = 0.6;
-
-        var lfo = ctx.createOscillator();
-        lfo.type = "sine";
-        lfo.frequency.value = voice.lfo;
-        var lfoGain = ctx.createGain();
-        lfoGain.gain.value = voice.gain * 0.45;
-        lfo.connect(lfoGain);
-        lfoGain.connect(gain.gain);
-
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(starCrushMusicGain);
-        osc.start();
-        lfo.start();
-        starCrushMusicNodes.push(osc, lfo, gain, filter);
-    });
-
-    // Soft pulsing pad for a light loop feel
-    var pulse = ctx.createOscillator();
-    pulse.type = "sine";
-    pulse.frequency.value = 98;
-    var pulseGain = ctx.createGain();
-    pulseGain.gain.value = 0.02;
-    var pulseLfo = ctx.createOscillator();
-    pulseLfo.frequency.value = 0.18;
-    var pulseLfoGain = ctx.createGain();
-    pulseLfoGain.gain.value = 0.012;
-    pulseLfo.connect(pulseLfoGain);
-    pulseLfoGain.connect(pulseGain.gain);
-    pulse.connect(pulseGain);
-    pulseGain.connect(starCrushMusicGain);
-    pulse.start();
-    pulseLfo.start();
-    starCrushMusicNodes.push(pulse, pulseLfo, pulseGain);
+function stopStarCrushMusic(){
+    if(!starCrushBgm) return;
+    starCrushBgm.pause();
 }
 
 function playCrushWhoosh(){
     if(!starCrushMusicEnabled) return;
-    var ctx = ensureStarCrushAudio();
-    if(!ctx || !starCrushSfxGain) return;
-
-    var duration = 0.32;
-    var sampleRate = ctx.sampleRate;
-    var frameCount = Math.floor(sampleRate * duration);
-    var buffer = ctx.createBuffer(1, frameCount, sampleRate);
-    var data = buffer.getChannelData(0);
-    for(var i = 0; i < frameCount; i++){
-        var t = i / sampleRate;
-        var env = Math.sin((Math.PI * t) / duration) * Math.exp(-t * 5.5);
-        data[i] = (Math.random() * 2 - 1) * env;
-    }
-
-    var source = ctx.createBufferSource();
-    source.buffer = buffer;
-    var filter = ctx.createBiquadFilter();
-    filter.type = "bandpass";
-    filter.Q.value = 0.75;
-    var now = ctx.currentTime;
-    filter.frequency.setValueAtTime(520, now);
-    filter.frequency.exponentialRampToValueAtTime(2800, now + 0.22);
-
-    var swooshGain = ctx.createGain();
-    swooshGain.gain.setValueAtTime(0.001, now);
-    swooshGain.gain.exponentialRampToValueAtTime(0.9, now + 0.04);
-    swooshGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-    source.connect(filter);
-    filter.connect(swooshGain);
-    swooshGain.connect(starCrushSfxGain);
-    source.start(now);
+    initStarCrushAudioElements();
+    try{
+        starCrushWhoosh.pause();
+        starCrushWhoosh.currentTime = 0;
+        starCrushWhoosh.volume = STAR_CRUSH_WHOOSH_VOLUME;
+        var playPromise = starCrushWhoosh.play();
+        if(playPromise && typeof playPromise.catch === "function"){
+            playPromise.catch(function(){});
+        }
+    }catch(err){}
 }
 
 function setStarCrushMusicEnabled(enabled){
     starCrushMusicEnabled = enabled;
     localStorage.setItem("starCrushMusic", enabled ? "on" : "off");
-    if(starCrushMusicGain){
-        starCrushMusicGain.gain.value = enabled ? 0.085 : 0;
-    }
-    if(starCrushSfxGain){
-        starCrushSfxGain.gain.value = enabled ? 0.42 : 0;
+    initStarCrushAudioElements();
+    if(enabled){
+        if(starCrushMusicStarted){
+            startStarCrushMusic();
+        }
+    }else{
+        stopStarCrushMusic();
     }
     var toggle = document.getElementById("soundToggle");
     var iconOn = document.getElementById("soundIconOn");
@@ -892,13 +829,10 @@ function setStarCrushMusicEnabled(enabled){
 function initStarCrushSoundToggle(){
     var toggle = document.getElementById("soundToggle");
     if(!toggle) return;
+    initStarCrushAudioElements();
     setStarCrushMusicEnabled(starCrushMusicEnabled);
     toggle.addEventListener("click", function(){
-        ensureStarCrushAudio();
         setStarCrushMusicEnabled(!starCrushMusicEnabled);
-        if(starCrushMusicEnabled && !starCrushMusicStarted){
-            // Keep ready; music starts when CRUSH! is pressed
-        }
     });
 }
 
