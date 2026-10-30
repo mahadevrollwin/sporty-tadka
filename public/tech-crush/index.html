@@ -229,7 +229,7 @@
     <p>Build your roster FAST,</p>
     <p>take over sports legends by crushing them!</p>
     <h3>LEVEL 1</h3>
-    <p>Crush <span class="boldOrange">Ronaldo</span> icons <span class="boldOrange"> 3 times in 20 moves</span> for a sports takeover.</p>
+    <p>Crush <span id="startScreenTargetName" class="boldOrange">Ronaldo</span> icons <span id="startScreenTargetMoves" class="boldOrange"> 3 times in 20 moves</span> for a sports takeover.</p>
     <span id="startScreenIconsSpan" class="iconsSpan" ></span>
     <br />
     <button onclick="startScreenPlayButtonClickHandler()" >CRUSH!</button>
@@ -903,7 +903,9 @@ function stageTooSmallHandler(bounds){
 //Demo specific properties
 //========================
 
-var brands = ["Ronaldo", "Messi", "Kohli", "Rohit", "Dhoni", "Perry", "Sindhu", "Chhetri", "Chopra"];
+var ALL_BRANDS = ["Ronaldo", "Messi", "Kohli", "Rohit", "Dhoni", "Perry", "Sindhu", "Chhetri", "Chopra"];
+var brands = ALL_BRANDS.slice();
+var gemToSprite = ALL_BRANDS.map(function(_, index){ return index; });
 var model;
 var gridSize = 10;
 var mobileGridCols = 6;
@@ -914,12 +916,31 @@ var unitAnimator = new Sakri.UnitAnimator();
 
 var numMoves;
 var level = 0;
-var totalLevels = brands.length;
+var totalLevels = ALL_BRANDS.length;
 var score = 0;
 var cellSize = 70;
 var affectedCells;
 var levelCrushes = 0;
 var levelCrushesTarget = 0;
+
+function spriteSourceX(gemId){
+    var spriteIndex = gemToSprite[gemId];
+    if(spriteIndex == null || spriteIndex < 0) spriteIndex = gemId;
+    return spriteIndex * 70;
+}
+
+function shuffleBrandOrder(){
+    gemToSprite = ALL_BRANDS.map(function(_, index){ return index; });
+    for(var i = gemToSprite.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = gemToSprite[i];
+        gemToSprite[i] = gemToSprite[j];
+        gemToSprite[j] = temp;
+    }
+    brands = gemToSprite.map(function(spriteIndex){
+        return ALL_BRANDS[spriteIndex];
+    });
+}
 
 var scoreCells;
 var scoreCellsAmounts;
@@ -954,9 +975,14 @@ function startGame(){
 function playGame(){
     level = 0;
     score = 0;
-    showTargetIconsInPanel("startScreenIconsSpan");
+    shuffleBrandOrder();
     nextLevel();
     blockUserInput();
+    var startName = document.getElementById("startScreenTargetName");
+    var startMoves = document.getElementById("startScreenTargetMoves");
+    if(startName) startName.textContent = brands[0];
+    if(startMoves) startMoves.textContent = " " + levelCrushesTarget + " times in " + (numMoves + 1) + " moves";
+    showTargetIconsInPanel("startScreenIconsSpan", 0);
     displayPanel(document.getElementById("startScreen"));
     document.getElementById("acquisitionsList").innerHTML = "";
 }
@@ -1162,20 +1188,21 @@ function createIconImage(index){
     var tempCanvas = document.createElement("canvas");
     tempCanvas.width =tempCanvas.height = cellSize;
     var tempContext = tempCanvas.getContext("2d");
-    tempContext.drawImage(logoImage, index*70, 0, 70, 70, 0, 0, 70, 70);
+    tempContext.drawImage(logoImage, spriteSourceX(index), 0, 70, 70, 0, 0, 70, 70);
     var dataUrl = tempCanvas.toDataURL();
     var img = new Image();
     img.src = dataUrl;
     return img;
 }
 
-function showTargetIconsInPanel(panelId){
+function showTargetIconsInPanel(panelId, gemId){
     var panel = document.getElementById(panelId);
     panel.innerHTML = "";
+    if(typeof gemId !== "number") gemId = level;
     var tempCanvas = document.createElement("canvas");
     tempCanvas.width =tempCanvas.height = cellSize;
     var tempContext = tempCanvas.getContext("2d");
-    tempContext.drawImage(logoImage, level*70, 0, 70, 70, 0, 0, 70, 70);
+    tempContext.drawImage(logoImage, spriteSourceX(gemId), 0, 70, 70, 0, 0, 70, 70);
     var dataUrl = tempCanvas.toDataURL();
     var img;
     for(var i=0;i<3; i++){
@@ -1327,10 +1354,10 @@ function animateSwipe(){
     var x = swipeAnimation.icon2Xtarget - (swipeAnimation.icon2Xtarget - swipeAnimation.icon1Xtarget) * percent;
     var y = swipeAnimation.icon2Ytarget - (swipeAnimation.icon2Ytarget - swipeAnimation.icon1Ytarget) * percent;
     //console.log("animateSwipe()", percent, x, y);
-    context.drawImage(logoImage, swipeAnimation.icon1*70, 0, 70, 70, x, y, 70, 70);
+    context.drawImage(logoImage, spriteSourceX(swipeAnimation.icon1), 0, 70, 70, x, y, 70, 70);
     x = swipeAnimation.icon1Xtarget - (swipeAnimation.icon1Xtarget - swipeAnimation.icon2Xtarget) * percent;
     y = swipeAnimation.icon1Ytarget - (swipeAnimation.icon1Ytarget - swipeAnimation.icon2Ytarget) * percent;
-    context.drawImage(logoImage, swipeAnimation.icon2*70, 0, 70, 70, x, y, 70, 70);
+    context.drawImage(logoImage, spriteSourceX(swipeAnimation.icon2), 0, 70, 70, x, y, 70, 70);
 }
 
 // ===========================================
@@ -1373,7 +1400,7 @@ function animateDropCells(){
         yTo = Math.floor(cell.moveToIndex / model.gameModelCols);
         y = yFrom + (yTo - yFrom) * percent;
 
-        context.drawImage(logoImage, cell.gemType * cellSize, 0, cellSize, cellSize, x, y * cellSize, cellSize, cellSize);
+        context.drawImage(logoImage, spriteSourceX(cell.gemType), 0, 70, 70, x, y * cellSize, cellSize, cellSize);
     }
     if(levelCrushes>=levelCrushesTarget){
         renderTechCrush();
@@ -1453,7 +1480,7 @@ function renderModelGameState(){
         x = i % model.gameModelCols;
         y = Math.floor(i/model.gameModelCols);
         if(gem > -1){
-            context.drawImage(logoImage, gem * cellSize, 0, cellSize, cellSize, x * cellSize, y * cellSize, cellSize, cellSize);
+            context.drawImage(logoImage, spriteSourceX(gem), 0, 70, 70, x * cellSize, y * cellSize, cellSize, cellSize);
         }else{
             context.clearRect(x * cellSize, y * cellSize, cellSize, cellSize);//no idea why, but without this the gem is rendered?!
         }
