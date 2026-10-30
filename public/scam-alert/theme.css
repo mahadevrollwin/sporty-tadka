@@ -52,6 +52,27 @@ h3,
   border: 1px solid rgba(244, 242, 255, 0.12);
 }
 
+/* Keep typed values readable on white registration inputs */
+input#name,
+input#mobile,
+.bg-white.rounded-lg.shadow-lg input[type="text"],
+.bg-white.rounded-lg.shadow-lg input[type="tel"],
+.bg-white.text-black input[type="text"],
+.bg-white.text-black input[type="tel"] {
+  color: #0b0710 !important;
+  -webkit-text-fill-color: #0b0710 !important;
+  caret-color: #0b0710;
+}
+
+input#name::placeholder,
+input#mobile::placeholder,
+.bg-white.rounded-lg.shadow-lg input::placeholder,
+.bg-white.text-black input::placeholder {
+  color: #6b7280 !important;
+  -webkit-text-fill-color: #6b7280 !important;
+  opacity: 1;
+}
+
 .bg-\[\#d50100\],
 .bg-red-600,
 .hover\:bg-red-700:hover,
