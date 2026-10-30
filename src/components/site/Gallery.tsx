@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   galleryImages,
   galleryVideos,
@@ -32,10 +32,6 @@ import {
 } from "@/lib/gallery-reactions";
 
 type Tab = "images" | "videos";
-
-function parseGalleryTab(value: string | null): Tab {
-  return value === "videos" ? "videos" : "images";
-}
 
 type MasonryInstance = {
   layout?: () => void;
@@ -186,16 +182,15 @@ function useGalleryReactions(): ReactionsApi {
 }
 
 export function Gallery({
+  tab = "images",
   images = galleryImages,
   videos = galleryVideos,
 }: {
+  tab?: Tab;
   images?: GalleryImage[];
   videos?: GalleryVideo[];
 } = {}) {
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const tab = parseGalleryTab(searchParams.get("tab"));
   const [active, setActive] = useState<GalleryItem | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const reactions = useGalleryReactions();
@@ -207,11 +202,9 @@ export function Gallery({
 
   const setTab = useCallback(
     (next: Tab) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("tab", next);
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      router.replace(`/gallery/${next}`, { scroll: false });
     },
-    [pathname, router, searchParams],
+    [router],
   );
 
   useEffect(() => {
