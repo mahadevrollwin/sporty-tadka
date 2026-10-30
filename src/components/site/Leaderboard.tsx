@@ -198,14 +198,16 @@ export function Leaderboard() {
           {data?.recent.map((row, index) => (
             <li
               key={`${row.createdAt}-${row.name}-${index}`}
-              className="flex items-center justify-between gap-3 border-t border-line-soft py-2.5 text-sm"
+              className="grid grid-cols-[minmax(0,1.4fr)_minmax(5.5rem,0.9fr)_minmax(4.5rem,0.7fr)] items-center gap-x-3 border-t border-line-soft py-2.5 text-sm sm:grid-cols-[minmax(0,1.6fr)_minmax(6.5rem,0.9fr)_minmax(5rem,0.7fr)_minmax(4rem,0.55fr)]"
             >
               <span className="min-w-0 truncate font-semibold">{row.name}</span>
-              <span className="text-dim">{gameRules.find((rule) => rule.id === row.game)?.label}</span>
-              <span className="font-display text-base font-black text-lime tabular-nums">
+              <span className="truncate text-dim">
+                {gameRules.find((rule) => rule.id === row.game)?.label}
+              </span>
+              <span className="text-right font-display text-base font-black text-lime tabular-nums">
                 {formatScore(row.game, row.score)}
               </span>
-              <span className="hidden text-dimmer sm:inline">{ago(row.createdAt)}</span>
+              <span className="hidden text-right text-dimmer sm:inline">{ago(row.createdAt)}</span>
             </li>
           ))}
         </ol>
