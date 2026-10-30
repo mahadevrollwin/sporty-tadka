@@ -209,7 +209,7 @@ h3,
 
   .howto-steps-card {
     flex: 0 1 auto;
-    max-height: 9.75rem;
+    max-height: 15rem;
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
