@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Gallery } from "@/components/site/Gallery";
 import { loadGallery, loadHome } from "@/sanity/content";
 import { Nav } from "@/components/site/Nav";
@@ -26,7 +27,9 @@ export default async function GalleryPage() {
             Frames that earned a second look. Campaign stills and films from launches, match days,
             and athlete stories.
           </Lead>
-          <Gallery images={gallery.images} videos={gallery.videos} />
+          <Suspense fallback={null}>
+            <Gallery images={gallery.images} videos={gallery.videos} />
+          </Suspense>
         </Wrap>
       </main>
       <Footer />
