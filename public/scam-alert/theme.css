@@ -27,16 +27,6 @@ h3,
   box-shadow: 0 0 36px rgba(198, 255, 61, 0.12);
 }
 
-/* Keep side padding tight around the card grid (card sizes unchanged) */
-.card-container.game-card-container {
-  width: fit-content !important;
-  max-width: calc(100% - 0.5rem);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 0.5rem !important;
-  padding-right: 0.5rem !important;
-}
-
 .pop-up-content {
   background: #0f0d18 !important;
   background-image: none !important;
@@ -136,25 +126,8 @@ input#mobile::placeholder,
 
 /* Match player art (~273×280); cap width so cards stay compact */
 .game-card-grid {
-  width: max-content;
-  max-width: 100%;
-  margin-inline: auto;
   justify-items: center;
   align-content: start;
-  gap: 0.5rem !important;
-  grid-template-columns: repeat(1, max-content) !important;
-}
-
-@media (min-width: 768px) {
-  .game-card-grid {
-    grid-template-columns: repeat(2, max-content) !important;
-  }
-}
-
-@media (min-width: 1024px) {
-  .game-card-grid {
-    grid-template-columns: repeat(3, max-content) !important;
-  }
 }
 
 .player-card {
