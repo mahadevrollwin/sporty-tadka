@@ -131,7 +131,7 @@ input#mobile::placeholder,
 }
 
 .player-card {
-  width: min(100%, 160px) !important;
+  width: min(100%, 185px) !important;
   height: auto !important;
   aspect-ratio: 273 / 280;
   justify-self: center;
@@ -139,7 +139,7 @@ input#mobile::placeholder,
 
 @media (min-width: 768px) {
   .player-card {
-    width: min(100%, 190px) !important;
+    width: min(100%, 220px) !important;
   }
 }
 
