@@ -10,18 +10,18 @@
       <stop offset="1" stop-color="#ff3cac" stop-opacity="0"/>
     </radialGradient>
     <clipPath id="ball">
-      <circle cx="96" cy="100" r="66"/>
+      <circle cx="100" cy="100" r="66"/>
     </clipPath>
   </defs>
-  <circle cx="96" cy="100" r="92" fill="url(#glow)"/>
-  <circle cx="96" cy="100" r="66" fill="url(#leather)"/>
-  <g clip-path="url(#ball)" transform="rotate(-32 96 100)" fill="none" stroke-linecap="round">
-    <path d="M20 90 Q96 116 172 90" stroke="#f6e7c8" stroke-width="3"/>
-    <path d="M20 110 Q96 136 172 110" stroke="#f6e7c8" stroke-width="3"/>
-    <path d="M20 84 Q96 110 172 84" stroke="#f6e7c8" stroke-width="5" stroke-dasharray="2 7" opacity="0.85"/>
-    <path d="M20 116 Q96 142 172 116" stroke="#f6e7c8" stroke-width="5" stroke-dasharray="2 7" opacity="0.85"/>
+  <circle cx="100" cy="100" r="92" fill="url(#glow)"/>
+  <circle cx="100" cy="100" r="66" fill="url(#leather)"/>
+  <g clip-path="url(#ball)" transform="rotate(-32 100 100)" fill="none" stroke-linecap="round">
+    <path d="M24 90 Q100 116 176 90" stroke="#f6e7c8" stroke-width="3"/>
+    <path d="M24 110 Q100 136 176 110" stroke="#f6e7c8" stroke-width="3"/>
+    <path d="M24 84 Q100 110 176 84" stroke="#f6e7c8" stroke-width="5" stroke-dasharray="2 7" opacity="0.85"/>
+    <path d="M24 116 Q100 142 176 116" stroke="#f6e7c8" stroke-width="5" stroke-dasharray="2 7" opacity="0.85"/>
   </g>
-  <ellipse cx="72" cy="70" rx="22" ry="13" fill="#fff" opacity="0.22" transform="rotate(-30 72 70)"/>
-  <circle cx="150" cy="150" r="28" fill="#c6ff3d" stroke="#0b1400" stroke-width="4"/>
-  <text x="150" y="163" text-anchor="middle" font-family="'Saira Condensed', 'Arial Black', sans-serif" font-size="38" font-weight="900" fill="#0b1400">?</text>
+  <ellipse cx="76" cy="70" rx="22" ry="13" fill="#fff" opacity="0.22" transform="rotate(-30 76 70)"/>
+  <circle cx="148" cy="148" r="28" fill="#c6ff3d" stroke="#0b1400" stroke-width="4"/>
+  <text x="148" y="161" text-anchor="middle" font-family="'Saira Condensed', 'Arial Black', sans-serif" font-size="38" font-weight="900" fill="#0b1400">?</text>
 </svg>
