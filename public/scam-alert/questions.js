@@ -1,6 +1,7 @@
-// Each round picks one random question, shows its answer plus up to 8 other options
+// Each round picks one question, shows its answer plus up to 8 other options
 // from the SAME category only (batsman / bowler / jersey), and avoids repeating
 // the previous round's question. `answer` must match a player `id`.
+// Questions marked `mandatory: true` are shuffled and served first at quiz start.
 window.SCAM_TRIVIA = {
   players: [
     // Batsmen
@@ -55,11 +56,16 @@ window.SCAM_TRIVIA = {
     { id: "sydney-sixers", name: "Sydney Sixers", image: "/scam-alert/players/sydney-sixers.jpg", roles: ["jersey"] },
   ],
   questions: [
-    // Kept from previous set
-    { question: "Who is known as the King of Cricket?", answer: "virat-kohli", category: "batsman" },
+    // Mandatory — served first (shuffled) at the start of each quiz session
+    { question: "Who is the king of cricket?", answer: "virat-kohli", category: "batsman", mandatory: true },
+    { question: "Who is known as 'Captain Cool' in cricket?", answer: "ms-dhoni", category: "batsman", mandatory: true },
+    { question: "Which bowler's nickname is 'Boom Boom'?", answer: "jasprit-bumrah", category: "bowler", mandatory: true },
+    { question: "Which of these is the CSK jersey?", answer: "csk", category: "jersey", mandatory: true },
+    { question: "Who was the Man of the Match in the 2023 World Cup final?", answer: "travis-head", category: "batsman", mandatory: true },
+    { question: "Who was the Player of the Tournament in the 2023 World Cup?", answer: "virat-kohli", category: "batsman", mandatory: true },
+    { question: "Who was the Player of the Match in the 2011 World Cup final?", answer: "ms-dhoni", category: "batsman", mandatory: true },
 
     // Batsman rounds
-    { question: "Who is known as Captain Cool?", answer: "ms-dhoni", category: "batsman" },
     { question: "Who is nicknamed the Hitman?", answer: "rohit-sharma", category: "batsman" },
     { question: "Who is known as Mr. 360?", answer: "ab-de-villiers", category: "batsman" },
     { question: "Which Australian batter is nicknamed Smudge?", answer: "steve-smith", category: "batsman" },
@@ -76,7 +82,6 @@ window.SCAM_TRIVIA = {
     { question: "Who scored three double centuries in ODI cricket?", answer: "rohit-sharma", category: "batsman" },
 
     // Bowler rounds
-    { question: "Which pacer was Player of the Tournament at the 2023 ODI World Cup?", answer: "jasprit-bumrah", category: "bowler" },
     { question: "Which left-arm pacer is nicknamed the Shaheen Express?", answer: "shaheen-afridi", category: "bowler" },
     { question: "Who was Player of the Tournament at the 2015 World Cup?", answer: "mitchell-starc", category: "bowler" },
     { question: "Which South African great was nicknamed Steyn Gun?", answer: "dale-steyn", category: "bowler" },
