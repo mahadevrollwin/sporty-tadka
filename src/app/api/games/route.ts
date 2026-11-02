@@ -174,15 +174,15 @@ export async function POST(request: Request) {
     name,
     score,
     createdAt: new Date(),
-    ...(key ? { idempotencyKey: key } : {}),
   };
 
   try {
     const collection = await scores;
     if (key) {
+      // Upsert so Cricket IQ can refresh a player's cumulative total under a stable key.
       await collection.updateOne(
         { idempotencyKey: key },
-        { $setOnInsert: entry },
+        { $set: entry, $setOnInsert: { idempotencyKey: key } },
         { upsert: true },
       );
     } else {

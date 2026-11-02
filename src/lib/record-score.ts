@@ -86,13 +86,13 @@ export function takePendingScore() {
 
 type ScamRow = { id?: string; name?: string; mobile?: string; score?: number; timestamp?: string };
 
-const seenScam = new Set<string>();
+/** Last cumulative score synced per player key (Cricket IQ sums all correct answers). */
+const seenScam = new Map<string, number>();
 
-function scamKey(row: ScamRow, score: number) {
+function scamKey(row: ScamRow) {
   const id = (row.id || row.mobile || row.name || "").replace(/[^a-z0-9]/gi, "").slice(0, 24);
-  const stamp = (row.timestamp || "").replace(/[^0-9]/g, "").slice(0, 14);
-  if (!id || !stamp) return null;
-  return `scam:${id}:${stamp}:${score}`.slice(0, 80);
+  if (!id) return null;
+  return `scam:${id}:total`.slice(0, 80);
 }
 
 export async function syncScamScores(raw: string | null) {
@@ -108,9 +108,9 @@ export async function syncScamScores(raw: string | null) {
   for (const row of rows) {
     const name = typeof row.name === "string" ? row.name : "";
     const score = typeof row.score === "number" ? Math.round(row.score) : 0;
-    const key = scamKey(row, score);
-    if (!key || score <= 0 || !cleanName(name) || seenScam.has(key)) continue;
-    seenScam.add(key);
+    const key = scamKey(row);
+    if (!key || score <= 0 || !cleanName(name) || seenScam.get(key) === score) continue;
+    seenScam.set(key, score);
     const result = await recordScore({ game: "scam", score, name, key });
     if (result === "offline") seenScam.delete(key);
   }
