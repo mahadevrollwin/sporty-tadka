@@ -64,6 +64,9 @@ window.SCAM_TRIVIA = {
     { question: "Who was the Man of the Match in the 2023 World Cup final?", answer: "travis-head", category: "batsman", mandatory: true },
     { question: "Who was the Player of the Tournament in the 2023 World Cup?", answer: "virat-kohli", category: "batsman", mandatory: true },
     { question: "Who was the Player of the Match in the 2011 World Cup final?", answer: "ms-dhoni", category: "batsman", mandatory: true },
+    { question: "Who was the winning captain of the 1st World Test Championship (WTC)?", answer: "kane-williamson", category: "batsman", mandatory: true },
+    { question: "Which of these is the Team India jersey?", answer: "india", category: "jersey", mandatory: true },
+    { question: "Which bowler did Virat Kohli hit for consecutive sixes in the 2022 T20 World Cup?", answer: "haris-rauf", category: "bowler", mandatory: true },
 
     // Batsman rounds
     { question: "Who is nicknamed the Hitman?", answer: "rohit-sharma", category: "batsman" },
