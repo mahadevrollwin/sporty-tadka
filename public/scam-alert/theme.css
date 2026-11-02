@@ -124,10 +124,25 @@ input#mobile::placeholder,
   box-shadow: 0 0 18px rgba(255, 60, 172, 0.5);
 }
 
-.player-card .card-front {
+/* Match player art (~273×280) so cards don't letterbox left/right */
+.player-card {
+  height: auto !important;
+  aspect-ratio: 273 / 280;
+}
+
+.player-card .card-front,
+.player-card .card-back {
   display: block;
-  padding: 0;
+  padding: 0 !important;
+  margin: 0;
   border: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.player-card .card-front {
   background: #161122;
   cursor: pointer;
   transition: box-shadow 0.2s ease;
@@ -149,15 +164,21 @@ input#mobile::placeholder,
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   filter: blur(18px) brightness(0.55);
   transform: scale(1.15);
 }
 
 .player-photo {
-  position: relative;
+  position: absolute;
+  inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  margin: 0;
+  padding: 0;
+  object-fit: cover;
+  object-position: center;
 }
 
 .player-name {
